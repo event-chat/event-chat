@@ -3,10 +3,12 @@ import { ZodType } from 'zod';
 import eventBus from './eventBus';
 import {
   createEvent,
+  createToken,
   DetailType,
   EventChatOptions,
   EventDetailType,
   EventName,
+  getConditionKey,
   getEventName,
   isSafetyType,
   mountEvent,
@@ -26,20 +28,18 @@ export const useEventChat = <Name extends string, Schema extends ZodType = ZodTy
   ops: EventChatOptions<Name, Schema>
 ) => {
   const eventName = useMemo(() => getEventName(name), [name]);
-  const id = useId();
-  const { callback } = ops;
+  const { callback, ...opsRecord } = ops;
 
   const callbackFn = useMemoFn(callback);
-  const emit = useCallback(
-    (detail?: Omit<EventDetailType, '__origin' | 'id'>) => {
-      if (name && detail) {
-        const event = createEvent({ ...detail, __origin: name, id });
-        document.body.dispatchEvent(event);
-      }
-    },
-    [id, name]
+  const id = useId();
+
+  // 随业务改变
+  const conditionKey = useMemo(
+    () => getConditionKey(name, id, opsRecord.type),
+    [id, name, opsRecord.type]
   );
 
+  const token = useMemo(() => createToken(conditionKey), [conditionKey]);
   const callbackHandle = useCallback(
     ({ name: subName, ...args }: DetailType<string, Schema>) => {
       if (callbackFn.current && isSafetyType(subName, name)) {
@@ -49,12 +49,21 @@ export const useEventChat = <Name extends string, Schema extends ZodType = ZodTy
     [callbackFn, name]
   );
 
-  useEffect(() => {
-    if (eventName) eventBus.on(eventName, callbackHandle);
-    return () => {
-      if (eventName) eventBus.off(eventName, callbackHandle);
-    };
-  }, [eventName, callbackHandle]);
+  const emit = useCallback(
+    <Detail>(detail: Omit<EventDetailType<Detail>, '__origin' | 'group' | 'id' | 'type'>) => {
+      // 业务提交 name 是空的，那么 __origin 就是空，当做匿名处理
+      // 匿名事件只允许通过 emit 发送消息，不能通过 callback 接收消息
+      const event = createEvent({
+        ...detail,
+        __origin: name,
+        group: opsRecord.group,
+        type: opsRecord.type,
+        id,
+      });
+      document.body.dispatchEvent(event);
+    },
+    [id, name, opsRecord.group, opsRecord.type]
+  );
 
   useEffect(() => {
     if (!document.body.dataset.globalIsListened) {
@@ -63,5 +72,19 @@ export const useEventChat = <Name extends string, Schema extends ZodType = ZodTy
     }
   }, []);
 
-  return [emit] as const;
+  useEffect(() => {
+    if (eventName) eventBus.on(eventName, callbackHandle);
+    return () => {
+      if (eventName) eventBus.off(eventName, callbackHandle);
+    };
+  }, [eventName, callbackHandle]);
+
+  useEffect(() => {
+    eventBus.mount(conditionKey, opsRecord);
+    return () => {
+      eventBus.unmount(conditionKey);
+    };
+  }, [conditionKey, opsRecord]);
+
+  return { token, emit } as const;
 };

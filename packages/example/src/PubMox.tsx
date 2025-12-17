@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 const PubMox: FC = () => {
   // 新增：打印 Button 类型和内容
-  const [emit] = useEventChat('pub-mox', {
+  const { token, emit } = useEventChat('pub-mox', {
     schema: z.object({
       title: z.string(),
       description: z.string().optional(),
@@ -19,7 +19,7 @@ const PubMox: FC = () => {
       <button
         type="button"
         onClick={() => {
-          emit({ name: 'sub-mox' });
+          emit({ name: 'sub-mox', detail: { token } });
         }}
       >
         click it
