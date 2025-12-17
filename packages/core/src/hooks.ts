@@ -1,42 +1,60 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef } from 'react';
+import { ZodType } from 'zod';
 import eventBus from './eventBus';
+import {
+  createEvent,
+  DetailType,
+  EventChatOptions,
+  EventDetailType,
+  EventName,
+  getEventName,
+  isSafetyType,
+  mountEvent,
+} from './utils';
 
-const EventName = 'custom-event-chat-11.18';
-function mountEvent(event: CustomDetailEvent) {
-  const { name: detailName } = event.detail ?? {};
-  const currentName = detailName ? getEventName(detailName) : undefined;
-  if (currentName) {
-    eventBus.emit(currentName, event.detail);
-  }
-}
+export const useMemoFn = <T>(fn: T) => {
+  const methodRef = useRef<T>(fn);
+  useEffect(() => {
+    methodRef.current = fn;
+  }, [fn]);
 
-const getEventName = (name: string) => (name ? `event-chart-${name}` : undefined);
-const createEvent = (detail?: CustomDetailEvent['detail']) =>
-  new CustomEvent(EventName, {
-    bubbles: true,
-    cancelable: true,
-    detail,
-  });
+  return methodRef;
+};
 
-export const useEventChat = (name: string, ops: EventChatOptions) => {
+export const useEventChat = <Name extends string, Schema extends ZodType = ZodType>(
+  name: Name,
+  ops: EventChatOptions<Name, Schema>
+) => {
   const eventName = useMemo(() => getEventName(name), [name]);
+  const id = useId();
   const { callback } = ops;
+
+  const callbackFn = useMemoFn(callback);
   const emit = useCallback(
-    (detail?: CustomDetailEvent['detail']) => {
+    (detail?: Omit<EventDetailType, '__origin' | 'id'>) => {
       if (name && detail) {
-        const event = createEvent({ ...detail, __origin: name });
+        const event = createEvent({ ...detail, __origin: name, id });
         document.body.dispatchEvent(event);
       }
     },
-    [name]
+    [id, name]
+  );
+
+  const callbackHandle = useCallback(
+    ({ name: subName, ...args }: DetailType<string, Schema>) => {
+      if (callbackFn.current && isSafetyType(subName, name)) {
+        callbackFn.current({ ...args, name: subName });
+      }
+    },
+    [callbackFn, name]
   );
 
   useEffect(() => {
-    if (eventName) eventBus.on(eventName, callback);
+    if (eventName) eventBus.on(eventName, callbackHandle);
     return () => {
-      if (eventName) eventBus.off(eventName, callback);
+      if (eventName) eventBus.off(eventName, callbackHandle);
     };
-  }, [eventName, callback]);
+  }, [eventName, callbackHandle]);
 
   useEffect(() => {
     if (!document.body.dataset.globalIsListened) {
@@ -47,14 +65,3 @@ export const useEventChat = (name: string, ops: EventChatOptions) => {
 
   return [emit] as const;
 };
-
-interface CustomDetailEvent extends Event {
-  detail?: {
-    name: string;
-    [key: string]: unknown;
-  };
-}
-
-interface EventChatOptions {
-  callback: (detail: unknown) => void;
-}
