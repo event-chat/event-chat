@@ -38,7 +38,7 @@ const SubMox: FC = () => {
 
 ### 只接收指定类型的消息
 
-那如何确定收到的消息是当前组件需要的？这里通过 `Zod` 来实现，提供一个 `schema` 后只有类型匹配的消息才会被接收。如下：
+这里通过 `Zod` 来实现，提供一个 `schema` 后只有类型匹配的消息才会被接收。如下：
 
 ```typescript
 const { emit } = useEventChat('pub-mox', {
@@ -66,6 +66,8 @@ type DetailType<Name extends string = string, Schema extends ZodType = ZodType> 
   detail?: z.infer<Schema>;
 };
 ```
+
+> 消息尽管发，但 `callback` 接收到的一定是开始就约定好的结构和类型
 
 ### 异步消息
 
