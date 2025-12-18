@@ -34,10 +34,12 @@ const SubMox: FC = () => {
 };
 ```
 
-那如何确定收到的消息是当前组件需要的？我通过 `Zod` 来实现，提供一个 `schema` 后只有类型匹配的消息才会被接收。如下：
+## 只接收指定类型
+
+那如何确定收到的消息是当前组件需要的？这里通过 `Zod` 来实现，提供一个 `schema` 后只有类型匹配的消息才会被接收。如下：
 
 ```typescript
-const { token, emit } = useEventChat('pub-mox', {
+const { emit } = useEventChat('pub-mox', {
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -63,3 +65,40 @@ type DetailType<Name extends string = string, Schema extends ZodType = ZodType> 
 };
 ```
 
+## 异步 Schema
+
+对于 `Zod` 是允许异步校验的，这里通过 `async` 来实现，例如：
+
+```typescript
+const { emit } = useEventChat('pub-mox', {
+  async: true,
+  schema: z.string().refine(async (id) => {
+    // verify that ID exists in database
+    return true;
+  }),
+  callback: (record) => console.log('a----pub-mox', record),
+});
+```
+
+## 群组消息
+
+设置 `group` 后将只接受来自成员组的组内消息，例如：
+
+```typescript
+useEventChat('pub-mox', {
+  group: 'form-detail-edit',
+  callback: (record) => console.log('a----pub-mox', record),
+});
+
+const { emit: groupEmit } = useEventChat("sub-mox", {
+  group: 'form-detail-edit',
+  callback: (detail) => console.log("a----sub-mox", detail),
+});
+
+const { emit: outEmit } = useEventChat("out-mox", {
+  callback: (detail) => console.log("a----sub-mox", detail),
+});
+
+groupEmit({ name: 'pub-mox' });  // ✅ 能够顺利发送
+outEmit({ name: 'pub-mox' }); // ❎ 发送的消息收不到
+```
