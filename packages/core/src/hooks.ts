@@ -52,6 +52,8 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
   );
 
   const options = useMemoFn(ops);
+  const tokenRc = useMemoFn(allowToken ? token : undefined);
+
   const callbackHandle = useCallback(
     (data: EventDetailType) => {
       const { name: subName, ...args } = data;
@@ -60,7 +62,7 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
       if (!opitem || !isSafetyType(subName, name)) return;
 
       if (hasSchema(opitem)) {
-        validate({ ...data, name: subName }, { ...opitem, token: allowToken ? token : undefined })
+        validate({ ...data, name: subName }, { ...opitem, token: tokenRc.current })
           .then(opitem.callback)
           .catch((error) => {
             if (error instanceof Error && opitem.debug)
@@ -71,7 +73,7 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
 
       opitem.callback?.({ ...args, name: subName });
     },
-    [allowToken, name, options]
+    [name, options, tokenRc]
   );
 
   const emit = useCallback(
