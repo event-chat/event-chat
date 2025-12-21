@@ -11,3 +11,4 @@ export const subNoLimit = 'sub-no-limit';
 // pub-sub-zod-schema
 export const pubZodSchema = 'pub-zod-schema';
 export const subZodSchema = 'sub-zod-schema';
+export const subZodSchemaResult = 'sub-zod-schema-result';

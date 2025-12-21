@@ -74,7 +74,9 @@ export type MountOpsType<Name extends string = string, Schema extends ZodType = 
 > &
   Pick<EventDetailType, 'token'>;
 
-export type ResultType<Schema = unknown> = z.ZodSafeParseError<Schema>;
+export type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & {
+  data: unknown;
+};
 
 interface CustomDetailEvent extends Event {
   detail?: EventDetailType;

@@ -65,7 +65,9 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
           .then(opitem.callback)
           .catch((error) => {
             if (error instanceof Error && opitem.debug)
-              opitem.debug(isResultType(error.cause) ? error.cause : undefined);
+              opitem.debug(
+                isResultType(error.cause) ? { ...error.cause, data: data.detail } : undefined
+              );
           });
         return;
       }
