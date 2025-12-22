@@ -5,8 +5,10 @@ import ChatLayout from './components/chat/ChatLayout';
 import Toast from './components/toast';
 import PubNoLimit from './module/PubNoLimit';
 import PubSchema from './module/PubSchema';
+import PubSchemaExtra from './module/PubSchemaExtra';
 import SubNoLimit from './module/SubNoLimit';
 import SubSchema from './module/SubSchema';
+import SubSchemaExtra from './module/SubSchemaExtra';
 
 const App = () => {
   return (
@@ -36,20 +38,10 @@ const App = () => {
       <hr className="mb-4 mt-4" />
       <Layout
         list={[
-          <ChatLayout
-            extra={<ExtraGuid>直接发型消息，无限制</ExtraGuid>}
-            footer={110}
-            key="pub"
-            title="pub-zod-schema"
-          >
+          <ChatLayout extra={<PubSchemaExtra />} footer={120} key="pub" title="pub-zod-schema">
             <PubSchema />
           </ChatLayout>,
-          <ChatLayout
-            extra={<ExtraGuid>直接发送信息，无限制</ExtraGuid>}
-            footer={110}
-            key="sub"
-            title="sub-no-limit"
-          >
+          <ChatLayout extra={<SubSchemaExtra />} footer={120} key="sub" title="sub-zod-schema">
             <SubSchema />
           </ChatLayout>,
         ]}

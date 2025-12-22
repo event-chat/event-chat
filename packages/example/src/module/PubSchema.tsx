@@ -1,7 +1,13 @@
 import { createToken, useEventChat } from '@event-chat/core';
 import _merge from 'lodash/merge';
-import { type FC, useRef, useState } from 'react';
-import { pubZodSchema, subZodSchema, subZodSchemaResult, toastOpen } from '@/utils/event';
+import { type FC, useEffect, useRef, useState } from 'react';
+import {
+  pubZodAllow,
+  pubZodSchema,
+  subZodSchema,
+  subZodSchemaResult,
+  toastOpen,
+} from '@/utils/event';
 import ChatList from '../components/chat/ChatList';
 import ChatPanel from '../components/chat/ChatPanel';
 import { safetyPrint } from '../utils/fields';
@@ -55,6 +61,16 @@ const PubSchema: FC = () => {
       }
     },
   });
+
+  useEffect(() => {
+    const current = list.slice(-1)[0]?.content.status;
+    if (current) {
+      emit({
+        name: pubZodAllow,
+        detail: current === 'waiting' ? ['error', 'faild', 'success', 'waiting'] : [current],
+      });
+    }
+  }, [list, emit]);
 
   return (
     <ChatPanel

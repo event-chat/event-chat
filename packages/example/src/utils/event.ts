@@ -9,6 +9,7 @@ export const pubNoLimit = 'pub-no-limit';
 export const subNoLimit = 'sub-no-limit';
 
 // pub-sub-zod-schema
+export const pubZodAllow = 'pub-zod-allow';
 export const pubZodSchema = 'pub-zod-schema';
 export const subZodSchema = 'sub-zod-schema';
 export const subZodSchemaResult = 'sub-zod-schema-result';

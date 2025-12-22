@@ -3,7 +3,7 @@ import { isKey } from '@/utils/fields';
 import type { ChatItemType } from './utils';
 
 const statusMap = Object.freeze({
-  error: '👾 [error] 发送失败',
+  error: '👾 [error] 操作异常',
   faild: '😞 [faild] 处理失败',
   success: '😎 [success] 完成处理',
   waiting: '⏳️ [waiting] 处理中',
@@ -72,7 +72,7 @@ const RenderCard: FC<RenderCardProps> = ({ item: { description, id, ingredients,
           </ul>
         </div>
         {description && (
-          <div className="text-gray-600 bg-light p-4 rounded-lg">
+          <div className="text-gray-600 bg-gray-100 p-4 rounded-lg">
             <h3 className="text-lg font-semibold mb-2 text-gray-800">食谱描述</h3>
             <p>{description}</p>
           </div>
