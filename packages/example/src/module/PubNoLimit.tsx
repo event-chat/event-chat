@@ -4,7 +4,7 @@ import { pubNoLimit, subNoLimit } from '@/utils/event';
 import ChatList from '../components/chat/ChatList';
 import ChatPanel from '../components/chat/ChatPanel';
 import { type ChatItemProps } from '../components/chat/utils';
-import { safetyPrint } from '../utils';
+import { safetyPrint } from '../utils/fields';
 
 const PubNoLimit: FC = () => {
   const [list, setList] = useState<ChatItemProps[]>([]);

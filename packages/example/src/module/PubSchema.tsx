@@ -1,41 +1,39 @@
-import { useEventChat } from '@event-chat/core';
+import { createToken, useEventChat } from '@event-chat/core';
+import _merge from 'lodash/merge';
 import { type FC, useRef, useState } from 'react';
-import { z } from 'zod';
-import { pubZodSchema, subNoLimit, subZodSchemaResult, toastOpen } from '@/utils/event';
+import { pubZodSchema, subZodSchema, subZodSchemaResult, toastOpen } from '@/utils/event';
 import ChatList from '../components/chat/ChatList';
 import ChatPanel from '../components/chat/ChatPanel';
-import { type ChatItemProps } from '../components/chat/utils';
-import { safetyPrint } from '../utils';
+import { safetyPrint } from '../utils/fields';
+import RenderSchema from './RenderSchema';
+import { type ChatItemType, checkStatus, pubSchema, subSchema } from './utils';
 
 const PubSchema: FC = () => {
-  const [list, setList] = useState<ChatItemProps[]>([]);
+  const [list, setList] = useState<ChatItemType[]>([]);
   const rollRef = useRef<HTMLDivElement>(null);
 
   const { emit } = useEventChat(pubZodSchema, {
-    schema: z.object(
-      {
-        title: z.string({
-          error: (issue) => (issue.input === undefined ? '请输入标题' : '标题类型不正确'),
-        }),
-        ingredients: z.array(z.string(), {
-          error: (issue) =>
-            issue.input === undefined ? '请输入原料' : '原料只能是多个字符组成的数组',
-        }),
-        description: z.string({ error: '描述类型不正确' }).optional(),
-        id: z.string({ error: '编号类型不正确' }).optional(),
-      },
-      {
-        error: '提交的格式和要求的不匹配',
-      }
-    ),
-    callback: (record) =>
+    schema: pubSchema,
+    callback: ({ __origin, detail }) => {
       setList((current) =>
         current.concat({
-          content: safetyPrint(record.detail),
+          content: detail,
           time: new Date(),
           type: 'receive',
         })
-      ),
+      );
+      emit({
+        detail: {
+          message: '这条 toast 也是 event-chat 示例',
+          title: `成功收到来自 ${__origin} 的消息`,
+          type: 'success',
+        },
+        name: toastOpen,
+      });
+      if (detail.id) {
+        emit({ detail: { id: detail.id, type: 'send' }, name: subZodSchemaResult });
+      }
+    },
     debug: (result) => {
       const { issues = [] } = result?.error ?? {};
       const { data } = result ?? {};
@@ -61,18 +59,57 @@ const PubSchema: FC = () => {
   return (
     <ChatPanel
       rollRef={rollRef}
-      onChange={(detail) => {
-        emit({ name: subNoLimit, detail });
-        setList((current) =>
-          current.concat({
-            content: detail,
+      onChange={(record) => {
+        const id = createToken('pub-schema');
+        const [status, message = ''] = record
+          .split(':')
+          .map((val) => val.trim())
+          .filter(Boolean);
+
+        const detail = { id, message, status };
+        const schema = subSchema.refine(
+          (current) =>
+            checkStatus(
+              current,
+              list.filter((item) => item.type === 'receive')
+            ),
+          {
+            error: '状态不正确',
+          }
+        );
+
+        const result = schema.safeParse(detail);
+        const uplist =
+          !result.success || result.data.status === 'waiting'
+            ? list
+            : list.map((item) =>
+                item.type !== 'receive'
+                  ? item
+                  : _merge({}, item, { content: { status: result.data.status } })
+              );
+
+        emit({ name: subZodSchema, detail });
+        setList(
+          uplist.concat({
+            content: result.success
+              ? result.data
+              : {
+                  message: result.error.issues[0].message,
+                  status: 'error',
+                },
             time: new Date(),
-            type: 'send',
+            type: result.success ? 'send' : 'faild',
           })
         );
       }}
     >
-      <ChatList list={list} rollRef={rollRef} />
+      <ChatList
+        list={list.map(({ content, ...item }) => ({
+          ...item,
+          content: <RenderSchema item={content} />,
+        }))}
+        rollRef={rollRef}
+      />
     </ChatPanel>
   );
 };

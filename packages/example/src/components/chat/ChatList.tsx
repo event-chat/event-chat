@@ -1,5 +1,5 @@
 import { type FC, type RefObject, useEffect } from 'react';
-import { createKey } from '../../utils';
+import { createKey } from '../../utils/fields';
 import ChatItem from './ChatItem';
 import type { ChatItemProps } from './utils';
 

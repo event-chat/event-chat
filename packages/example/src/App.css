@@ -2,10 +2,14 @@
 
 @theme {
   /* 定义颜色变量 */
+  --color-light: #f3f4f6;
+  --color-primary: #4b5563;
+  --color-secondary: #f97316;
   --color-toast-success: #10b981;
   --color-toast-error: #ef4444;
   --color-toast-warning: #f59e0b;
   --color-toast-info: #3b82f6;
+  --shadow-card: 0 4px 20px -2px rgb(0 0 0 / 10%);
 
   @keyframes toast-in {
     0% {
@@ -37,6 +41,10 @@
 }
 
 /* 对话框 */
+@utility card-shadow {
+  box-shadow: var(--shadow-card);
+}
+
 @utility chat-container {
   @apply max-w-[80%] px-4 py-3 relative rounded-lg shadow-sm;
 }
@@ -50,7 +58,7 @@
 }
 
 @utility chat-footer {
-  @apply flex gap-1 justify-end mt-1 text-xs;
+  @apply flex gap-1 mt-1 text-xs;
 }
 
 @utility chat-wrapper {
