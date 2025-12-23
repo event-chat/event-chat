@@ -19,7 +19,7 @@ const GroupItem: FC<PropsWithChildren<GroupItemProps>> = ({
   rollRef,
 }) => (
   <div
-    className={['gap-2 grid grid-rows-[60px_1fr] h-70 p-2 rounded-md shadow-md', className]
+    className={['gap-2 grid grid-rows-[60px_1fr] h-78 p-2 rounded-md shadow-md', className]
       .filter(Boolean)
       .join(' ')}
   >
