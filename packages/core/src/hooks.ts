@@ -115,7 +115,7 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
     };
   }, [eventName, callbackHandle]);
 
-  return { token, emit } as const;
+  return Object.freeze({ token, emit });
 }
 
 type ChatResult = { token: string; emit: EmitType };
