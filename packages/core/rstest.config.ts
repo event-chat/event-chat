@@ -22,6 +22,7 @@ export default defineConfig({
     reportOnFailure: true,
     clean: true,
   },
+  includeSource: ['src/**/*.{js,ts}'],
   testEnvironment: 'jsdom',
   setupFiles: ['./rstest.setup.ts'],
   plugins: [pluginReact()],
