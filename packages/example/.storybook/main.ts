@@ -37,6 +37,20 @@ const config: StorybookConfig = {
     },
     check: true,
   },
+  async rsbuildFinal(config, { configType }) {
+    if (configType !== 'PRODUCTION') return config;
+    // Set the public path for the built files
+    const { output = {} } = config;
+
+    // return the customized config
+    return {
+      ...config,
+      output: {
+        ...output,
+        assetPrefix: './event-chat/',
+      },
+    };
+  },
   //   framework: 'storybook-react-rsbuild',
 };
 export default config;
