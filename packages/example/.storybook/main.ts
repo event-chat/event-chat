@@ -37,6 +37,7 @@ const config: StorybookConfig = {
     },
     check: true,
   },
+  staticDirs: ['event-chat'],
   //   framework: 'storybook-react-rsbuild',
 };
 export default config;
