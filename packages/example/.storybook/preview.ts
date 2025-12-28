@@ -2,14 +2,19 @@ import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/react';
 import { sb } from 'storybook/test';
 import '../src/App.css';
+import AppDecorator from './AppDecorator';
 
 const preview: Preview = {
+  decorators: [AppDecorator],
   parameters: {
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    interactivePlayground: {
+      collapsed: true,
     },
   },
 };

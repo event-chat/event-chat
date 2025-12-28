@@ -9,4 +9,26 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    type: 'NormalChat',
+  },
+};
+
+export const Schema: Story = {
+  args: {
+    type: 'SchemaChat',
+  },
+};
+
+export const Group: Story = {
+  args: {
+    type: 'GroupChat',
+  },
+};
+
+export const Token: Story = {
+  args: {
+    type: 'TokenChat',
+  },
+};

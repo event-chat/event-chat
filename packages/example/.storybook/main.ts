@@ -39,10 +39,8 @@ const config: StorybookConfig = {
   },
   async rsbuildFinal(config, { configType }) {
     if (configType !== 'PRODUCTION') return config;
-    // Set the public path for the built files
     const { output = {} } = config;
 
-    // return the customized config
     return {
       ...config,
       output: {
