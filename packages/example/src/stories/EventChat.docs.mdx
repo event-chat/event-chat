@@ -62,6 +62,26 @@ import ListObserver from './components/ListObserver';
 
 <Controls />
 
+> 由于 `Storybook` 限制 `useEventChat` 返回的数据类型，切换上方 `tab` 至 `EventChatResult` 查看
+
+### 参数 `callback`：回调函数（指定 `schema`）
+
+```typescript
+type DetailBaseType<Name extends string = string> = {
+  __origin: string;
+  name: Name;
+};
+
+type DetailTypeWithSchema<
+  Name extends string = string,
+  Schema extends ZodType = ZodType,
+> = DetailBaseType<Name> & {
+  detail: z.output<Schema>;
+};
+```
+
+### 参数 `callback`：回调函数（不指定 `schema`）
+
 <style>
   {`
   .category-item > a:first-child {

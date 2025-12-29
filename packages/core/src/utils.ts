@@ -57,11 +57,8 @@ export type EventChatOptionsWithoutSchema<Name extends string = string> = EventC
   schema?: never;
 };
 
-export type EventDetailType<Detail = unknown, Name extends string = string> = Pick<
-  DetailBaseType<Name>,
-  '__origin' | 'name'
-> &
-  Pick<EventChatOptionsWithoutSchema, 'group' | 'type'> & {
+export type EventDetailType<Detail = unknown, Name extends string = string> = DetailBaseType<Name> &
+  Pick<EventChatOptionsBase<Detail>, 'group' | 'type'> & {
     id: string;
     detail?: Detail;
     global?: boolean;
@@ -87,16 +84,14 @@ type DetailBaseType<Name extends string = string> = {
   name: Name;
 };
 
-type DetailTypeWithSchema<
-  Name extends string = string,
-  Schema extends ZodType = ZodType,
-> = DetailBaseType<Name> & {
+type DetailTypeWithSchema<Name extends string = string, Schema extends ZodType = ZodType> = Omit<
+  EventDetailType<z.output<Schema>, Name>,
+  'detail'
+> & {
   detail: z.output<Schema>;
 };
 
-type DetailTypeWithoutSchema<Name extends string = string> = DetailBaseType<Name> & {
-  detail?: unknown;
-};
+type DetailTypeWithoutSchema<Name extends string = string> = EventDetailType<unknown, Name>;
 
 type EventChatOptionsBase<DetailType> = {
   async?: boolean;

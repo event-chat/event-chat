@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react';
 import type { Meta, StoryObj } from 'storybook-react-rsbuild';
 import type { ZodType } from 'zod';
 import EventChat from './EventChat';
+import EventChatResult from './components/EventChatResult';
 import OptionsWithSchema from './components/OptionsWithSchema';
 import OptionsWithoutSchema from './components/OptionsWithoutSchema';
 
@@ -25,14 +26,14 @@ const meta = {
     options: {
       control: false,
       description:
-        '配置选项，详细切换上方 Tab 到 `OptionsWithSchema` 选项和 `OptionsWithoutSchema` 选项',
+        '配置选项，详细切换上方 Tab 到 `OptionsWithSchema` 选项（指定 `schema`）和 `OptionsWithoutSchema` 选项（不指定 `schema`）',
       table: {
         defaultValue: { summary: 'undefined' },
       },
     },
   },
   component: EventChat,
-  subcomponents: { OptionsWithSchema, OptionsWithoutSchema },
+  subcomponents: { OptionsWithSchema, OptionsWithoutSchema, EventChatResult },
 } satisfies Meta<EventChatAdditionalProps>;
 
 export default meta;

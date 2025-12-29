@@ -1,12 +1,7 @@
 import type { FC } from 'react';
+import BasicPrint from './BasicPrint';
 
-const OptionsWithoutSchema: FC<OptionsWithoutSchemaProps> = (props) => {
-  try {
-    return <pre>{JSON.stringify(props)}</pre>;
-  } catch {
-    return <pre>null</pre>;
-  }
-};
+const OptionsWithoutSchema: FC<OptionsWithoutSchemaProps> = (props) => <BasicPrint {...props} />;
 
 export default OptionsWithoutSchema;
 
