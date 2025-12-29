@@ -7,12 +7,7 @@ import AppDecorator from './AppDecorator';
 const preview: Preview = {
   decorators: [AppDecorator],
   parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
+    controls: false,
     interactivePlayground: {
       collapsed: true,
     },

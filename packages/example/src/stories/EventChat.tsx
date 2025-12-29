@@ -12,6 +12,7 @@ import type { FC } from 'react';
 import ExtraGuid from '@/components/ExtraGuid';
 import Layout from '@/components/Layout';
 import ChatLayout from '@/components/chat/ChatLayout';
+import { isKey } from '@/utils/fields';
 
 const GroupChat: FC = () => (
   <Layout
@@ -96,14 +97,14 @@ const demoMap = Object.freeze({
   TokenChat,
 });
 
-const EventChat: FC<EventChatProps> = ({ type = 'NormalChat' }) => {
-  const Demo = demoMap[type];
-  return <Demo />;
+const EventChat: FC<EventChatProps> = ({ name }) => {
+  const Demo = isKey(name, demoMap) ? demoMap[name] : null;
+  return Demo ? <Demo /> : null;
 };
 
 export default EventChat;
 
 export interface EventChatProps {
   /* 演示类型 */
-  type?: keyof typeof demoMap;
+  name: string;
 }

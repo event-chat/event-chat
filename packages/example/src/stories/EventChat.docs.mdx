@@ -1,6 +1,7 @@
-import { ArgsTable, Meta, Story } from '@storybook/addon-docs/blocks';
+import { ArgsTable, Canvas, Controls, Description, Meta } from '@storybook/addon-docs/blocks';
 import EventChat from './EventChat';
-import EventChatStories from './EventChat.stories';
+import EventChatStories, { Default } from './EventChat.stories';
+import ListObserver from './components/ListObserver';
 
 # `useEventChat`: 组件通信 `Hooks`
 
@@ -26,18 +27,60 @@ import EventChatStories from './EventChat.stories';
   title="useEventChat"
 />
 
+## Table of Contents 目录
+
+<ListObserver />
+
 ## 基础使用示例
 
-<div className="demo-wrap">
-  <Story name="default">
-    <EventChat />
-  </Story>
-</div>
+<Canvas
+  additionalActions={[
+    {
+      title: 'Pub in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubNoLimit.tsx',
+          '_blank'
+        );
+      },
+    },
+    {
+      title: 'Sub in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubNoLimit.tsx',
+          '_blank'
+        );
+      },
+    },
+  ]}
+  of={Default}
+  sourceState="none"
+/>
+
+## API 参数
+
+<Controls />
 
 <style>
   {`
-  .demo-wrap {
+  .category-item > a:first-child {
+    float: none;
+    left: -18px;
+    margin-left: 0;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+  }
+  .docs-story, .demo-wrap {
     background-color: #020917;
+  }
+  .docs-story > div:first-child {
+    padding: 0;
+    padding-bottom: 22px;
+  }
+  .floatingList ul {
+    margin: 0;
   }
 `}
 </style>
