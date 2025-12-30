@@ -79,20 +79,6 @@ export const validate = <
     }))
   );
 
-// type ValidateType<
-//   Name extends string,
-//   Schema extends ZodType,
-//   Group extends string | undefined = undefined,
-//   Type extends string | undefined = undefined,
-//   Token extends string | undefined = undefined,
-// > = Omit<
-//   EventChatOptions<Name, Schema, Group, Type, Token extends string ? true : undefined>,
-//   'callback' | 'schema' | 'token'
-// > & {
-//   schema: Schema;
-//   token?: Token;
-// };
-
 // 一旦校验通过就断言类型为 CallbackPropsType
 // 即便使用类型缩窄也是通过判断后通过 is 进行断言
 // 也可以使用重载替代断言，但结果就意味着 useEventChat，validate 每增加一个方法就要重载一次

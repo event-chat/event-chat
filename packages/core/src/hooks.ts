@@ -32,7 +32,6 @@ export function useEventChat<
   Token extends boolean | undefined = undefined,
 >(name: Name, ops?: EventChatOptions<Name, Schema, Group, Type, Token>) {
   const eventName = useMemo(() => getEventName(name), [name]);
-  // const allowToken = useMemo(() => Boolean(ops?.token), [ops?.token]);
   const id = useId();
 
   // 随业务改变
@@ -107,8 +106,3 @@ export function useEventChat<
 
   return Object.freeze({ token, emit });
 }
-
-// type ChatResult = { token: string; emit: EmitType };
-// type EmitType = <Detail, CustomName extends string = string>(
-//   detail: Omit<EventDetailType<Detail, CustomName>, '__origin' | 'group' | 'id' | 'type'>
-// ) => void;
