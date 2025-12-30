@@ -21,11 +21,11 @@ export const getConditionKey = (name: string, id: string, type?: string) =>
 export const getEventName = <T extends string>(name: T) =>
   name ? `event-chart-${name}` : undefined;
 
-export function hasSchema<Schema extends ZodType, Name extends string>(
-  ops: EventChatOptions<Schema, Name> | undefined
-): ops is EventChatOptionsWithSchema<Schema, Name> {
-  return !!ops && 'schema' in ops && ops.schema !== undefined;
-}
+// export function hasSchema<Schema extends ZodType, Name extends string>(
+//   ops: EventChatOptions<Schema, Name> | undefined
+// ): ops is EventChatOptionsWithSchema<Schema, Name> {
+//   return !!ops && 'schema' in ops && ops.schema !== undefined;
+// }
 
 export const isResultType = (data: unknown): data is ResultType =>
   typeof data === 'object' && data !== null && 'success' in data && !data.success;
@@ -40,36 +40,90 @@ export function mountEvent(event: CustomDetailEvent) {
   }
 }
 
-export type EventChatOptions<Schema extends ZodType, Name extends string = string> =
-  | EventChatOptionsWithoutSchema<Name>
-  | EventChatOptionsWithSchema<Schema, Name>;
+export interface EventChatOptions<
+  Name extends string,
+  Schema extends ZodType | undefined = undefined,
+  Group extends string | undefined = undefined,
+  Type extends string | undefined = undefined,
+  Token extends boolean | undefined = undefined,
+> {
+  async?: boolean;
+  group?: Group;
+  schema?: Schema;
+  token?: Token;
+  type?: Type;
+  callback?: (target: DetailType<Name, Schema, Group, Type, Token>) => void;
+  debug?: (result?: ResultType) => void;
+}
 
-export type EventChatOptionsWithSchema<
-  Schema extends ZodType,
-  Name extends string = string,
-> = EventChatOptionsBase<DetailTypeWithSchema<Name, Schema>> & {
-  schema: Schema;
+export type DetailType<
+  Name extends string,
+  Schema extends ZodType | undefined = undefined,
+  Group extends string | undefined = undefined,
+  Type extends string | undefined = undefined,
+  Token extends boolean | undefined = undefined,
+> = {
+  __origin: string;
+  id: string;
+  name: Name;
+  detail: WasProvided<Schema> extends true ? z.output<Exclude<Schema, undefined>> : unknown;
+  group: WasProvided<Group> extends true ? Exclude<Group, undefined> : undefined;
+  type: WasProvided<Type> extends true ? Exclude<Type, undefined> : undefined;
+  token: Token extends true ? string : undefined;
+  global?: boolean;
 };
 
-export type EventChatOptionsWithoutSchema<Name extends string = string> = EventChatOptionsBase<
-  DetailTypeWithoutSchema<Name>
-> & {
-  schema?: never;
+// 工具类型：判断在调用中，泛型 T 是否“实际上被提供了参数”
+// 如果被提供了（无论具体值还是undefined），T会被实例化为具体的类型（如 string, number, undefined）
+// 如果没被提供，T会保持其默认值或整个约束类型
+export type WasProvided<T, Default = undefined> =
+  // 关键判断：如果 T 不等于 Default，且不等于约束的“或undefined”部分，则认为它被提供了
+  [T] extends [Default]
+    ? false
+    : [T] extends [undefined]
+      ? false // 单独处理只传了 undefined 的情况，如果你想将其视为“已提供但值为空”
+      : true;
+
+// export type EventChatOptionsWithSchema<
+//   Schema extends ZodType,
+//   Name extends string = string,
+// > = EventChatOptionsBase<DetailTypeWithSchema<Name, Schema>> & {
+//   schema: Schema;
+// };
+
+// export type EventChatOptionsWithoutSchema<Name extends string = string> = EventChatOptionsBase<
+//   DetailTypeWithoutSchema<Name>
+// > & {
+//   schema?: never;
+// };
+
+// export type EventDetailType<Name extends string = string> = Omit<
+//   DetailType<Name, undefined>,
+//   'group' | 'token' | 'type'
+// > & {
+//   group?: string;
+//   token?: string;
+//   type?: string;
+// };
+
+export type EventDetailType<Detail = unknown, Name extends string = string> = {
+  __origin: string;
+  id: string;
+  name: Name;
+  detail?: Detail;
+  global?: boolean;
+  group?: string;
+  type?: string;
+  token?: string;
 };
 
-export type EventDetailType<Detail = unknown, Name extends string = string> = DetailBaseType<Name> &
-  Pick<EventChatOptionsBase<Detail>, 'group' | 'type'> & {
-    id: string;
-    detail?: Detail;
-    global?: boolean;
-    token?: string;
-  };
-
-export type MountOpsType<Name extends string = string, Schema extends ZodType = ZodType> = Omit<
-  EventChatOptionsWithSchema<Schema, Name>,
-  'callback' | 'token'
-> &
-  Pick<EventDetailType, 'token'>;
+// export type MountOpsType<
+//   Name extends string,
+//   Schema extends ZodType | undefined = undefined,
+//   Group extends string | undefined = undefined,
+//   Type extends string | undefined = undefined,
+//   Token extends boolean | undefined = undefined,
+// > = Omit<DetailType<Name, Schema, Group, Type, Token>, 'callback' | 'token'> & {};
 
 export type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & {
   data: unknown;
@@ -79,25 +133,25 @@ interface CustomDetailEvent extends Event {
   detail?: EventDetailType;
 }
 
-type DetailBaseType<Name extends string = string> = {
-  __origin: string;
-  name: Name;
-};
+// type DetailBaseType<Name extends string = string> = {
+//   __origin: string;
+//   name: Name;
+// };
 
-type DetailTypeWithSchema<Name extends string = string, Schema extends ZodType = ZodType> = Omit<
-  EventDetailType<z.output<Schema>, Name>,
-  'detail'
-> & {
-  detail: z.output<Schema>;
-};
+// type DetailTypeWithSchema<Name extends string = string, Schema extends ZodType = ZodType> = Omit<
+//   EventDetailType<z.output<Schema>, Name>,
+//   'detail'
+// > & {
+//   detail: z.output<Schema>;
+// };
 
-type DetailTypeWithoutSchema<Name extends string = string> = EventDetailType<unknown, Name>;
+// type DetailTypeWithoutSchema<Name extends string = string> = EventDetailType<unknown, Name>;
 
-type EventChatOptionsBase<DetailType> = {
-  async?: boolean;
-  group?: string;
-  token?: boolean;
-  type?: string;
-  callback?: (target: DetailType) => void;
-  debug?: (result?: ResultType) => void;
-};
+// type EventChatOptionsBase<DetailType> = {
+//   async?: boolean;
+//   group?: string;
+//   token?: boolean;
+//   type?: string;
+//   callback?: (target: DetailType) => void;
+//   debug?: (result?: ResultType) => void;
+// };

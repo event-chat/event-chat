@@ -8,7 +8,7 @@ import OptionsWithSchema from './components/OptionsWithSchema';
 import OptionsWithoutSchema from './components/OptionsWithoutSchema';
 
 type EventChatAdditionalProps = ComponentProps<typeof EventChat> & {
-  options?: EventChatOptions<ZodType>;
+  options?: EventChatOptions<string, ZodType, string, string, true>;
 };
 
 const meta = {

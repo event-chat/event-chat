@@ -1,7 +1,6 @@
-import { describe, expect, rstest, test } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import { z } from 'zod';
 import { EventDetailType } from '../src';
-import { MountOpsType } from '../src/utils';
 import { checkLiteral, validate } from '../src/validate';
 
 const getPath = (data: unknown, path: string): unknown => {
@@ -35,22 +34,31 @@ const testSchema = z.object({
   message: z.string().min(3, '消息长度不能少于3个字符'),
 });
 
-const options: MountOpsType<typeof name, typeof testSchema> = {
+const options = {
   ...config,
   schema: testSchema,
+  token: true,
 };
 
 describe('验证方法单元测试', () => {
   test('checkLiteral：group和token均匹配，校验成功', async () => {
-    const result = await checkLiteral(baseTestData, config);
+    const result = await checkLiteral(baseTestData, options, config.token);
 
-    expect(result.success).toBeTruthy();
-    expect(result.data).toEqual(config);
+    expect(result).toHaveProperty('__origin', baseTestData.__origin);
+    expect(result).toHaveProperty('id', baseTestData.id);
+    expect(result).toHaveProperty('type', baseTestData.type);
+    expect(result).toHaveProperty('group', baseTestData.group);
+    expect(result).toHaveProperty('token', baseTestData.token);
+    expect(result).toHaveProperty('name', name);
+    expect(result.detail).toEqual({ message });
   });
 
   test('checkLiteral：group不匹配，校验失败并抛出错误', async () => {
-    const upConfig = { ...config, group: 'wrong-group' };
-    await expect(checkLiteral(baseTestData, upConfig)).rejects.toThrow('validate faild');
+    const upConfig = { ...options, group: 'wrong-group' };
+    await expect(checkLiteral(baseTestData, upConfig, config.token)).rejects.toThrow(
+      'validate faild'
+    );
+
     checkLiteral(baseTestData, upConfig).catch((error) => {
       const { cause } = error instanceof Error ? error : {};
       expect(cause).toMatchObject({ success: false });
@@ -61,7 +69,7 @@ describe('验证方法单元测试', () => {
   });
 
   test('checkLiteral：token不匹配，校验失败并抛出错误', async () => {
-    const upConfig = { ...config, token: 'wrong-token' };
+    const upConfig = { ...options, token: true };
     await expect(checkLiteral(baseTestData, upConfig)).rejects.toThrow('validate faild');
     checkLiteral(baseTestData, upConfig).catch((error) => {
       const { cause } = error instanceof Error ? error : {};
@@ -76,35 +84,34 @@ describe('验证方法单元测试', () => {
     // group 都为空
     const baseWithOutGroup = { ...baseTestData, group: undefined, token: undefined };
     checkLiteral(baseWithOutGroup, {}).then((result) => {
-      expect(result.success).toBeTruthy();
+      expect(result.group).toBeUndefined();
     });
 
     // group 都为空，但 global 为 true
     checkLiteral({ ...baseWithOutGroup, global: true }, {}).then((result) => {
-      expect(result.success).toBeTruthy();
+      expect(result.token).toBeUndefined();
     });
 
     // emit 的 group 不为空，但 global 为 true
     checkLiteral({ ...baseTestData, global: true }, {}).then((result) => {
-      expect(result.success).toBeTruthy();
+      expect(result.global).toBeTruthy();
     });
   });
 
   test('checkLiteral：私聊或私聊成员公屏喊话', () => {
-    // group 都为空
     const baseWithOutGroup = { ...baseTestData, group: undefined };
-    checkLiteral(baseWithOutGroup, { token: config.token }).then((result) => {
-      expect(result.success).toBeTruthy();
+    checkLiteral(baseWithOutGroup, { token: true }, config.token).then((result) => {
+      expect(result.token).toBe(config.token);
     });
 
     // token 都为空，但 global 为 true
     checkLiteral({ ...baseWithOutGroup, global: true }, {}).then((result) => {
-      expect(result.success).toBeTruthy();
+      expect(result.global).toBeTruthy();
     });
 
     // emit 的 token 不为空，但 global 为 true
     checkLiteral({ ...baseTestData, global: true }, {}).then((result) => {
-      expect(result.success).toBeTruthy();
+      expect(result.token).toBeUndefined();
     });
   });
 
@@ -113,14 +120,14 @@ describe('验证方法单元测试', () => {
   });
 
   test('validate：同步校验 - 符合Schema规则，返回成功结果', async () => {
-    validate(baseTestData, options).then((result) => {
+    validate(baseTestData, options, config.token).then((result) => {
       expect(result).toEqual(baseTestData);
     });
   });
 
   test('validate：同步校验 - 不符合Schema规则，抛出错误并携带cause', async () => {
     const invalidDetail = { message: 'hi' };
-    const checked = validate({ ...baseTestData, detail: invalidDetail }, options);
+    const checked = validate({ ...baseTestData, detail: invalidDetail }, options, config.token);
     const { rejects } = await expect(checked);
 
     await rejects.toThrow('validate faild');
@@ -132,7 +139,7 @@ describe('验证方法单元测试', () => {
   });
 
   test('validate：异步校验 - 符合Schema规则，返回成功结果', () => {
-    validate(baseTestData, { ...options, async: true }).then((result) => {
+    validate(baseTestData, { ...options, async: true }, config.token).then((result) => {
       expect(result).toEqual(baseTestData);
     });
   });

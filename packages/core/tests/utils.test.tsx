@@ -8,7 +8,6 @@ import {
   createToken,
   getConditionKey,
   getEventName,
-  hasSchema,
   isResultType,
   isSafetyType,
   mountEvent,
@@ -73,14 +72,6 @@ describe('工具函数单元测试', () => {
   test('getEventName: 当name不为空时，应该返回拼接后的事件名称，否则返回 undefined', () => {
     expect(getEventName('test')).toBe('event-chart-test');
     expect(getEventName('')).toBeUndefined();
-  });
-
-  test('hasSchema: 检测是否包含属性 schema', () => {
-    const options = { group: 'test', schema: testSchema };
-    expect(hasSchema(options)).toBeTruthy();
-    expect(hasSchema({})).toBeFalsy();
-    expect(hasSchema(undefined)).toBeFalsy();
-    expect(hasSchema({ group: 'test', schema: undefined })).toBeFalsy();
   });
 
   test('isResultType: 获取校验失败的对象', () => {

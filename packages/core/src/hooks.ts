@@ -3,15 +3,12 @@ import { ZodType } from 'zod';
 import eventBus from './eventBus';
 import {
   EventChatOptions,
-  EventChatOptionsWithSchema,
-  EventChatOptionsWithoutSchema,
   EventDetailType,
   EventName,
   createEvent,
   createToken,
   getConditionKey,
   getEventName,
-  hasSchema,
   isResultType,
   isSafetyType,
   mountEvent,
@@ -27,22 +24,15 @@ export const useMemoFn = <T>(fn: T) => {
   return methodRef;
 };
 
-export function useEventChat<Name extends string>(
-  name: Name,
-  ops?: EventChatOptionsWithoutSchema<Name>
-): Readonly<ChatResult>;
-
-export function useEventChat<Schema extends ZodType, Name extends string>(
-  name: Name,
-  ops?: EventChatOptionsWithSchema<Schema, Name>
-): Readonly<ChatResult>;
-
-export function useEventChat<Schema extends ZodType, Name extends string>(
-  name: Name,
-  ops?: EventChatOptions<Schema, Name>
-): Readonly<ChatResult> {
+export function useEventChat<
+  Name extends string,
+  Schema extends ZodType | undefined = undefined,
+  Group extends string | undefined = undefined,
+  Type extends string | undefined = undefined,
+  Token extends boolean | undefined = undefined,
+>(name: Name, ops?: EventChatOptions<Name, Schema, Group, Type, Token>) {
   const eventName = useMemo(() => getEventName(name), [name]);
-  const allowToken = useMemo(() => Boolean(ops?.token), [ops?.token]);
+  // const allowToken = useMemo(() => Boolean(ops?.token), [ops?.token]);
   const id = useId();
 
   // 随业务改变
@@ -52,7 +42,7 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
   );
 
   const options = useMemoFn(ops);
-  const tokenRc = useMemoFn(allowToken ? token : undefined);
+  const tokenRc = useMemoFn(token);
 
   const errorHandle = useCallback(
     (error: unknown, data: unknown) => {
@@ -70,13 +60,13 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
       if (!opitem || !isSafetyType(subName, name)) return;
       const upRecord = { ...args, name: subName };
 
-      if (hasSchema(opitem)) {
-        validate(upRecord, { ...opitem, token: tokenRc.current })
+      if (opitem.schema !== undefined) {
+        validate(upRecord, { ...opitem, schema: opitem.schema }, tokenRc.current)
           .then(opitem.callback)
           .catch((error) => errorHandle(error, data.detail));
       } else {
-        checkLiteral(upRecord, { ...opitem, token: tokenRc.current })
-          .then(() => opitem.callback?.(upRecord))
+        checkLiteral(upRecord, { ...opitem, schema: undefined }, tokenRc.current)
+          .then(opitem.callback)
           .catch((error) => errorHandle(error, data.detail));
       }
     },
@@ -118,7 +108,7 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
   return Object.freeze({ token, emit });
 }
 
-type ChatResult = { token: string; emit: EmitType };
-type EmitType = <Detail, CustomName extends string = string>(
-  detail: Omit<EventDetailType<Detail, CustomName>, '__origin' | 'group' | 'id' | 'type'>
-) => void;
+// type ChatResult = { token: string; emit: EmitType };
+// type EmitType = <Detail, CustomName extends string = string>(
+//   detail: Omit<EventDetailType<Detail, CustomName>, '__origin' | 'group' | 'id' | 'type'>
+// ) => void;
