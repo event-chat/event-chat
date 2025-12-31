@@ -10,7 +10,7 @@ type EventChatAdditionalProps = ComponentProps<typeof EventChat> & {
   options?: EventChatOptionsType<string, ZodType, string, string, true>;
 };
 
-const meta = {
+const meta: Meta<EventChatAdditionalProps> = {
   args: {
     name: 'NormalChat',
     options: {
@@ -31,8 +31,15 @@ const meta = {
     },
   },
   component: EventChat,
+  decorators: [
+    (Story) => (
+      <div className="m-auto max-w-400">
+        <Story />
+      </div>
+    ),
+  ],
   subcomponents: { EventChatOptions, EventChatResult },
-} satisfies Meta<EventChatAdditionalProps>;
+};
 
 export default meta;
 

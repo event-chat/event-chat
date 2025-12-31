@@ -1,6 +1,6 @@
 import { ArgsTable, Canvas, Controls, Description, Meta } from '@storybook/addon-docs/blocks';
 import EventChat from './EventChat';
-import EventChatStories, { Default } from './EventChat.stories';
+import EventChatStories, { Default, Group, Schema } from './EventChat.stories';
 import ListObserver from './components/ListObserver';
 import TableList from './components/TableList';
 import Tag from './components/Tag';
@@ -29,7 +29,7 @@ import Tag from './components/Tag';
   title="useEventChat"
 />
 
-## Table of Contents 目录
+## 目录
 
 <ListObserver />
 
@@ -137,7 +137,7 @@ import Tag from './components/Tag';
 - 接收消息没有配置 `group`，回调函数 `callback` 参数中的 `group` 为 `undefined`
 - 接收消息 `token` 不为 `true`，回调函数 `callback` 参数中的 `token` 为 `undefined`
 
-> 也就意味着，即便发送消息时通过 `global` 发送到公屏，同时也提供了 `group` 和 `token`，但接收方没有配置，那么回调函数中 `group` 和 `token` 为 `undefined`
+> 也就意味着，即便发送消息时通过 `global` 发送到“公屏“，同时也提供了 `group` 和 `token`，但接收方没有配置，那么回调函数中 `group` 和 `token` 为 `undefined`
 
 ### `debug`：调试方法
 
@@ -183,6 +183,86 @@ type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & 
 - `__origin`、`type` 将根据 `useEventChat` 配置自动添加
 - `id` 为内部生成
 - `group`、`token` 仅用于接收方比对，接收方最终根据自身配置，透传给 `callback` 作为参数
+
+## 只接收指定类型的消息
+
+通过 `Zod` 来实现，提供一个 `schema` 后只有类型匹配的消息才会被接收。
+
+<Canvas
+  additionalActions={[
+    {
+      title: 'Pub in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubSchema.tsx',
+          '_blank'
+        );
+      },
+    },
+    {
+      title: 'Sub in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubSchema.tsx',
+          '_blank'
+        );
+      },
+    },
+  ]}
+  of={Schema}
+  sourceState="none"
+/>
+
+提供 `schema` 后回调函数 `callback` 的参数对象中的属性 `detail`，会根据 `schema` 模型定义的规则推断数据类型。只有类型校验通过的数据才会被接收。所以无论消息怎么发，最终接收的一定是约定好的类型。
+
+### 异步消息
+
+`Zod` 是允许异步校验的，这里通过 `async` 来实现，例如：
+
+```typescript
+const { emit } = useEventChat('pub-mox', {
+  async: true,
+  schema: z.string().refine(async (id) => {
+    // verify that ID exists in database
+    return true;
+  }),
+  callback: ({ detail }) => {
+    // print id is string
+    console.log('a----pub-mox', detail.id);
+  },
+});
+```
+
+通过 `Zod` 的 `refine` 可以实现异步或同步的自定义校验规则，例如 `return type === 'customType'`
+
+## 群组消息
+
+设置 `group` 后将只接受来自成员组的组内消息：
+
+<Canvas
+  additionalActions={[
+    {
+      title: 'Pub in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubSchema.tsx',
+          '_blank'
+        );
+      },
+    },
+    {
+      title: 'Sub in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubSchema.tsx',
+          '_blank'
+        );
+      },
+    },
+  ]}
+  of={Group}
+  sourceState="none"
+/>
 
 <style>
   {`

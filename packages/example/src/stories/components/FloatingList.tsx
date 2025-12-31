@@ -28,6 +28,7 @@ const FloatingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
 
       if (floatingList) floatingList.addEventListener('click', stopClose);
       allowRef.current = true;
+      setIsExpanded(false);
     };
   }, [setIsExpanded]);
   return (
@@ -65,7 +66,7 @@ const FloatingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
           `}
         >
           <button className="control-btn cursor-pointer w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors">
-            <span className="font-medium">完整悬浮清单</span>
+            <span className="font-medium">文档目录</span>
             <svg
               className="w-4 h-4 text-gray-500 rotate-180 transition-transform duration-300 pointer-events-none"
               fill="none"
@@ -81,22 +82,24 @@ const FloatingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
               />
             </svg>
           </button>
-          <ul className="px-2 py-2 m-0 border-t border-gray-100">
-            {list.map(({ name, tag, title }) => {
-              const { indent, color } = getCatalogItemStyle(tag);
-              return (
-                <li
-                  className={`
+          <div className="max-h-84 overflow-y-auto">
+            <ul className="px-2 py-2 m-0 border-t border-gray-100">
+              {list.map(({ name, tag, title }) => {
+                const { indent, color } = getCatalogItemStyle(tag);
+                return (
+                  <li
+                    className={`
                   ${indent} ${color}
                   sb-anchor py-2 text-sm hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors cursor-pointer`}
-                  key={name}
-                  onClick={() => scrollTo?.(name)}
-                >
-                  {title}
-                </li>
-              );
-            })}
-          </ul>
+                    key={name}
+                    onClick={() => scrollTo?.(name)}
+                  >
+                    {title}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
