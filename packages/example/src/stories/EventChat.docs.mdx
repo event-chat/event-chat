@@ -319,8 +319,19 @@ useEventChat('multiple-event', {
   }),
   callback: ({ detail }) => {
     if (detail.type === 'color') {
-      // do something
+      // 1. manual: do something
     }
+  },
+});
+
+useEventChat('multiple-event', {
+  group: 'edit-group',
+  schema: z.object({
+    name: z.string(),
+    type: z.never(),
+  }),
+  callback: ({ detail }) => {
+    // 2. auto: do somethine
   },
 });
 ```
