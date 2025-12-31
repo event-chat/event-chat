@@ -80,7 +80,7 @@ describe('useEventChat 基础功能', () => {
 
     // 检测 detail
     const detail = Reflect.get(emittedEvent, 'detail');
-    expect(detail.__origin).toBe(testName);
+    expect(detail.origin).toBe(testName);
     expect(detail.group).toBe('test-group');
     expect(detail.type).toBe('test-type');
     expect(detail.name).toBe(testDetail.name);
@@ -101,7 +101,7 @@ describe('useEventChat 基础功能', () => {
     expect(mockDispatchEvent).toHaveBeenCalledTimes(1);
 
     const dispatchedEvent = mockDispatchEvent.mock.calls[0][0];
-    expect(dispatchedEvent.detail.__origin).toBe('');
+    expect(dispatchedEvent.detail.origin).toBe('');
   });
 
   test('Hooks 挂载时订阅 eventBus，卸载时取消订阅', () => {

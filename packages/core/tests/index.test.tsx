@@ -35,28 +35,38 @@ describe('index 出口文件导出验证', () => {
   });
 
   test('应正确导出 EventChatOptions 和 EventDetailType 类型', () => {
-    const withoSchemaOptions: IndexExports.EventChatOptions<UserSchema, 'user.created'> = {
+    const withoSchemaOptions: IndexExports.EventChatOptions<
+      'user.created',
+      UserSchema,
+      'user-items',
+      'created'
+    > = {
       group: 'user-items',
       schema: userSchema,
       type: 'created',
     };
 
-    const withoutSchemaOptions: IndexExports.EventChatOptions<z.ZodType, 'message.sent'> = {
+    const withoutSchemaOptions: IndexExports.EventChatOptions<
+      'message.sent',
+      z.ZodType,
+      'message',
+      'sent'
+    > = {
       group: 'message',
       type: 'sent',
     };
 
     const eventDetail: IndexExports.EventDetailType<CustomDetail, 'chat.message'> = {
-      __origin: 'web-client',
-      name: 'chat.message',
-      id: '123456',
       detail: {
         content: 'Hello World',
         timestamp: 1719283645000,
       },
-      group: 'chat',
-      type: 'message',
       global: true,
+      group: 'chat',
+      id: '123456',
+      name: 'chat.message',
+      origin: 'web-client',
+      type: 'message',
       token: 'abc-123',
     };
 

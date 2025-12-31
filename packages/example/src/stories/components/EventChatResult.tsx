@@ -15,6 +15,6 @@ export interface EventChatResultProps {
    * 发送事件消息的方法
    */
   emit: <Detail, CustomName extends string>(
-    detail: Omit<EventDetailType<Detail, CustomName>, '__origin' | 'group' | 'id' | 'type'>
+    detail: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'type'>
   ) => void;
 }

@@ -74,14 +74,14 @@ export function useEventChat<
 
   const emit = useCallback(
     <Detail, CustomName extends string>(
-      detail: Omit<EventDetailType<Detail, CustomName>, '__origin' | 'group' | 'id' | 'type'>
+      detail: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'type'>
     ) => {
-      // 业务提交 name 是空的，那么 __origin 就是空，当做匿名处理
+      // 业务提交 name 是空的，那么 origin 就是空，当做匿名处理
       // 匿名事件只允许通过 emit 发送消息，不能通过 callback 接收消息
       const event = createEvent({
         ...detail,
-        __origin: name,
         group: ops?.group,
+        origin: name,
         type: ops?.type,
         id,
       });

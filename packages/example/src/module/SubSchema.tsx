@@ -28,7 +28,7 @@ const SubSchema: FC = () => {
         error: '状态不正确',
       }
     ),
-    callback: ({ detail, __origin }) => {
+    callback: ({ detail, origin }) => {
       const updateList =
         detail.status === 'waiting'
           ? list
@@ -49,7 +49,7 @@ const SubSchema: FC = () => {
       emit({
         detail: {
           message: '这条 toast 也是 event-chat 示例',
-          title: `成功收到来自 ${__origin} 的消息`,
+          title: `成功收到来自 ${origin} 的消息`,
           type: 'success',
         },
         name: toastOpen,

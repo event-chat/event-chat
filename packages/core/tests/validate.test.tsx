@@ -23,9 +23,9 @@ const config = {
 
 const baseTestData: EventDetailType<{ message: string }> = {
   ...config,
-  __origin: 'test-origin',
   detail: { message },
   id: 'test-id-123',
+  origin: 'test-origin',
   type: 'test-type',
   name,
 };
@@ -44,7 +44,7 @@ describe('验证方法单元测试', () => {
   test('checkLiteral：group和token均匹配，校验成功', async () => {
     const result = await checkLiteral(baseTestData, options, config.token);
 
-    expect(result).toHaveProperty('__origin', baseTestData.__origin);
+    expect(result).toHaveProperty('origin', baseTestData.origin);
     expect(result).toHaveProperty('id', baseTestData.id);
     expect(result).toHaveProperty('type', baseTestData.type);
     expect(result).toHaveProperty('group', baseTestData.group);

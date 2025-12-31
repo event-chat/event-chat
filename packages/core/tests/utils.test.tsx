@@ -22,9 +22,9 @@ const config = {
 
 const baseTestData: EventDetailType<{ message: string }> = {
   ...config,
-  __origin: 'test-origin',
   detail: { message },
   id: 'test-id-123',
+  origin: 'test-origin',
   type: 'test-type',
   name,
 };

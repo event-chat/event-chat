@@ -57,20 +57,20 @@ export type DetailType<
   Type extends string | undefined = undefined,
   Token extends boolean | undefined = undefined,
 > = {
-  __origin: string;
   id: string;
   name: Name;
   detail: WasProvided<Schema> extends true ? z.output<Exclude<Schema, undefined>> : unknown;
   group: WasProvided<Group> extends true ? Exclude<Group, undefined> : undefined;
+  origin: string;
   type: WasProvided<Type> extends true ? Exclude<Type, undefined> : undefined;
   token: Token extends true ? string : undefined;
   global?: boolean;
 };
 
 export type EventDetailType<Detail = unknown, Name extends string = string> = {
-  __origin: string;
   id: string;
   name: Name;
+  origin: string;
   detail?: Detail;
   global?: boolean;
   group?: string;

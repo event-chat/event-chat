@@ -20,7 +20,7 @@ const PubSchema: FC = () => {
 
   const { emit } = useEventChat(pubZodSchema, {
     schema: pubSchema,
-    callback: ({ __origin, detail }) => {
+    callback: ({ detail, origin }) => {
       setList((current) =>
         current.concat({
           content: detail,
@@ -31,7 +31,7 @@ const PubSchema: FC = () => {
       emit({
         detail: {
           message: '这条 toast 也是 event-chat 示例',
-          title: `成功收到来自 ${__origin} 的消息`,
+          title: `成功收到来自 ${origin} 的消息`,
           type: 'success',
         },
         name: toastOpen,

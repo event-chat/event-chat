@@ -17,7 +17,7 @@ const withSchemaOptions: EventChatOptions<'user.created', UserSchema, 'user-item
   type: 'created',
   callback: (record) => {
     // 验证 detail 类型是否符合 DetailTypeWithSchema
-    expectType<string>(record.__origin);
+    expectType<string>(record.origin);
     expectType<'user.created'>(record.name);
     expectType<{ id: string; name: string }>(record.detail);
   },
@@ -37,7 +37,7 @@ const withoutSchemaOptions: EventChatOptions<'message.sent', undefined, 'message
   type: 'sent',
   callback: (record) => {
     // 验证 detail 类型是否符合 DetailTypeWithoutSchema
-    expectType<string>(record.__origin);
+    expectType<string>(record.origin);
     expectType<'message.sent'>(record.name);
     expectType<unknown | undefined>(record.detail);
   },
@@ -55,21 +55,21 @@ type CustomDetail = {
 };
 
 const eventDetail: EventDetailType<CustomDetail, 'chat.message'> = {
-  __origin: 'web-client',
-  name: 'chat.message',
-  id: '123456',
   detail: {
     content: 'Hello World',
     timestamp: 1719283645000,
   },
   group: 'chat',
+  id: '123456',
+  name: 'chat.message',
+  origin: 'web-client',
   type: 'message',
   global: true,
   token: 'abc-123',
 };
 
 // 验证各个字段类型
-expectType<string>(eventDetail.__origin);
+expectType<string>(eventDetail.origin);
 expectType<'chat.message'>(eventDetail.name);
 expectType<string>(eventDetail.id);
 expectType<CustomDetail | undefined>(eventDetail.detail);
@@ -80,15 +80,15 @@ expectType<string | undefined>(eventDetail.type);
 
 // 2. 测试默认 Detail（unknown）的 EventDetailType
 const defaultDetail: EventDetailType<unknown, 'system.notice'> = {
-  __origin: 'mobile-client',
-  name: 'system.notice',
-  id: '654321',
   detail: { anyKey: 'anyValue' },
+  id: '654321',
+  name: 'system.notice',
+  origin: 'mobile-client',
   token: undefined,
 };
 
 // 验证各个字段类型
-expectType<string>(defaultDetail.__origin);
+expectType<string>(defaultDetail.origin);
 expectType<'system.notice'>(defaultDetail.name);
 expectType<string>(defaultDetail.id);
 expectType<unknown | undefined>(defaultDetail.detail);

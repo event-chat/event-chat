@@ -6,12 +6,12 @@ import eventBus from '../src/eventBus';
 const eventName = 'test-on-emit';
 const message = 'hello event bus';
 const testEventData: EventDetailType = {
-  __origin: 'test-origin',
   detail: { message },
   global: true,
   group: 'test-group',
   id: 'test-id-123',
   name: 'test-evet',
+  origin: 'test-origin',
   token: 'test-token-456',
   type: 'test-type',
 };

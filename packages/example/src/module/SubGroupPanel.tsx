@@ -35,11 +35,11 @@ const SubPanel: FC<SubPanelProps> = ({ group, name, ...props }) => {
   const rollRef = useRef<HTMLDivElement>(null);
 
   useEventChat(name, {
-    callback: ({ __origin, detail }) =>
+    callback: ({ detail, origin }) =>
       setList((current) =>
         current.concat({
           content: safetyPrint(detail),
-          header: __origin,
+          header: origin,
           time: new Date(),
           type: 'receive',
         })
