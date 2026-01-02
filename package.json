@@ -10,10 +10,15 @@
   },
   "main": "index.js",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "pnpm --filter @event-chat/core build && pnpm --filter @event-chat/example build",
+    "build": "pnpm --filter @event-chat/core build && pnpm --filter @event-chat/antd-item build && pnpm --filter @event-chat/example build",
+    "antd-item:dev": "pnpm --filter \"@event-chat/antd-item\" build --watch",
     "core:dev": "pnpm --filter \"@event-chat/core\" build --watch",
     "example:dev": "pnpm --filter \"@event-chat/example\" dev",
+    "example:storybook": "pnpm --filter \"@event-chat/example\" storybook",
     "format:check": "pnpm -r format:check",
     "lint": "pnpm -r lint",
     "commit:msg": "commitlint --edit $1",

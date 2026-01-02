@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  // 新增：指定测试目录的 rootDir，包含测试文件和 setup 文件
+  "compilerOptions": {
+    "rootDir": "../", // 覆盖源码的 rootDir，指向 packages/core 根目录（包含 src、tests、rstest.setup.ts）
+    // 可选：若需输出测试编译文件，指定输出目录（避免与源码编译产物混淆）
+    "outDir": "./dist"
+  },
+  "include": [".", "../rstest.setup.ts", "../src"]
+}

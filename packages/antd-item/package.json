@@ -1,5 +1,5 @@
 {
-  "name": "@event-chat/core",
+  "name": "@event-chat/antd-item",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,6 +28,7 @@
     "test:type": "tsd"
   },
   "devDependencies": {
+    "@event-chat/core": "workspace:*",
     "@rslib/core": "^0.18.4",
     "@rstest/core": "^0.7.1",
     "@rstest/coverage-istanbul": "^0.1.3",
