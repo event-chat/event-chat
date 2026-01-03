@@ -1,60 +1,74 @@
-import { EventDetailType, useEventChat } from '@event-chat/core';
+import { EventDetailType, createToken, useEventChat } from '@event-chat/core';
 import { Form, FormInstance } from 'antd';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import z from 'zod';
 
-const FormEventContext = createContext<FormEventContextInstance>({});
-const namepathSchema = z.union([
+export const FormEventContext = createContext<FormEventContextInstance>({});
+export const namepathSchema = z.union([
   z.string(),
   z.number(),
   z.array(z.union([z.string(), z.number()])),
 ]);
 
-const convertNamepath = (path: z.infer<typeof namepathSchema>) => {
+export const getStringValue = <T extends string | undefined>(values: T[]) =>
+  values.find((item) => Boolean(item));
+
+export const convertNamepath = (path: z.infer<typeof namepathSchema>) => {
   const namepath = Array.isArray(path) ? path : [path];
   return namepath.join('.');
 };
 
-const useFormEvent = () => {
-  const { name, emit } = useContext(FormEventContext);
-  return { name, emit } as const;
-};
-
-const useForm = <ValueType, Name extends string, Group extends string | undefined = undefined>(
-  { group, name }: FormOptions<Name, Group>,
-  formInit?: FormEventInstance<ValueType, Name, Group>
+export const useForm = <
+  ValueType,
+  Name extends string,
+  Group extends string | undefined = undefined,
+>(
+  formInit?: FormEventInstance<ValueType, Name, Group>,
+  options?: FormOptions<Name, Group>
 ) => {
+  const { group, name } = formInit ?? {};
   const [form] = Form.useForm(formInit);
-  const { emit } = useEventChat(name, {
+  const formName = useMemo(
+    () => getStringValue([name, options?.name]) ?? createToken('form-event'),
+    [name, options?.name]
+  );
+
+  const { emit } = useEventChat(formName, {
     schema: z.array(z.object({ name: namepathSchema, value: z.unknown() })),
     callback: ({ detail }) =>
       detail.forEach((item) => {
         const target = convertNamepath(item.name);
         emit({ detail: item.value, name: target });
       }),
-    group,
+    group: getStringValue([group, options?.group]),
   });
 
-  return Object.assign(form, { group, name, emit });
+  const formInstance = Object.assign(form, { group, name, emit });
+  return [formInstance] as const;
 };
 
-export { FormEventContext, namepathSchema, convertNamepath, useForm, useFormEvent };
+export const useFormEvent = () => {
+  const record = useContext(FormEventContext);
+  return record;
+};
 
 export interface FormEventContextInstance {
-  name?: string;
+  group?: string;
+  name?: string; // 用于向 form 传递 detail
+  parent?: string | number | Array<string | number>;
   emit?: <Detail, CustomName extends string>(record: EventDetailType<Detail, CustomName>) => void;
 }
 
 export interface FormEventInstance<
   ValueType,
-  CustomName extends string,
+  Name extends string,
   Group extends string | undefined = undefined,
 >
-  extends FormInstance<ValueType>, Partial<FormOptions<CustomName, Group>> {
-  emit?: (record: EventDetailType<z.infer<typeof namepathSchema>, CustomName>) => void;
+  extends FormInstance<ValueType>, FormOptions<Name, Group> {
+  emit?: <Detail, CustomName extends string>(record: EventDetailType<Detail, CustomName>) => void;
 }
 
-type FormOptions<CustomName extends string, Group extends string | undefined = undefined> = {
+type FormOptions<Name extends string, Group extends string | undefined = undefined> = {
   group?: Group;
-  name: CustomName;
+  name?: Name;
 };

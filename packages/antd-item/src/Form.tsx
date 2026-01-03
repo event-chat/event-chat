@@ -1,50 +1,79 @@
-import { createToken, useEventChat } from '@event-chat/core';
 import { Form, FormProps as FormRawProps } from 'antd';
-import { PropsWithChildren, useMemo } from 'react';
-import z from 'zod';
-import { FormEventContext, convertNamepath, namepathSchema } from './utils';
+import { FC, PropsWithChildren, memo, useMemo } from 'react';
+import {
+  FormEventContext,
+  FormEventContextInstance,
+  FormEventInstance,
+  getStringValue,
+  useForm,
+} from './utils';
 
-const FormEvent = <ValuesType,>({
+const FormProviderInner: FC<PropsWithChildren<FormEventContextInstance>> = ({
+  children,
+  group,
+  name,
+  emit,
+}) => (
+  <FormEventContext.Provider value={{ group, name, emit }}>{children}</FormEventContext.Provider>
+);
+
+const FormProvider = memo(FormProviderInner);
+
+const FormInitialization = <
+  ValuesType,
+  Name extends string,
+  Group extends string | undefined = undefined,
+>({
   children,
   form,
   group,
   name,
   ...props
-}: PropsWithChildren<FormProps<ValuesType>>) => {
-  const [formInstance] = Form.useForm<ValuesType>(form);
-  const formName = useMemo(
-    () => (name === undefined || name === '' ? createToken('form-event') : name),
-    [name]
-  );
-
-  const { emit } = useEventChat(formName, {
-    schema: z.array(z.object({ name: namepathSchema, value: z.unknown() })),
-    callback: ({ detail }) =>
-      detail.forEach((item) => {
-        const target = convertNamepath(item.name);
-        emit({ detail: item.value, name: target });
-      }),
-    group,
-  });
-
-  Reflect.setPrototypeOf(formInstance, emit);
+}: PropsWithChildren<FormProps<ValuesType, Name, Group>>) => {
+  const [formInstance] = useForm(form, { group, name });
   return (
     <Form {...props} form={formInstance}>
-      {useMemo(
-        () => (
-          <FormEventContext.Provider value={{ name: formName, emit }}>
-            {children}
-          </FormEventContext.Provider>
-        ),
-        [children, formName, emit]
-      )}
+      <FormProvider group={formInstance.group} name={formInstance.name} emit={formInstance.emit}>
+        {children}
+      </FormProvider>
     </Form>
+  );
+};
+
+const FormEvent = <ValuesType, Name extends string, Group extends string | undefined = undefined>({
+  children,
+  form,
+  group,
+  name,
+  ...props
+}: PropsWithChildren<FormProps<ValuesType, Name, Group>>) => {
+  // 组件 Form 的 name 优先于外部配置的 form.name，group 外部配置则需要外部更新
+  const formName = useMemo(() => getStringValue([name, form?.name]) ?? '--', [form?.name, name]);
+  if (form?.emit && form.name === formName) {
+    return (
+      <Form>
+        <FormProvider group={form.group} name={form.name} emit={form.emit}>
+          {children}
+        </FormProvider>
+      </Form>
+    );
+  }
+
+  return (
+    <FormInitialization {...props} form={form} group={group} name={name}>
+      {children}
+    </FormInitialization>
   );
 };
 
 export default FormEvent;
 
-interface FormProps<ValuesType> extends FormRawProps<ValuesType> {
-  group?: string;
-  name?: string;
+interface FormProps<
+  ValuesType,
+  Name extends string,
+  Group extends string | undefined = undefined,
+> extends Omit<FormRawProps<ValuesType>, 'form'> {
+  form?: FormEventInstance<ValuesType, Name, Group>;
+  group?: Group;
+  name?: Name;
 }

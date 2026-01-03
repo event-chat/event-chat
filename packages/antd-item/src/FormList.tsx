@@ -1,26 +1,11 @@
-import { createToken } from '@event-chat/core';
 import { Form } from 'antd';
-import { ComponentProps, FC, PropsWithChildren, memo, useMemo } from 'react';
+import { ComponentProps, FC, PropsWithChildren, memo } from 'react';
 import { FormEventContext, useFormEvent } from './utils';
 
-const FormListInner: FC<PropsWithChildren<FormListInnerProps>> = ({ children, name: itemName }) => {
-  const { name, emit } = useFormEvent();
-  const listName = useMemo(() => {
-    const propsName =
-      itemName === undefined || itemName === '' ? createToken('list-event') : itemName;
-
-    const names: Array<string | number> = Array.isArray(propsName) ? propsName : [propsName];
-    return [name, ...names]
-      .filter((item) => item ?? '')
-      .map(String)
-      .filter(Boolean)
-      .join('.');
-  }, [name, itemName]);
-
+const FormListInner: FC<PropsWithChildren<FormListInnerProps>> = ({ children, name: parent }) => {
+  const record = useFormEvent();
   return (
-    <FormEventContext.Provider value={{ name: listName, emit }}>
-      {children}
-    </FormEventContext.Provider>
+    <FormEventContext.Provider value={{ ...record, parent }}>{children}</FormEventContext.Provider>
   );
 };
 
