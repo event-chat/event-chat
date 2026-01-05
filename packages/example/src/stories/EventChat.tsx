@@ -8,6 +8,7 @@ import SubNoLimit from '@/module/SubNoLimit';
 import SubPrivate from '@/module/SubPrivate';
 import SubSchema from '@/module/SubSchema';
 import SubSchemaExtra from '@/module/SubSchemaExtra';
+import type { NamepathType } from '@event-chat/core';
 import type { FC } from 'react';
 import ExtraGuid from '@/components/ExtraGuid';
 import Layout from '@/components/Layout';
@@ -104,5 +105,5 @@ export default EventChat;
 
 export interface EventChatProps {
   /* 演示类型 */
-  name: string;
+  name: NamepathType;
 }

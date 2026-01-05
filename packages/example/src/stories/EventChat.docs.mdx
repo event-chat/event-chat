@@ -107,9 +107,9 @@ import Tag from './components/Tag';
         </>
       ),
       keyname: 'name',
-      type: ['Name'],
+      type: ['NamepathType'],
     },
-    { desc: '发送消息的事件名', keyname: 'origin', type: ['string'] },
+    { desc: '发送消息的事件名', keyname: 'origin', type: ['NamepathType'] },
     {
       desc: (
         <>
@@ -168,7 +168,7 @@ type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & 
     {
       desc: '接收消息的事件名',
       keyname: 'name',
-      type: ['Name'],
+      type: ['NamepathType'],
     },
     {
       desc: '接收事件消息的密钥',
@@ -183,6 +183,21 @@ type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & 
 - `group`、`token` 仅用于接收方比对，接收方最终根据自身配置，透传给 `callback` 作为参数
 - `id` 为内部生成
 - `origin`、`type` 将根据 `useEventChat` 配置自动添加
+
+### `NamepathType`：事件名
+
+类型如下，可以接受字符、数值、以及字符和数值的元祖：
+
+```ts
+type NamepathType = number | string | Array<string | number> | Readonly<Array<string | number>>;
+```
+
+- 比如可以定义为字符名称：`pub-mox`（推荐，简单直接推导）
+- 可以定义为通过 `.` 划分的 `namepath`：`pub.mox`（例如 `formily` 的路径结构）
+- 可以定义为数组划分的 `namepath`：`['pub', 0, 'mox']`（例如 `antd` 的路径结构）
+- 当定义为元祖的时候会丢失原有的可读性，于是允许传递 `readonly` 的元祖维持可读性
+
+> 当设置字符类型的 `namepath` 时，事件名和元祖类型可能不相等。例如：`['pub.mox', 0, 'name']` 和 `pub.mox.0.name` 得到的事件名不相等。
 
 ## `schema`：指定消息类型
 
