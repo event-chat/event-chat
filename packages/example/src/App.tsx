@@ -1,7 +1,10 @@
+import { StyleProvider } from '@ant-design/cssinjs';
+import { ConfigProvider, theme } from 'antd';
 import { type FC, Suspense, lazy, useState } from 'react';
 import './App.css';
 import Tabs, { TabItem } from './components/Tabs';
 import Toast from './components/toast';
+import FormModule from './module/FormModule';
 import { isKey } from './utils/fields';
 
 const AntdForm = lazy(() => import('./pages/AntdForm'));
@@ -24,17 +27,35 @@ const App: FC = () => {
           <TabItem name="antd-form1">antdForm1</TabItem>
         </Tabs>
       </div>
-      <Suspense
-        fallback={
-          <div className="animate-fade-in-up flex justify-center items-center w-full">
-            loading...
-          </div>
-        }
-      >
-        <div className="animate-fade-in-up m-auto max-w-400 p-4">
-          <IndexCom />
-        </div>
-      </Suspense>
+      <StyleProvider layer>
+        <ConfigProvider
+          theme={{
+            algorithm: theme.darkAlgorithm,
+            token: {
+              colorPrimary: '#1890ff',
+              colorTextSecondary: '#6610f2',
+            },
+            components: {
+              Form: {
+                labelColor: '#1890ff',
+              },
+            },
+          }}
+        >
+          <FormModule />
+          <Suspense
+            fallback={
+              <div className="animate-fade-in-up flex justify-center items-center w-full">
+                loading...
+              </div>
+            }
+          >
+            <div className="animate-fade-in-up m-auto max-w-400 p-4">
+              <IndexCom />
+            </div>
+          </Suspense>
+        </ConfigProvider>
+      </StyleProvider>
     </>
   );
 };

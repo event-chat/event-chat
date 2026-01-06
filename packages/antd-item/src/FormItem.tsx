@@ -19,7 +19,7 @@ const FormItem = <
   return (
     <>
       <Form.Item {...props}>{children}</Form.Item>
-      <Form.Item name={convertName(props.name)}>
+      <Form.Item name={convertName(props.name)} hidden>
         <FormInput
           async={async}
           name={props.name}
