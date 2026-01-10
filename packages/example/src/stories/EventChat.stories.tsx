@@ -39,6 +39,7 @@ const meta: Meta<EventChatAdditionalProps> = {
     ),
   ],
   subcomponents: { EventChatOptions, EventChatResult },
+  title: 'Document/EventChat',
 };
 
 export default meta;

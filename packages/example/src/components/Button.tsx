@@ -52,7 +52,7 @@ if (process.env.NODE_ENV !== 'production') {
 export default Button;
 
 // 定义按钮的属性类型
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'text';

@@ -45,6 +45,13 @@ export const useForm = <Name extends NamepathType, Group extends string | undefi
   return [formInstance] as const;
 };
 
+export const useFormInstance = <ValueType>() => {
+  const FormCom = useFormCom();
+  const form = FormCom.useFormInstance<ValueType>();
+  const { group, name, emit } = useFormEvent();
+  return Object.assign(form, { group, name, emit });
+};
+
 export const useFormCom = (): FormBaseInstance => {
   return AntdCom.form ?? Form;
 };
@@ -59,7 +66,7 @@ export interface FormEventContextInstance {
   name?: NamepathType; // 用于向 form 传递 detail
   parent?: NamepathType;
   emit?: <Detail, CustomName extends NamepathType>(
-    record: EventDetailType<Detail, CustomName>
+    record: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'type'>
   ) => void;
 }
 
@@ -69,7 +76,7 @@ export interface FormEventInstance<
 >
   extends FormInsType, FormOptions<Name, Group> {
   emit?: <Detail, CustomName extends NamepathType>(
-    record: EventDetailType<Detail, CustomName>
+    record: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'type'>
   ) => void;
 }
 
@@ -87,9 +94,13 @@ export interface FormBaseInstance extends FC<
     }
   >;
   List: FC<Pick<ComponentProps<typeof Form.List>, 'children' | 'name'>>;
+  useFormInstance: <Value>() => FormInsType<Value>;
 }
 
 // 内部剔除掉 6 的新特新改为可选项，保留公共属性
-export type FormInsType = Omit<NonNullable<ComponentProps<typeof Form>['form']>, 'focusField'> & {
+export type FormInsType<ValueType = unknown> = Omit<
+  NonNullable<ComponentProps<typeof Form<ValueType>>['form']>,
+  'focusField'
+> & {
   focusField?: NonNullable<ComponentProps<typeof Form>['form']>['focusField'];
 };

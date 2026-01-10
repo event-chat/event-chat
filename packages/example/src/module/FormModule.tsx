@@ -1,4 +1,4 @@
-import { FormEvent, FormItem, useForm } from '@event-chat/antd-item';
+import { FormEvent, FormItem, useForm, useFormInstance } from '@event-chat/antd-item';
 import {
   Divider,
   Flex,
@@ -12,8 +12,12 @@ import {
   Typography,
 } from 'antd';
 import { type FC, type PropsWithChildren, type ReactNode, forwardRef, useState } from 'react';
-import Button from '@/components/Button';
+import Button, { type ButtonProps } from '@/components/Button';
 import { safetyPrint } from '@/utils/fields';
+
+const fieldInput = ['target', 'input'] as const;
+const fieldOrigin = ['origin', 'input'] as const;
+const fieldRate = ['target', 'rate'] as const;
 
 const { Title } = Typography;
 const RateInput = forwardRef<HTMLSpanElement, { value?: number }>(({ value = 0 }, ref) => (
@@ -25,44 +29,84 @@ const RateInput = forwardRef<HTMLSpanElement, { value?: number }>(({ value = 0 }
 
 RateInput.displayName = 'RateInput';
 
-const FormModule: FC<PropsWithChildren<FormModuleProps>> = ({ children, ...props }) => {
+const FormButton: FC<PropsWithChildren<FormButtonProps>> = ({ children, label, ...props }) => (
+  <Form.Item label={label}>
+    <Button {...props}>{children}</Button>
+  </Form.Item>
+);
+
+const FormButtonEmit: FC<PropsWithChildren<FormButtonProps>> = ({
+  children,
+  onClick,
+  ...props
+}) => {
+  const form = useFormInstance();
+  return (
+    <FormButton
+      {...props}
+      onClick={(event) => {
+        form.emit?.({
+          detail: [
+            {
+              name: fieldInput,
+              value: String(Math.random()),
+            },
+          ],
+          name: 'fields-update',
+        });
+        onClick?.(event);
+      }}
+    >
+      {children}
+    </FormButton>
+  );
+};
+
+const FormModule: FC<PropsWithChildren<FormModuleProps>> = ({ children, footer, ...props }) => {
   return (
     <FormEvent {...props} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
       {children}
       <FormItem
         label="受控表单"
-        name={['target', 'input']}
+        name={fieldInput}
         onChange={(rate, { emit }) => {
           emit({
             detail: !rate ? 0 : safetyPrint(rate).slice(-1).charCodeAt(0),
-            name: ['target', 'rate'],
+            name: fieldRate,
           });
         }}
       >
         <Input disabled />
       </FormItem>
-      <FormItem name={['target', 'rate']} hidden>
+      <FormItem name={fieldRate} hidden>
         <InputNumber />
       </FormItem>
-      <Form.Item dependencies={[['target', 'rate']]} label="受控响应">
+      <Form.Item dependencies={[fieldRate]} label="受控响应">
         {(formIns) => {
-          const value = (Number(formIns.getFieldValue(['target', 'rate']) ?? 0) % 10) / 2;
+          const value = (Number(formIns.getFieldValue(fieldRate) ?? 0) % 10) / 2;
           return <RateInput value={value} />;
         }}
       </Form.Item>
+      {footer}
     </FormEvent>
   );
 };
 
 const FormOrigin: FC<Pick<InputProps, 'onChange'>> = ({ onChange }) => (
-  <FormItem label="主控表单" name={['origin', 'input']}>
+  <FormItem label="主控表单" name={fieldOrigin}>
     <Input onChange={onChange} />
   </FormItem>
 );
 
-const FormWrapper: FC<PropsWithChildren<FormWrapper>> = ({ children, form, title, ...props }) => (
+const FormWrapper: FC<PropsWithChildren<FormWrapper>> = ({
+  children,
+  footer,
+  form,
+  title,
+  ...props
+}) => (
   <div className="max-w-150">
-    <FormModule {...props} form={form}>
+    <FormModule {...props} footer={footer} form={form}>
       <Form.Item colon={false} label={` `}>
         <Title level={5}>{title}</Title>
       </Form.Item>
@@ -94,9 +138,7 @@ export const FormEmit: FC = () => {
         }
       >
         <FormOrigin
-          onChange={({ target }) =>
-            formEvent.emit({ detail: target.value, name: ['target', 'input'] })
-          }
+          onChange={({ target }) => formEvent.emit({ detail: target.value, name: fieldInput })}
         />
       </FormWrapper>
       <Divider />
@@ -110,9 +152,9 @@ export const FormEmit: FC = () => {
       >
         <FormOrigin
           onChange={({ target }) => {
-            // 同时会更新 rate 值，反正不会被响应，这里给个固定值
-            formRaw.setFieldValue(['target', 'input'], target.value);
-            formRaw.setFieldValue(['target', 'rate'], 5);
+            // 同时会更新 rate 值
+            formRaw.setFieldValue(fieldInput, target.value);
+            formRaw.setFieldValue(fieldRate, String(Math.random()));
           }}
         />
       </FormWrapper>
@@ -127,39 +169,126 @@ export const FormUpdate: FC = () => {
   return (
     <>
       <FormWrapper
+        footer={
+          <Form.Item colon={false} label={` `}>
+            <pre className="bg-gray-800 max-h-80 overflow-auto p-4 rounded-xl text-sm">
+              {JSON.stringify(alldata, null, 2)}
+            </pre>
+          </Form.Item>
+        }
         form={formEvent}
         title={
           <>
-            <Tag>emit</Tag> 触发更新会被 <Tag>dependencies</Tag> 监听
+            <Tag>emit</Tag> 触发更新会被 <Tag>onValuesChange</Tag> 监听
           </>
         }
         onValuesChange={(...args) => {
           setData(args);
         }}
       >
+        <FormButton
+          label="随机设值"
+          onClick={() => {
+            formEvent.emit({ detail: String(Math.random()), name: fieldInput });
+          }}
+        >
+          emit
+        </FormButton>
+      </FormWrapper>
+      <Divider />
+      <FormWrapper
+        footer={
+          <Form.Item colon={false} label={` `} shouldUpdate>
+            {() => (
+              <pre className="bg-gray-800 max-h-80 overflow-auto p-4 rounded-xl text-sm">
+                {JSON.stringify(formRaw.getFieldsValue(), null, 2)}
+              </pre>
+            )}
+          </Form.Item>
+        }
+        form={formRaw}
+        title={
+          <>
+            <Tag>setFieldValue</Tag> 触发更新不会被 <Tag>onFieldsChange</Tag> 监听
+          </>
+        }
+      >
+        <FormButton
+          label="随机设值"
+          onClick={() => {
+            // 同时会更新 rate 值
+            const value = String(Math.random());
+            formRaw.setFieldValue(fieldInput, value);
+            formRaw.setFieldValue(fieldRate, value);
+          }}
+        >
+          emit
+        </FormButton>
+      </FormWrapper>
+    </>
+  );
+};
+
+export const FormUpdateFields: FC = () => {
+  const [formEvent] = useForm({ group: 'form-update-fields', name: 'fields-update' });
+  const [formRaw] = Form.useForm();
+  const [alldata, setData] = useState<unknown[]>([]);
+  return (
+    <>
+      <FormWrapper
+        footer={
+          <Form.Item colon={false} label={` `}>
+            <pre className="bg-gray-800 max-h-80 overflow-auto p-4 rounded-xl text-sm">
+              {JSON.stringify(alldata, null, 2)}
+            </pre>
+          </Form.Item>
+        }
+        form={formEvent}
+        title={
+          <>
+            <Tag>emit</Tag> 触发表单字段更新
+          </>
+        }
+        onValuesChange={(...args) => {
+          setData(args);
+        }}
+      >
+        <FormButtonEmit label="随机设值">emit</FormButtonEmit>
+      </FormWrapper>
+      <Divider />
+      <FormWrapper
+        footer={
+          <Form.Item colon={false} label={` `} shouldUpdate>
+            {() => (
+              <pre className="bg-gray-800 max-h-80 overflow-auto p-4 rounded-xl text-sm">
+                {JSON.stringify(formRaw.getFieldsValue(), null, 2)}
+              </pre>
+            )}
+          </Form.Item>
+        }
+        form={formRaw}
+        title={
+          <>
+            <Tag>setField sValue</Tag> 触发表单字段更新
+          </>
+        }
+      >
         <Form.Item label="随机设值">
           <Button
             onClick={() => {
-              formEvent.emit({ detail: String(Math.random()), name: ['target', 'input'] });
+              // 同时会更新 rate 值
+              const value = String(Math.random());
+              formRaw.setFieldsValue({
+                target: {
+                  input: value,
+                  rate: value,
+                },
+              });
             }}
           >
             emit
           </Button>
         </Form.Item>
-      </FormWrapper>
-      <pre>{JSON.stringify(alldata, null, 2)}</pre>
-      <Divider />
-      <FormWrapper
-        form={formRaw}
-        title={
-          <>
-            <Tag>setFieldValue</Tag> 触发更新不会被 <Tag>dependencies</Tag> 监听
-          </>
-        }
-      >
-        <FormOrigin
-          onChange={({ target }) => formRaw.setFieldValue(['target', 'input'], target.value)}
-        />
       </FormWrapper>
     </>
   );
@@ -167,10 +296,16 @@ export const FormUpdate: FC = () => {
 
 export default FormModule;
 
+interface FormButtonProps extends ButtonProps {
+  label?: ReactNode;
+}
+
 interface FormModuleProps extends Omit<
   FormProps,
   'labelCol' | 'onChange' | 'title' | 'wrapperCol'
-> {}
+> {
+  footer?: ReactNode;
+}
 
 interface FormWrapper extends FormModuleProps {
   title?: ReactNode;
