@@ -10,22 +10,18 @@ const meta: Meta<typeof Tabs> = {
   },
   argTypes: {
     active: {
-      options: ['EventChat', 'test'],
+      options: ['EventChat', 'AntdForm', 'Formily'],
       description: '自定义事件名，用于接受消息',
-      type: 'string',
     },
     defaultActive: {
-      options: ['EventChat', 'test'],
+      options: ['EventChat', 'AntdForm', 'Formily'],
       description: '自定义事件名，用于接受消息',
-      type: 'string',
     },
     group: {
       description: '自定义事件名，用于接受消息',
-      type: 'string',
     },
     onChange: {
       description: '自定义事件名，用于接受消息',
-      type: 'function',
     },
   },
   component: Tabs,
@@ -38,7 +34,7 @@ const meta: Meta<typeof Tabs> = {
             <Tabs {...args}>
               <TabItem name="EventChat">eventChat</TabItem>
               <TabItem name="AntdForm">antdForm</TabItem>
-              <TabItem name="formily">formily</TabItem>
+              <TabItem name="Formily">formily</TabItem>
             </Tabs>
           </div>
           <TabContent {...args} />

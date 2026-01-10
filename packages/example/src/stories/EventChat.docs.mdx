@@ -5,14 +5,6 @@ import ListObserver from './components/ListObserver';
 import TableList from './components/TableList';
 import Tag from './components/Tag';
 
-# `useEventChat`: 组件通信 `Hooks`
-
-## 介绍
-
-- 提供名字和回调方法，`Hooks` 会返回一个 `emit`
-- 用 `emit` 可以向指定名称发送消息，也可以给事件名提供 `callback` 用于接收消息
-- 无论是否是父子层级都能相互通信，不会引发不必要的 `rerender`
-
 <Meta
   component={EventChat}
   of={EventChatStories}
@@ -25,9 +17,29 @@ import Tag from './components/Tag';
       },
     },
   }}
-  tags={['autodocs']}
   title="useEventChat"
 />
+
+# `useEventChat`: 组件通信 `Hooks`
+
+## 介绍
+
+- 提供名字和回调方法，`Hooks` 会返回一个 `emit`
+- 用 `emit` 可以向指定名称发送消息，也可以给事件名提供 `callback` 用于接收消息
+- 无论是否是父子层级都能相互通信，不会引发不必要的 `rerender`
+
+## 安装
+
+```shell
+# npm
+npm install @event-chat/core
+
+# yarn
+yarn add @event-chat/core
+
+# pnpm
+pnpm add @event-chat/core
+```
 
 ## 目录
 
