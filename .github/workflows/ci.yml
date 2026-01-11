@@ -16,13 +16,16 @@ permissions:
 
 # 作业配置
 jobs:
+  # 更新 release
   release-please:
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@v4
         with:
           # 适配你的项目类型（支持 node/ocaml/ruby/java 等，见测试代码）
-          release-type: node
+          release-type: node,
+          config-file: release-please-config.json,
+          manifest-file: release-please-config.json
 
   # 代码校验 & 构建作业（覆盖所有子包）
   validate-and-build:
