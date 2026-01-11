@@ -19,6 +19,15 @@ jobs:
   # 更新 release
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      # 输出每个子包的独立发布状态和Tag
+      antd-item--release_created: ${{ steps.release.outputs['packages/antd-item--release_created'] }}
+      antd-item--tag_name: ${{ steps.release.outputs['packages/antd-item--tag_name'] }}
+      antd-item--version: ${{ steps.release.outputs['packages/antd-item--version'] }} # 新增：输出版本号
+      core--release_created: ${{ steps.release.outputs['packages/core--release_created'] }}
+      core--tag_name: ${{ steps.release.outputs['packages/core--tag_name'] }}
+      core--version: ${{ steps.release.outputs['packages/core--version'] }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
