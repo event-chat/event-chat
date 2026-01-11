@@ -11,7 +11,6 @@ export const TabContent: FC<TabContentProps> = ({ active, defaultActive, group }
     group,
   });
 
-  // tabs content
   return (
     <div className="animate-fade-in-up flex justify-center w-full">{safetyPrint(current)}</div>
   );
