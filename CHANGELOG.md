@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/cgfeel/event-chat/compare/v1.0.0...v1.0.1) (2026-01-11)
+
+
+### Bug Fixes
+
+* update release-please-config.json ([e12d66d](https://github.com/cgfeel/event-chat/commit/e12d66dcd8fd860c4bdf6a0bce748da8bce084bf))
+* update release-please-config.json ([cfaa6b4](https://github.com/cgfeel/event-chat/commit/cfaa6b4cdfe461a9971ada7872424c06b5861883))
+* update release-type ([59704e8](https://github.com/cgfeel/event-chat/commit/59704e84ae47e91c1f2abd632be5a55fcb7d805a))
+
 ## 1.0.0 (2026-01-11)
 
 
