@@ -35,8 +35,10 @@ jobs:
       - name: Print release outputs for debugging
         continue-on-error: true
         run: |
-          echo "Release outputs:"
-          echo "${{ toJson(steps.release.outputs) }}"
+          echo "Release outputs (write to file first):"
+          # 方案1：将JSON输出到文件，再cat查看（推荐，避免特殊字符解析）
+          echo '${{ toJson(steps.release.outputs) }}' > release-outputs.json
+          cat release-outputs.json
 
   # 代码校验 & 构建作业（覆盖所有子包）
   validate-and-build:
