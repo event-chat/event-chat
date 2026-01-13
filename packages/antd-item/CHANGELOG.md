@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.6](https://github.com/event-chat/event-chat/compare/antd-item@v0.2.5...antd-item@v0.2.6) (2026-01-13)
+
+
+### Bug Fixes
+
+* add form-item example and doc ([b845d87](https://github.com/event-chat/event-chat/commit/b845d873e95121d5e9f356d59b9ed691e29e7e3e))
+* add form-item example and doc ([f0ce1f9](https://github.com/event-chat/event-chat/commit/f0ce1f9808f90deeed7053415544cb5e18756b27))
+
 ## [0.2.5](https://github.com/event-chat/event-chat/compare/antd-item@v0.2.4...antd-item@v0.2.5) (2026-01-12)
 
 
