@@ -1,4 +1,4 @@
-import { NamepathType } from '@event-chat/core';
+import { NamepathType, checkDetail } from '@event-chat/core';
 import { Form as FormRaw } from 'antd';
 import { ComponentProps, FC, PropsWithChildren, memo } from 'react';
 import { ZodType } from 'zod';
@@ -19,6 +19,7 @@ const FormList = <
 >({
   async,
   name,
+  rules,
   schema,
   type,
   callback,
@@ -30,7 +31,19 @@ const FormList = <
   const Form = useFormCom();
   return (
     <>
-      <Form.List {...props} name={typeof name === 'object' ? [...name] : name}>
+      <Form.List
+        {...props}
+        name={typeof name === 'object' ? [...name] : name}
+        rules={
+          !schema
+            ? rules
+            : (rules ?? []).concat([
+                {
+                  validator: (_, value) => checkDetail(value, { async, schema }),
+                },
+              ])
+        }
+      >
         {(fields, options, metas) => (
           <ListItem name={name}>{children(fields, options, metas)}</ListItem>
         )}

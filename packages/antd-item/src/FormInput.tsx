@@ -11,7 +11,7 @@ const InputInner = <
   Schema extends ZodType | undefined = undefined,
   Type extends string | undefined = undefined,
 >(
-  { async, name, schema, type, callback, debug, onChange }: FormInputProps<Schema, Type>,
+  { name, callback, onChange, ...props }: FormInputProps<Schema, Type>,
   ref?: ForwardedRef<HTMLInputElement>
 ) => {
   const { group, parent } = useFormEvent();
@@ -25,15 +25,12 @@ const InputInner = <
   }, [name, parent]);
 
   const result = useEventChat(formName, {
+    ...props,
     callback: (record) => {
       callback?.(record);
       onChange?.(record.detail, result);
     },
-    async,
     group,
-    schema,
-    type,
-    debug,
   });
 
   return <input ref={ref} />;

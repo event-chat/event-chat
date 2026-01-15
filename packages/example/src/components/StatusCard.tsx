@@ -3,66 +3,60 @@ import { cn, tv } from 'tailwind-variants';
 import { isKey } from '@/utils/fields';
 
 const card = tv({
-  base: 'flex w-full max-w-md items-center gap-3 rounded-lg p-4 shadow-md',
+  slots: {
+    base: 'flex w-full max-w-md items-start gap-3 rounded-lg border p-4 shadow-md',
+    color: 'text-md text-gray-700',
+    icon: 'mt-1 flex h-8 w-8 items-center justify-center rounded-full',
+  },
   variants: {
     status: {
-      default: 'border border-gray-200 bg-gray-50',
-      failed: 'border border-red-200 bg-red-50',
-      success: 'border border-green-200 bg-green-50',
-      waiting: 'border border-blue-200 bg-blue-50',
+      default: {
+        base: 'border-gray-200 bg-gray-50',
+      },
+      failed: {
+        base: 'border-red-200 bg-red-50',
+      },
+      success: {
+        base: 'border-green-200 bg-green-50',
+      },
+      waiting: {
+        base: 'border-blue-200 bg-blue-50',
+      },
     },
   },
+  compoundVariants: [
+    { status: 'default', class: { icon: 'bg-gray-100 text-gray-600' } },
+    { status: 'failed', class: { color: 'text-red-700', icon: 'bg-red-100 text-red-600' } },
+    { status: 'success', class: { color: 'text-green-700', icon: 'bg-green-100 text-green-600' } },
+    { status: 'waiting', class: { color: 'text-blue-700', icon: 'bg-blue-100 text-blue-600' } },
+  ],
   defaultVariants: {
     status: 'default',
   },
-});
-
-const icon = tv({
-  base: 'flex h-8 w-8 items-center justify-center rounded-full',
-  variants: {
-    status: {
-      default: 'bg-gray-100 text-gray-600',
-      failed: 'bg-red-100 text-red-600',
-      success: 'bg-green-100 text-green-600',
-      waiting: 'bg-blue-100 text-blue-600',
-    },
-  },
-  defaultVariants: {
-    status: 'default',
-  },
-});
-
-const colorMap = Object.freeze({
-  default: 'text-gray-700',
-  failed: 'text-red-700',
-  success: 'text-green-700',
-  waiting: 'text-blue-700',
 });
 
 const iconMap = Object.freeze({
-  default: <span className="text-lg font-bold">…</span>,
-  failed: <span className="text-lg font-bold">×</span>,
-  success: <span className="text-lg font-bold">✓</span>,
-  waiting: <span className="text-lg font-bold">○</span>,
+  default: '…',
+  failed: '×',
+  success: '✓',
+  waiting: '○',
 });
 
 const StatusCard: FC<StatusCardProps> = ({ code, text, status = 'default' }) => {
-  const color = useMemo(
-    () => (isKey(status, colorMap) ? colorMap[status] : colorMap.default),
-    [status]
-  );
-
-  const IconCom = useMemo(
+  const { base, icon, color } = card({ status });
+  const iconText = useMemo(
     () => (isKey(status, iconMap) ? iconMap[status] : iconMap.default),
     [status]
   );
 
   return (
-    <div className={card({ status })}>
-      <div className={icon({ status })}>{IconCom}</div>
+    <div className={base()}>
+      <div className={icon()}>
+        <span className="text-lg font-bold">{iconText}</span>
+      </div>
       <div className="flex-1">
-        <div className={color}>状态码: {code ?? '--'}</div>
-        <p className={cn('text-base', color)}>{text}</p>
+        <div className={cn(color(), 'text-lg')}>状态码: {code ?? '--'}</div>
+        <p className={color()}>{text}</p>
       </div>
     </div>
   );

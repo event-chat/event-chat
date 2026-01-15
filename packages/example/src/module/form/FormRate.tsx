@@ -5,6 +5,7 @@ import z from 'zod';
 import Button from '@/components/Button';
 import { type EerrorItem, ErrorResultList } from '@/components/ErrorResultList';
 import StatusCard, { type StatusCardProps } from '@/components/StatusCard';
+import Toast from '@/components/toast';
 import { toastOpen } from '@/utils/event';
 import { isKey, objectEntries, safetyPrint } from '@/utils/fields';
 
@@ -62,7 +63,12 @@ const FormButton: FC<{ name: string }> = ({ name }) => {
   return (
     <FormEvent.Item colon={false} label={` `}>
       <Space>
-        <Button onClick={() => form.emit?.({ detail: Math.floor(Math.random() * 10 + 1), name })}>
+        <Button
+          onClick={() => {
+            const detail = Math.floor(Math.random() * 10 + 1);
+            form.emit?.({ detail, name });
+          }}
+        >
           随机赋值
         </Button>
         <span>设置的值有可能是错误的</span>
@@ -81,13 +87,13 @@ const RateInput: FC<RateInputProps> = ({ value, onChange }) => (
         onChange={(valueNum) => onChange?.(convertData(valueNum))}
       />
     </div>
-    <StatusCard {...value} />
+    <StatusCard {...value} text={value?.text ?? '请滑动选择...'} />
   </div>
 );
 
 const FormRate: FC = () => {
   const [debug, setDebug] = useState<EerrorItem[]>([]);
-  const [form] = FormEvent.useForm();
+  const [form] = FormEvent.useForm({ group: 'form-rate' });
 
   const debugHandle = useCallback(
     (name: string, log?: EerrorItem) => {
@@ -97,9 +103,8 @@ const FormRate: FC = () => {
         );
 
         form.emit({
-          global: true,
           detail: {
-            message: '这条 toast 也是 event-chat 示例',
+            message: '这条 toast 来自 form 实例',
             title: `随机设置 ${name} 失败`,
             type: 'error',
           },
@@ -114,6 +119,7 @@ const FormRate: FC = () => {
     <ConfigProvider
       theme={{ components: { Rate: { starHoverScale: 'scale(1.5)', starSize: 32 } } }}
     >
+      <Toast group={'form-rate'} />
       <div className="max-w-150">
         <FormEvent form={form} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
           <FormButton name="rateInput" />

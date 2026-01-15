@@ -1,7 +1,15 @@
 import { ZodType, z } from 'zod';
 import { EventChatOptions, EventDetailType, NamepathType } from './utils';
 
-const checkDetail = <
+const literalCondition = (value?: string | boolean, error?: string, empty?: string) => {
+  return (
+    (typeof value === 'string' && value !== ''
+      ? z.literal(value, !error ? undefined : { error })
+      : undefined) ?? (value ? z.any() : z.undefined(!empty ? undefined : { error: empty }))
+  );
+};
+
+export const checkDetail = <
   Name extends NamepathType,
   Schema extends ZodType,
   Group extends string | undefined = undefined,
@@ -21,14 +29,6 @@ const checkDetail = <
     );
   }
   return Promise.reject(new Error('validate faild'));
-};
-
-const literalCondition = (value?: string | boolean, error?: string, empty?: string) => {
-  return (
-    (typeof value === 'string' && value !== ''
-      ? z.literal(value, !error ? undefined : { error })
-      : undefined) ?? (value ? z.any() : z.undefined(!empty ? undefined : { error: empty }))
-  );
 };
 
 export const checkLiteral = <

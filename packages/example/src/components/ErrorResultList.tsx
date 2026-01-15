@@ -25,6 +25,7 @@ export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
       })
       .catch(() => {});
   }, [errors]);
+
   return errors.length === 0 ? (
     <div className="rounded-lg bg-gray-50 p-8 text-center text-gray-500">暂无错误记录</div>
   ) : (

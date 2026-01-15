@@ -89,11 +89,11 @@ export interface FormBaseInstance extends FC<
   Pick<ComponentProps<typeof Form>, 'children' | 'form' | 'name'>
 > {
   Item: FC<
-    Pick<FormItemProps, 'hidden' | 'name'> & {
+    Pick<FormItemProps, 'hidden' | 'name' | 'rules'> & {
       children?: ReactNode | ((form: FormInsType) => ReactNode);
     }
   >;
-  List: FC<Pick<ComponentProps<typeof Form.List>, 'children' | 'name'>>;
+  List: FC<Pick<ComponentProps<typeof Form.List>, 'children' | 'name' | 'rules'>>;
   useFormInstance: <Value>() => FormInsType<Value>;
 }
 

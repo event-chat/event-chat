@@ -1,3 +1,4 @@
+import { checkDetail } from '@event-chat/core';
 import { FormItemProps as FormItemRawProps } from 'antd';
 import { ReactNode } from 'react';
 import { ZodType } from 'zod';
@@ -10,6 +11,7 @@ const FormItem = <
 >({
   async,
   children,
+  rules,
   schema,
   type,
   callback,
@@ -21,7 +23,18 @@ const FormItem = <
   const Form = useFormCom();
   return (
     <>
-      <Form.Item {...props}>
+      <Form.Item
+        {...props}
+        rules={
+          !schema
+            ? rules
+            : (rules ?? []).concat([
+                {
+                  validator: (_, value) => checkDetail(value, { async, schema }),
+                },
+              ])
+        }
+      >
         {typeof children === 'function' ? children(formInstance) : children}
       </Form.Item>
       {props.name !== undefined && (
