@@ -6,7 +6,7 @@ import { type EerrorItem, ErrorResultList } from '@/components/ErrorResultList';
 
 const FormSchema: FC = () => {
   const [debug, setDebug] = useState<EerrorItem[]>([]);
-  const [form] = FormEvent.useForm();
+  const [form] = FormEvent.useForm({ group: 'form-schema' });
   return (
     <div className="max-w-150">
       <FormEvent form={form} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>

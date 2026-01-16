@@ -62,15 +62,16 @@ export function useEventChat<
 
       if (!opitem || !isSafetyType(subName, nameRc.current)) return;
       const upRecord = { ...args, name: subName };
+      const throwError = (error: unknown) => errorHandle(error, data.detail, data.time);
 
       if (opitem.schema !== undefined) {
         validate(upRecord, { ...opitem, schema: opitem.schema }, tokenRc.current)
           .then(opitem.callback)
-          .catch((error) => errorHandle(error, data.detail, data.time));
+          .catch(throwError);
       } else {
         checkLiteral(upRecord, { ...opitem, schema: undefined }, tokenRc.current)
           .then(opitem.callback)
-          .catch((error) => errorHandle(error, data.detail, data.time));
+          .catch(throwError);
       }
     },
     [nameRc, options, tokenRc, errorHandle]
@@ -102,9 +103,9 @@ export function useEventChat<
   }, []);
 
   useEffect(() => {
-    if (eventName) eventBus.on(eventName, callbackHandle);
+    eventBus.on(eventName, callbackHandle);
     return () => {
-      if (eventName) eventBus.off(eventName, callbackHandle);
+      eventBus.off(eventName, callbackHandle);
     };
   }, [eventName, callbackHandle]);
 
