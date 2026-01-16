@@ -187,6 +187,16 @@ pnpm add @event-chat/item
       keyname: 'onChange',
       type: ['Function', 'undefined'],
     },
+    {
+      desc: (
+        <>
+          将原有的 <Tag>Form.Item</Tag> 中的 <Tag>rules</Tag> 类型中提取一项 <Tag>transform</Tag>
+          ，用于搭配 <Tag>schema</Tag> 转换字段数据后用于自身校验用的。
+        </>
+      ),
+      keyname: 'transform',
+      type: ['(value: unknown) => unknown'],
+    },
   ]}
 />
 
