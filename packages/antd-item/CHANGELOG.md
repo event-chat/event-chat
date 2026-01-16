@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.8](https://github.com/event-chat/event-chat/compare/antd-item@v0.2.7...antd-item@v0.2.8) (2026-01-16)
+
+
+### Bug Fixes
+
+* antd-item add rule and core provider validate detail ([313dd64](https://github.com/event-chat/event-chat/commit/313dd64dc353095399b95bc43e37f6c067dfc915))
+* antd-item up name Type & add  transform & up children func & up core checkDetail reject ([b8bdf7a](https://github.com/event-chat/event-chat/commit/b8bdf7a4ff4b06321300eede085b694c92acb74e))
+
 ## [0.2.7](https://github.com/event-chat/event-chat/compare/antd-item@v0.2.6...antd-item@v0.2.7) (2026-01-14)
 
 
