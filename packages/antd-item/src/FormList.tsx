@@ -1,24 +1,18 @@
-import { NamepathType, checkDetail } from '@event-chat/core';
+import { checkDetail } from '@event-chat/core';
 import { Form as FormRaw } from 'antd';
-import { ComponentProps, FC, PropsWithChildren, memo, useMemo } from 'react';
+import { ComponentProps, RefObject, useMemo } from 'react';
 import { ZodType } from 'zod';
 import FormInput, { FormInputProps } from './FormInput';
-import { FormEventContext, useFormCom, useFormEvent } from './utils';
+import { FormItemProvider } from './FormProvider';
+import { FormInputInstance, useFormCom, useFormItemEmit } from './utils';
 
 const isNamepath = (value: unknown): value is number | string =>
   typeof value === 'string' || Number.isInteger(value);
 
-const FormListInner: FC<PropsWithChildren<FormListInnerProps>> = ({ children, name: parent }) => {
-  const record = useFormEvent();
-  return (
-    <FormEventContext.Provider value={{ ...record, parent }}>{children}</FormEventContext.Provider>
-  );
-};
-
-const ListItem = memo(FormListInner);
-const FormList = <Name extends NamepathType, Schema extends ZodType | undefined = undefined>({
+const FormList = <Schema extends ZodType>({
   async,
   initialValue,
+  item,
   name,
   rules,
   schema,
@@ -28,7 +22,7 @@ const FormList = <Name extends NamepathType, Schema extends ZodType | undefined 
   debug,
   onChange,
   ...props
-}: FormListProps<Name, Schema>) => {
+}: FormListProps<Schema>) => {
   const Form = useFormCom();
   const fieldName = useMemo(
     () =>
@@ -37,6 +31,7 @@ const FormList = <Name extends NamepathType, Schema extends ZodType | undefined 
     [name]
   );
 
+  const [inputRef, emit] = useFormItemEmit(item);
   return !fieldName ? null : (
     <>
       <Form.List
@@ -54,13 +49,16 @@ const FormList = <Name extends NamepathType, Schema extends ZodType | undefined 
         }
       >
         {(fields, options, metas) => (
-          <ListItem name={name}>{children(fields, options, metas)}</ListItem>
+          <FormItemProvider parent={name} emit={emit}>
+            {children(fields, options, metas)}
+          </FormItemProvider>
         )}
       </Form.List>
       <Form.Item {...props} name={fieldName} hidden>
         <FormInput
           async={async}
           name={fieldName}
+          ref={inputRef}
           schema={schema}
           type={type}
           callback={callback}
@@ -74,11 +72,7 @@ const FormList = <Name extends NamepathType, Schema extends ZodType | undefined 
 
 export default FormList;
 
-interface FormListInnerProps extends Pick<FormListProps<NamepathType>, 'name'> {}
-
-interface FormListProps<Name extends NamepathType, Schema extends ZodType | undefined = undefined>
-  extends
-    Omit<ComponentProps<typeof FormRaw.List>, 'name'>,
-    Omit<FormInputProps<Name, Schema>, 'name'> {
-  name: Name;
+interface FormListProps<Schema extends ZodType>
+  extends Omit<ComponentProps<typeof FormRaw.List>, 'name'>, FormInputProps<Schema> {
+  item?: RefObject<FormInputInstance>;
 }

@@ -1,18 +1,22 @@
 import { NamepathType, checkDetail } from '@event-chat/core';
 import { FormItemProps as FormItemRawProps } from 'antd';
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { ZodType } from 'zod';
 import FormInput, { FormInputProps } from './FormInput';
-import { FormEventInstance, useFormCom, useFormInstance } from './utils';
+import { FormItemProvider } from './FormProvider';
+import {
+  FormEventInstance,
+  FormInputInstance,
+  useFormCom,
+  useFormInstance,
+  useFormItemEmit,
+} from './utils';
 
-const FormItem = <
-  Name extends NamepathType,
-  Schema extends ZodType | undefined = undefined,
-  ValueType = unknown,
->({
+const FormItem = <Schema extends ZodType, ValueType = unknown>({
   async,
   children,
   initialValue,
+  item,
   name,
   rules,
   schema,
@@ -22,35 +26,40 @@ const FormItem = <
   onChange,
   transform,
   ...props
-}: FormItemProps<Name, Schema, ValueType>) => {
-  const { group, emit } = useFormInstance<ValueType>();
+}: FormItemProps<Schema, ValueType>) => {
+  const { group, name: formName } = useFormInstance<ValueType>();
+  const [inputRef, emit] = useFormItemEmit(item);
   const Form = useFormCom<ValueType>();
+
   return (
     <>
-      <Form.Item
-        {...props}
-        initialValue={initialValue}
-        name={name}
-        rules={
-          !schema
-            ? rules
-            : (rules ?? []).concat([
-                {
-                  validator: (_, value) => checkDetail(value, { async, schema }),
-                  transform,
-                },
-              ])
-        }
-      >
-        {typeof children === 'function'
-          ? (form) => children({ ...form, group, name, emit })
-          : children}
-      </Form.Item>
+      <FormItemProvider emit={emit}>
+        <Form.Item
+          {...props}
+          initialValue={initialValue}
+          name={name}
+          rules={
+            !schema
+              ? rules
+              : (rules ?? []).concat([
+                  {
+                    validator: (_, value) => checkDetail(value, { async, schema }),
+                    transform,
+                  },
+                ])
+          }
+        >
+          {typeof children === 'function'
+            ? (form) => children({ ...form, name: formName, group, emit })
+            : children}
+        </Form.Item>
+      </FormItemProvider>
       {name !== undefined && (
-        <Form.Item {...props} name={name} hidden>
+        <Form.Item {...props} name={name} rules={rules} hidden>
           <FormInput
             async={async}
             name={name}
+            ref={inputRef}
             schema={schema}
             type={type}
             callback={callback}
@@ -65,17 +74,12 @@ const FormItem = <
 
 export default FormItem;
 
-interface FormItemProps<
-  Name extends NamepathType,
-  Schema extends ZodType | undefined = undefined,
-  ValueType = unknown,
->
-  extends
-    Omit<FormItemRawProps, 'children' | 'initialValue' | 'name'>,
-    FormInputProps<Name, Schema> {
+interface FormItemProps<Schema extends ZodType, ValueType = unknown>
+  extends Omit<FormItemRawProps, 'children' | 'initialValue' | 'name'>, FormInputProps<Schema> {
   children?:
     | ReactNode
-    | ((form: FormEventInstance<Name, string | undefined, ValueType>) => ReactNode);
+    | ((form: FormEventInstance<NamepathType, string | undefined, ValueType>) => ReactNode);
   initialValue?: unknown;
+  item?: RefObject<FormInputInstance>;
   transform?: (value: unknown) => unknown;
 }

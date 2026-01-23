@@ -1,5 +1,5 @@
 import { ZodType, z } from 'zod';
-import { EventChatOptions, EventDetailType, NamepathType } from './utils';
+import { EventChatOptions, EventDetailType, NamepathType, defaultLang } from './utils';
 
 const literalCondition = (value?: string | boolean, error?: string, empty?: string) => {
   return (
@@ -17,8 +17,9 @@ export const checkDetail = <
   Token extends boolean | undefined = undefined,
 >(
   detail: unknown,
-  { async, schema }: EventChatOptions<Name, Schema, Group, Type, Token>
+  { async, lang, schema }: EventChatOptions<Name, Schema, Group, Type, Token>
 ) => {
+  const { detailError } = lang ?? defaultLang;
   if (schema) {
     const result = async
       ? schema.safeParseAsync(detail)
@@ -27,10 +28,10 @@ export const checkDetail = <
     return result.then((cause) =>
       cause.success
         ? cause
-        : Promise.reject(new Error(cause.error.issues[0].message ?? 'validate faild', { cause }))
+        : Promise.reject(new Error(cause.error.issues[0].message ?? detailError, { cause }))
     );
   }
-  return Promise.reject(new Error('validate faild'));
+  return Promise.reject(new Error(detailError));
 };
 
 export const checkLiteral = <
@@ -41,34 +42,45 @@ export const checkLiteral = <
   Token extends boolean | undefined = undefined,
 >(
   data: EventDetailType,
-  { group, token }: EventChatOptions<Name, Schema, Group, Type, Token>,
+  { group, lang, token, filter }: EventChatOptions<Name, Schema, Group, Type, Token>,
   currentToken?: string
 ) => {
+  const { customError, detailError, groupEmpty, groupProvider, tokenEmpty, tokenProvider } =
+    lang ?? defaultLang;
   const schema = z.object({
-    group: literalCondition(
-      group ?? data.global,
-      'Non group members.',
-      'Do not accept record with group.'
-    ),
-    token: literalCondition(
-      token ? currentToken : data.global,
-      'Not providing tokens as expected.',
-      'Do not accept record with token.'
-    ),
+    group: literalCondition(group ?? data.global, groupProvider, groupEmpty),
+    token: literalCondition(token ? currentToken : data.global, tokenProvider, tokenEmpty),
   });
 
-  const cause = schema.safeParse(data);
-  return cause.success
-    ? Promise.resolve().then(() => {
-        const resultData = {
-          ...data,
-          token: currentToken,
-          group,
-        };
+  const result = !filter
+    ? Promise.resolve(schema.safeParse(data))
+    : schema
+        .refine(
+          async () => {
+            const detailRecord = { ...data };
+            Reflect.deleteProperty(detailRecord, 'detail');
 
-        return resultData as CallbackPropsType<Name, Schema, Group, Type, Token>;
-      })
-    : Promise.reject(new Error('validate faild', { cause }));
+            const verify = await Promise.resolve(detailRecord)
+              .then(filter)
+              .catch(() => false);
+            return verify;
+          },
+          {
+            error: customError,
+          }
+        )
+        .safeParseAsync(data);
+
+  return result.then((cause) => {
+    if (!cause.success) return Promise.reject(new Error(detailError, { cause }));
+    const resultData = {
+      ...data,
+      token: currentToken,
+      group,
+    };
+
+    return resultData as CallbackPropsType<Name, Schema, Group, Type, Token>;
+  });
 };
 
 export const validate = <

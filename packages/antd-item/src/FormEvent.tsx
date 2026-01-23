@@ -1,24 +1,7 @@
 import { FormProps as FormRawProps } from 'antd';
-import { FC, PropsWithChildren, memo, useMemo } from 'react';
-import {
-  FormEventContext,
-  FormEventContextInstance,
-  FormEventInstance,
-  getStringValue,
-  useForm,
-  useFormCom,
-} from './utils';
-
-const FormProviderInner: FC<PropsWithChildren<FormEventContextInstance>> = ({
-  children,
-  group,
-  name,
-  emit,
-}) => (
-  <FormEventContext.Provider value={{ group, name, emit }}>{children}</FormEventContext.Provider>
-);
-
-const FormProvider = memo(FormProviderInner);
+import { PropsWithChildren, useMemo } from 'react';
+import { FormProvider } from './FormProvider';
+import { FormEventInstance, getStringValue, useForm, useFormCom } from './utils';
 
 const FormInitialization = <
   Name extends string,
