@@ -10,8 +10,10 @@ const testEventData: EventDetailType = {
   global: true,
   group: 'test-group',
   id: 'test-id-123',
-  name: 'test-evet',
+  name: eventName,
   origin: 'test-origin',
+  originName: 'test-origin',
+  rule: eventName,
   time: new Date(),
   token: 'test-token-456',
   type: 'test-type',
@@ -39,7 +41,7 @@ describe('EventBus 核心功能测试', () => {
         }
       };
       eventBus.on(eventName, testCallback);
-      eventBus.emit(eventName, testEventData);
+      eventBus.emit(testEventData);
     }));
 
   test('同一事件可以注册多个回调，emit 会按顺序触发所有回调', () => {
@@ -48,7 +50,7 @@ describe('EventBus 核心功能测试', () => {
 
     eventBus.on(eventName, mockCallback1);
     eventBus.on(eventName, mockCallback2);
-    eventBus.emit(eventName, testEventData);
+    eventBus.emit(testEventData);
 
     expect(mockCallback1).toHaveBeenCalledTimes(1);
     expect(mockCallback1).toHaveBeenCalledWith(testEventData);
@@ -61,7 +63,7 @@ describe('EventBus 核心功能测试', () => {
     const onSpy = rstest.spyOn(eventBus, 'on').mockImplementation(mockOnCallback);
 
     const emitEvent = () => {
-      eventBus.emit(eventName, testEventData);
+      eventBus.emit(testEventData);
     };
 
     expect(emitEvent).not.toThrow();
@@ -83,7 +85,7 @@ describe('EventBus 核心功能测试', () => {
     eventBus.on(eventName, mockCallback);
     eventBus.on(eventName, mockCallback);
 
-    eventBus.emit(eventName, testEventData);
+    eventBus.emit(testEventData);
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 
@@ -94,14 +96,14 @@ describe('EventBus 核心功能测试', () => {
     // 添加回调
     eventBus.on(eventName, mockCallback1);
     eventBus.on(eventName, mockCallback2);
-    eventBus.emit(eventName, testEventData);
+    eventBus.emit(testEventData);
 
     expect(mockCallback1).toHaveBeenCalledTimes(1);
     expect(mockCallback2).toHaveBeenCalledTimes(1);
 
     // 移除回调
     eventBus.off(eventName, mockCallback2);
-    eventBus.emit(eventName, testEventData);
+    eventBus.emit(testEventData);
 
     expect(mockCallback1).toHaveBeenCalledTimes(2);
     expect(mockCallback2).toHaveBeenCalledTimes(1);
@@ -114,7 +116,7 @@ describe('EventBus 核心功能测试', () => {
     // 添加回调
     eventBus.on(eventName, mockCallback1);
     eventBus.on(eventName, mockCallback2);
-    eventBus.emit(eventName, testEventData);
+    eventBus.emit(testEventData);
 
     expect(mockCallback1).toHaveBeenCalledTimes(1);
     expect(mockCallback2).toHaveBeenCalledTimes(1);
@@ -139,8 +141,8 @@ describe('EventBus 核心功能测试', () => {
   test('once 注册事件，触发后会自动从事件列表中删除', () => {
     const mockCallback = rstest.fn();
     eventBus.once(eventName, mockCallback);
-    eventBus.emit(eventName, testEventData);
-    eventBus.emit(eventName, testEventData);
+    eventBus.emit(testEventData);
+    eventBus.emit(testEventData);
 
     expect(mockCallback).toHaveBeenCalledTimes(1);
     expect(mockCallback).toHaveBeenCalledWith(testEventData);

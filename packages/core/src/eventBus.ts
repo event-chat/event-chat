@@ -1,3 +1,4 @@
+import { Path } from '@formily/path';
 import { EventDetailType } from './utils';
 
 class EventBus {
@@ -10,9 +11,13 @@ class EventBus {
     this.events = {};
   }
 
-  emit(eventName: string, args: EventDetailType) {
-    this.events[eventName]?.forEach((callback) => {
-      callback(args);
+  emit(args: EventDetailType) {
+    const { rule } = args;
+    Object.entries(this.events).forEach(([eventName, list]) => {
+      if (Path.parse(rule).match(eventName))
+        list?.forEach((callback) => {
+          callback(args);
+        });
     });
   }
 

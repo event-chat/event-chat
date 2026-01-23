@@ -5,13 +5,15 @@ import {
   EventChatOptions,
   EventDetailType,
   EventName,
+  ExcludeKey,
   NamepathType,
+  combinePath,
   createEvent,
   createToken,
+  defaultName,
   getConditionKey,
   getEventName,
   isResultType,
-  isSafetyType,
   mountEvent,
 } from './utils';
 import { checkLiteral, validate } from './validate';
@@ -57,11 +59,10 @@ export function useEventChat<
 
   const callbackHandle = useCallback(
     (data: EventDetailType) => {
-      const { name: subName, ...args } = data;
+      const upRecord = { ...data, name: nameRc.current };
       const opitem = options.current;
 
-      if (!opitem || !isSafetyType(subName, nameRc.current)) return;
-      const upRecord = { ...args, name: subName };
+      if (!opitem) return;
       const throwError = (error: unknown) => errorHandle(error, data.detail, data.time);
 
       if (opitem.schema !== undefined) {
@@ -79,20 +80,26 @@ export function useEventChat<
 
   const emit = useCallback(
     <Detail, CustomName extends NamepathType>(
-      detail: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'time' | 'type'>
+      detail: Omit<EventDetailType<Detail, CustomName>, ExcludeKey>
     ) => {
-      // 业务提交 name 是空的，那么 origin 就是空，当做匿名处理
-      const event = createEvent({
-        ...detail,
-        group: ops?.group,
-        origin: nameRc.current,
-        time: new Date(),
-        type: ops?.type,
-        id,
-      });
-      document.body.dispatchEvent(event);
+      try {
+        const rule = combinePath(detail.name, nameRc.current);
+        const event = createEvent({
+          ...detail,
+          group: options.current?.group,
+          origin: nameRc.current,
+          originName: detail.name,
+          time: new Date(),
+          type: options.current?.type,
+          id,
+          rule,
+        });
+        document.body.dispatchEvent(event);
+      } catch {
+        options.current?.onLost?.({ name: detail.name, origin: nameRc.current, type: 'emit' });
+      }
     },
-    [id, nameRc, ops?.group, ops?.type]
+    [id, nameRc, options]
   );
 
   useEffect(() => {
@@ -101,6 +108,12 @@ export function useEventChat<
       document.body.dataset.globalIsListened = '1';
     }
   }, []);
+
+  useEffect(() => {
+    if (!(name === '' || (Array.isArray(name) && name.length === 0)) && eventName === defaultName) {
+      options.current?.onLost?.({ type: 'init', name });
+    }
+  }, [eventName, name, options]);
 
   useEffect(() => {
     eventBus.on(eventName, callbackHandle);

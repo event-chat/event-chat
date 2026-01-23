@@ -4,12 +4,12 @@ import eventBus from '../src/eventBus';
 import {
   EventDetailType,
   EventName,
+  combinePath,
   createEvent,
   createToken,
   getConditionKey,
   getEventName,
   isResultType,
-  isSafetyType,
   mountEvent,
 } from '../src/utils';
 
@@ -25,6 +25,8 @@ const baseTestData: EventDetailType<{ message: string }> = {
   detail: { message },
   id: 'test-id-123',
   origin: 'test-origin',
+  originName: 'test-origin',
+  rule: name,
   time: new Date(),
   type: 'test-type',
   name,
@@ -71,8 +73,25 @@ describe('工具函数单元测试', () => {
   });
 
   test('getEventName: 获取事件名', () => {
-    expect(getEventName('test')).toBe(`event-chart_${JSON.stringify(['test'])}`);
-    expect(getEventName('')).toBe(`event-chart_${JSON.stringify([''])}`);
+    expect(getEventName(['test'])).toBe('test');
+    expect(getEventName('')).toBe('');
+  });
+
+  test('eventName 路径计算', () => {
+    expect(getEventName('ab.cd.ef')).toBe(getEventName(['ab', 'cd', 'ef']));
+    expect(getEventName('ab.0.ef')).toBe(getEventName(['ab', '0', 'ef']));
+    expect(getEventName('.ab.0.ef')).toBe(getEventName(['', 'ab', '0', 'ef']));
+
+    expect(getEventName('ab.cd.ef')).not.toBe(getEventName(['ab.cd', 'ef']));
+    expect(getEventName('ab.0.ef')).not.toBe(getEventName(['ab', 0, 'ef']));
+
+    expect(combinePath('.ab.0.ef', 'x.y.z')).toBe(getEventName(['x', 'y', 'ab', '0', 'ef']));
+    expect(combinePath('..ab.0.ef', 'x.y.z')).toBe(getEventName(['x', 'ab', '0', 'ef']));
+    expect(combinePath('...ab.0.ef', 'x.y.z')).toBe(getEventName(['ab', '0', 'ef']));
+    expect(combinePath('....ab.0.ef', 'x.y.z')).toBe(getEventName(['ab', '0', 'ef']));
+
+    expect(combinePath('.ab.0..ef', 'x.y.z')).toBe(getEventName(['x', 'y', 'ab', '0', 'ef']));
+    // expect(combinePath('.ab.0..ef', 'x.y.z')).toBe(getEventName(['x', 'y', 'ab', 'ef']));
   });
 
   test('isResultType: 获取校验失败的对象', () => {
@@ -90,27 +109,14 @@ describe('工具函数单元测试', () => {
     expect(isResultType(null)).toBeFalsy();
   });
 
-  test('isSafetyType: 将一个未知类型判定为特定类型', () => {
-    const testObj = { a: 1 };
-    expect(isSafetyType(testObj, testObj)).toBeTruthy();
-    expect(isSafetyType(123, 123)).toBeTruthy();
-    expect(isSafetyType('test', 'test')).toBeTruthy();
-    expect(isSafetyType({ a: 1 }, { a: 1 })).toBeTruthy();
-
-    expect(isSafetyType(123, 456)).toBeFalsy();
-    expect(isSafetyType('test', 'test2')).toBeFalsy();
-  });
-
   test('mountEvent: 通过 eventBus 发送事件', () => {
     const mockCallback = rstest.fn();
     const spyOn = rstest.spyOn(eventBus, 'emit').mockImplementation(mockCallback);
-
     const event = createEvent(baseTestData);
-    const eventName = getEventName(baseTestData.name) ?? '';
 
     mountEvent(event);
     expect(mockCallback).toHaveBeenCalledTimes(1);
-    expect(mockCallback).toHaveBeenCalledWith(eventName, baseTestData);
+    expect(mockCallback).toHaveBeenCalledWith(baseTestData);
 
     spyOn.mockRestore();
   });

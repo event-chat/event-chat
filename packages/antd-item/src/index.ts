@@ -1,3 +1,4 @@
+import FormContainer from './FormContainer';
 import FormEventInner from './FormEvent';
 import FormItem from './FormItem';
 import FormList from './FormList';
@@ -8,6 +9,7 @@ const observer = (FormCom: FormBaseInstance): void => {
 };
 
 const FormEvent: typeof FormEventInner & FormExtraInstance = Object.assign(FormEventInner, {
+  Container: FormContainer,
   Item: FormItem,
   List: FormList,
   observer,
@@ -19,6 +21,7 @@ export * from './utils';
 export default FormEvent;
 
 interface FormExtraInstance {
+  Container: typeof FormContainer;
   Item: typeof FormItem;
   List: typeof FormList;
   observer: typeof observer;

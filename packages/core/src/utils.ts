@@ -1,5 +1,33 @@
+import { Path } from '@formily/path';
 import { ZodType, z } from 'zod';
 import eventBus from './eventBus';
+
+// eventName 在 formily 中是没有缓存的，这里补一层缓存
+const eventMap: Record<string | number, string> = {};
+const cacheEventName = (name: NamepathType, path?: string) => {
+  try {
+    const keyname = typeof name === 'object' ? JSON.stringify(name) : name;
+    if (path) eventMap[keyname] = path;
+
+    return keyname in eventMap ? eventMap[keyname] : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const escapeSpecialSymbols = (text: string | number) =>
+  typeof text === 'number' ? text : text.replace(/([*~[\],:.])/g, '\\$1');
+
+// 暂时不用默认前缀，避免破坏 Path 本身的缓存
+export const defaultName = '';
+export const defaultLang = Object.freeze({
+  customError: 'Does not meet the requirements for custom filtering',
+  detailError: 'validate faild',
+  groupEmpty: 'Do not accept record with group.',
+  groupProvider: 'Non group members.',
+  tokenEmpty: 'Do not accept record with token.',
+  tokenProvider: 'Not providing tokens as expected.',
+});
 
 export const EventName = 'custom-event-chat-11.18';
 export const createEvent = <Detail, Name extends NamepathType = string>(
@@ -17,36 +45,51 @@ export const createToken = (key: string): string =>
 export const getConditionKey = (name: string, id: string, type?: string) =>
   [name, id, type].filter(Boolean).join('-');
 
-// 考虑空字符的情况
-export const getEventName = (name: NamepathType) => {
-  const path = Array.isArray(name) ? name : [name];
+export const combinePath = (name: NamepathType, origin: NamepathType) => {
+  const namepath = getEventName(name, (text) => text);
+  const orgpath = getEventName(origin);
+
+  if (namepath.startsWith('.') || namepath.startsWith('[')) {
+    return Path.parse(namepath, orgpath).toString();
+  }
+
+  return namepath;
+};
+
+export const getEventName = (name: NamepathType, filter?: typeof escapeSpecialSymbols) => {
+  const cachePath = cacheEventName(name);
+  if (cachePath) return cachePath;
+
+  // 只过滤 eventName
+  const eventName =
+    (Array.isArray(name) ? name.map(filter ?? escapeSpecialSymbols) : undefined) ??
+    (typeof name === 'object' ? [] : [name]);
+
+  const reduceName = eventName.reduce<string[]>((current, item, index) => {
+    if (typeof item === 'number') {
+      const target = index === 0 ? '' : current[index - 1];
+      current.splice(Math.max(index - 1, 0), 1, `${target}[${item}]`);
+      return current;
+    }
+    return current.concat(item);
+  }, []);
+
   try {
-    // 如果传入空字符会得到 event-chart_[""]
-    return `event-chart_${JSON.stringify(path)}`;
+    const targetName = `${defaultName}${reduceName.join('.')}`;
+    Path.parse(targetName);
+    return cacheEventName(name, targetName) ?? defaultName;
   } catch {
-    return `event-chart_[]`;
+    return cacheEventName(name, defaultName) ?? defaultName;
   }
 };
 
 export const isResultType = (data: unknown): data is ResultType =>
   typeof data === 'object' && data !== null && 'success' in data && !data.success;
 
-export const isSafetyType = <T>(target: unknown, origin: T): target is T => {
-  if (target && origin && typeof origin === 'object') {
-    try {
-      return JSON.stringify(target) === JSON.stringify(origin);
-    } catch {
-      return false;
-    }
-  }
-  return target === origin;
-};
-
 export function mountEvent(event: CustomDetailEvent) {
-  const { name: detailName } = event.detail ?? {};
-  const currentName = detailName ? getEventName(detailName) : undefined;
-  if (currentName && event.detail) {
-    eventBus.emit(currentName, event.detail);
+  const { rule } = event.detail ?? {};
+  if (event.detail && rule) {
+    eventBus.emit(event.detail);
   }
 }
 
@@ -59,11 +102,14 @@ export interface EventChatOptions<
 > {
   async?: boolean;
   group?: Group;
+  lang?: Record<keyof typeof defaultLang, string>;
   schema?: Schema;
   token?: Token;
   type?: Type;
   callback?: (target: DetailType<Name, Schema, Group, Type, Token>) => void;
   debug?: (result?: ResultType) => void;
+  filter?: (detail: Omit<EventDetailType<unknown>, 'detail'>) => boolean | PromiseLike<boolean>;
+  onLost?: (info: LostType) => void;
 }
 
 export type DetailType<
@@ -72,7 +118,10 @@ export type DetailType<
   Group extends string | undefined = undefined,
   Type extends string | undefined = undefined,
   Token extends boolean | undefined = undefined,
-> = Pick<EventDetailType<unknown, Name>, 'global' | 'id' | 'name' | 'time'> & {
+> = Pick<
+  EventDetailType<unknown, Name>,
+  'global' | 'id' | 'name' | 'originName' | 'rule' | 'time'
+> & {
   detail: WasProvided<Schema> extends true ? z.output<Exclude<Schema, undefined>> : unknown;
   group: WasProvided<Group> extends true ? Exclude<Group, undefined> : undefined;
   origin: string;
@@ -84,6 +133,8 @@ export type EventDetailType<Detail = unknown, Name extends NamepathType = Namepa
   id: string;
   name: Name;
   origin: NamepathType;
+  originName: NamepathType;
+  rule: string;
   time: Date;
   detail?: Detail;
   global?: boolean;
@@ -91,6 +142,8 @@ export type EventDetailType<Detail = unknown, Name extends NamepathType = Namepa
   type?: string;
   token?: string;
 };
+
+export type ExcludeKey = 'group' | 'id' | 'origin' | 'originName' | 'rule' | 'time' | 'type';
 
 export type NamepathType =
   | number
@@ -117,3 +170,9 @@ export type WasProvided<T, Default = undefined> =
 interface CustomDetailEvent extends Event {
   detail?: EventDetailType;
 }
+
+type LostType = {
+  name: NamepathType;
+  type: 'emit' | 'init';
+  origin?: NamepathType;
+};

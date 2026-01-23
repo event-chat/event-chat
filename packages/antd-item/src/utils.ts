@@ -1,6 +1,22 @@
-import { EventDetailType, NamepathType, createToken, useEventChat } from '@event-chat/core';
+import {
+  EventDetailType,
+  ExcludeKey,
+  NamepathType,
+  createToken,
+  useEventChat,
+} from '@event-chat/core';
 import { Form, FormItemProps } from 'antd';
-import { ComponentProps, FC, ReactNode, createContext, useContext, useMemo } from 'react';
+import {
+  ComponentProps,
+  FC,
+  ReactNode,
+  RefObject,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+} from 'react';
 import z from 'zod';
 
 export const AntdCom: {
@@ -66,12 +82,25 @@ export const useFormEvent = () => {
   return record;
 };
 
+export const useFormItemEmit = (item?: RefObject<FormInputInstance>) => {
+  const itemRef = useRef<FormInputInstance>(null);
+  const emit: FormInputInstance['emit'] = useCallback(
+    (detail) => {
+      const inputRef = item ?? itemRef;
+      inputRef.current?.emit(detail);
+    },
+    [item, itemRef]
+  );
+
+  return [item ?? itemRef, emit] as const;
+};
+
 export interface FormEventContextInstance {
   group?: string;
   name?: NamepathType; // 用于向 form 传递 detail
   parent?: NamepathType;
   emit?: <Detail, CustomName extends NamepathType>(
-    record: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'time' | 'type'>
+    record: Omit<EventDetailType<Detail, CustomName>, ExcludeKey>
   ) => void;
 }
 
@@ -82,9 +111,11 @@ export interface FormEventInstance<
 >
   extends FormInsType<ValueType>, FormOptions<Name, Group> {
   emit?: <Detail, CustomName extends NamepathType>(
-    record: Omit<EventDetailType<Detail, CustomName>, 'group' | 'id' | 'origin' | 'time' | 'type'>
+    record: Omit<EventDetailType<Detail, CustomName>, ExcludeKey>
   ) => void;
 }
+
+export interface FormInputInstance extends Required<Pick<FormEventContextInstance, 'emit'>> {}
 
 export type FormBaseInstance<ValueType = unknown> = FormType<ValueType> & {
   Item: FC<
@@ -110,6 +141,9 @@ type FormOptions<Name extends NamepathType, Group extends string | undefined = u
 };
 
 type FormType<ValueType = unknown> = (
-  props: Pick<ComponentProps<typeof Form<ValueType>>, 'children' | 'form' | 'name'> &
+  props: Pick<
+    ComponentProps<typeof Form<ValueType>>,
+    'children' | 'component' | 'form' | 'name' | 'onValuesChange'
+  > &
     React.RefAttributes<FormInsType<ValueType>>
 ) => React.ReactElement;
