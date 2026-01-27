@@ -343,8 +343,11 @@ const useTrackClick: TrackHooksType = (thumbRef, { direction, wrap, moveTo }) =>
   }, [direction, thumbRef, moveWrapLeft, moveWrapTop]);
 };
 
-const useWheel: WheelHooksType = (thumbRef, { direction, wrap }) => {
+const useWheel: ScrollHooksType = (thumbRef, { direction, scroll, wrap }) => {
   const hoverRef = useRef(false);
+  const positionRef = useRef(0);
+  const isx = useRef(direction === 'horizontal');
+
   const enterHandle = useCallback(() => {
     hoverRef.current = true;
   }, []);
@@ -364,22 +367,27 @@ const useWheel: WheelHooksType = (thumbRef, { direction, wrap }) => {
 
   const wheelHandle = useCallback(
     (event: WheelEvent | TouchEvent) => {
+      const parent = thumbRef.current?.parentElement;
+      const wheelNode = scroll.current?.querySelector('[data-wheel="1"]');
       const { currentTarget } = event;
-      if (currentTarget instanceof HTMLElement) {
-        const { clientHeight, clientWidth, scrollHeight, scrollWidth } = currentTarget;
-        const delta = getPointerCoord(event, direction === 'horizontal' ? 'x' : 'y');
-        const parent = thumbRef.current?.parentElement;
 
-        const diff =
-          direction === 'horizontal' ? scrollWidth - clientWidth : scrollHeight - clientHeight;
+      if (currentTarget instanceof HTMLElement && parent && (!wheelNode || wheelNode === parent)) {
+        const delta = getPointerCoord(event, isx.current ? 'x' : 'y');
+        const { clientHeight, clientWidth, scrollHeight, scrollLeft, scrollTop, scrollWidth } =
+          currentTarget;
 
-        if (diff > 0 && delta && parent) {
+        const position = isx.current ? scrollLeft : scrollTop;
+        const diff = isx.current ? scrollWidth - clientWidth : scrollHeight - clientHeight;
+
+        if (diff > 0 && delta && positionRef.current && position !== positionRef.current) {
           parent.dataset.wheel = '1';
           debounceHandle();
         }
+
+        positionRef.current = position;
       }
     },
-    [direction, thumbRef, debounceHandle]
+    [scroll, thumbRef, debounceHandle]
   );
 
   useEffect(() => {
@@ -424,9 +432,9 @@ const ScrollVirtual: FC<ScrollVirtualProps> = ({ scroll, wrap, direction = 'vert
   );
 
   useScrollPosition(thumbRef, { direction, scroll, wrap });
+  useWheel(thumbRef, { direction, scroll, wrap });
   useThumbDrag(thumbRef, { direction, wrap, moveTo });
   useTrackClick(thumbRef, { direction, wrap, moveTo });
-  useWheel(thumbRef, { direction, wrap });
 
   return (
     <div className={track()}>
@@ -445,10 +453,6 @@ interface ScrollVirtualProps {
 
 type ScrollHooksType = (thumb: RefObject<HTMLElement>, ops: Required<ScrollVirtualProps>) => void;
 type TrackHooksType = (thumb: RefObject<HTMLElement>, ops: OptionsType) => void;
-type WheelHooksType = (
-  thumb: RefObject<HTMLElement>,
-  ops: Omit<Required<ScrollVirtualProps>, 'scroll'>
-) => void;
 
 type OptionsType = Omit<Required<ScrollVirtualProps>, 'scroll'> & {
   moveTo: (position: 'left' | 'top', barTo: number, scrollTo: number) => void;
