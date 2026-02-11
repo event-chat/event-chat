@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.7](https://github.com/event-chat/event-chat/compare/core@v0.2.6...core@v0.2.7) (2026-02-11)
+
+
+### Bug Fixes
+
+* update ci sort ([4ef180e](https://github.com/event-chat/event-chat/commit/4ef180ed7b8e267f0e4347cd529133169d400ddc))
+* update ci sort ([6a338b8](https://github.com/event-chat/event-chat/commit/6a338b8e8a55fee80131a2610322ea60c4e125f5))
+
 ## [0.2.6](https://github.com/event-chat/event-chat/compare/core@v0.2.5...core@v0.2.6) (2026-01-23)
 
 
