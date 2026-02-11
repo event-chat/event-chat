@@ -9,11 +9,11 @@ import {
   SubPrivate,
   SubSchema,
   SubSchemaExtra,
-} from '@/module/pubsub';
-import type { FC } from 'react';
-import ExtraGuid from '../components/ExtraGuid';
-import Layout from '../components/Layout';
-import ChatLayout from '../components/chat/ChatLayout';
+} from '@/module/pubsub'
+import type { FC } from 'react'
+import ExtraGuid from '../components/ExtraGuid'
+import Layout from '../components/Layout'
+import ChatLayout from '../components/chat/ChatLayout'
 
 const EventChat: FC = () => (
   <>
@@ -84,6 +84,6 @@ const EventChat: FC = () => (
     />
     <hr className="mt-4 mb-4" />
   </>
-);
+)
 
-export default EventChat;
+export default EventChat

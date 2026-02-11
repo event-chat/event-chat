@@ -1,12 +1,13 @@
-import TableSticky from '@/module/table/TableSticky';
-import TableVirtualSticky from '@/module/table/TableVirtualSticky';
-import { Tag } from 'antd';
-import type { FC } from 'react';
-import Card from '@/components/Card';
+import TableSticky from '@/module/table/TableSticky'
+import TableVirtualSticky from '@/module/table/TableVirtualSticky'
+import { Tag } from 'antd'
+import type { FC } from 'react'
+import Card from '@/components/Card'
 
 const Components: FC = () => {
   return (
     <div className="flex flex-col gap-16">
+      <div>😏 记录用例中用到的一些自定义组件</div>
       <Card
         title={
           <>
@@ -37,7 +38,7 @@ const Components: FC = () => {
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default Components;
+export default Components

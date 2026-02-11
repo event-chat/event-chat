@@ -1,4 +1,4 @@
-import { type FC, type PropsWithChildren, type RefObject, useState } from 'react';
+import { type FC, type PropsWithChildren, type RefObject, useState } from 'react'
 
 const ChatPanel: FC<PropsWithChildren<ChatPanelProps>> = ({
   children,
@@ -6,7 +6,7 @@ const ChatPanel: FC<PropsWithChildren<ChatPanelProps>> = ({
   onChange,
   wraper = 'h-120',
 }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('')
   return (
     <div className={`grid grid-rows-[1fr_80px] rounded-md bg-slate-800 p-2 shadow-md ${wraper}`}>
       <div className="h-full overflow-y-auto p-2" ref={rollRef}>
@@ -27,8 +27,8 @@ const ChatPanel: FC<PropsWithChildren<ChatPanelProps>> = ({
             disabled={!value}
             type="button"
             onClick={() => {
-              onChange?.(value);
-              setValue('');
+              onChange?.(value)
+              setValue('')
             }}
           >
             send
@@ -36,13 +36,13 @@ const ChatPanel: FC<PropsWithChildren<ChatPanelProps>> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChatPanel;
+export default ChatPanel
 
 interface ChatPanelProps {
-  rollRef?: RefObject<HTMLDivElement>;
-  wraper?: string;
-  onChange?: (message: string) => void;
+  rollRef?: RefObject<HTMLDivElement>
+  wraper?: string
+  onChange?: (message: string) => void
 }

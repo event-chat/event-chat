@@ -1,4 +1,4 @@
-import { useEventChat } from '@event-chat/core';
+import { useEventChat } from '@event-chat/core'
 import {
   type FC,
   type PropsWithChildren,
@@ -6,11 +6,11 @@ import {
   type RefObject,
   useRef,
   useState,
-} from 'react';
-import ChatList from '@/components/chat/ChatList';
-import type { ChatItemProps } from '@/components/chat/utils';
-import { groupName, subGroupItems } from '@/utils/event';
-import { safetyPrint } from '@/utils/fields';
+} from 'react'
+import ChatList from '@/components/chat/ChatList'
+import type { ChatItemProps } from '@/components/chat/utils'
+import { groupName, subGroupItems } from '@/utils/event'
+import { safetyPrint } from '@/utils/fields'
 
 const GroupItem: FC<PropsWithChildren<GroupItemProps>> = ({
   children,
@@ -28,11 +28,11 @@ const GroupItem: FC<PropsWithChildren<GroupItemProps>> = ({
       {children}
     </div>
   </div>
-);
+)
 
 const SubPanel: FC<SubPanelProps> = ({ group, name, ...props }) => {
-  const [list, setList] = useState<ChatItemProps[]>([]);
-  const rollRef = useRef<HTMLDivElement>(null);
+  const [list, setList] = useState<ChatItemProps[]>([])
+  const rollRef = useRef<HTMLDivElement>(null)
 
   useEventChat(name, {
     callback: ({ detail, origin }) =>
@@ -45,7 +45,7 @@ const SubPanel: FC<SubPanelProps> = ({ group, name, ...props }) => {
         })
       ),
     group,
-  });
+  })
 
   return (
     <GroupItem {...props} rollRef={rollRef}>
@@ -56,8 +56,8 @@ const SubPanel: FC<SubPanelProps> = ({ group, name, ...props }) => {
         textColor="text-slate-500 group-[.bg-green-600]:text-emerald-700"
       />
     </GroupItem>
-  );
-};
+  )
+}
 
 const SubGroup: FC = () => (
   <div className="grid grid-cols-1 gap-4">
@@ -83,17 +83,17 @@ const SubGroup: FC = () => (
       name={subGroupItems}
     />
   </div>
-);
+)
 
-export default SubGroup;
+export default SubGroup
 
 interface GroupItemProps extends Pick<SubPanelProps, 'className' | 'header'> {
-  rollRef?: RefObject<HTMLDivElement>;
+  rollRef?: RefObject<HTMLDivElement>
 }
 
 interface SubPanelProps {
-  header: ReactNode;
-  name: string;
-  className?: string;
-  group?: string;
+  header: ReactNode
+  name: string
+  className?: string
+  group?: string
 }

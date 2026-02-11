@@ -1,20 +1,20 @@
-import { FC, PropsWithChildren, useEffect } from 'react';
-import { FormEventContextInstance, useFormCom, useFormEvent, useFormInstance } from './utils';
+import { FC, PropsWithChildren, useEffect } from 'react'
+import { FormEventContextInstance, useFormCom, useFormEvent, useFormInstance } from './utils'
 
 const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
   children,
   value,
   onChange,
 }) => {
-  const Form = useFormCom<{ input: unknown }>();
-  const form = useFormInstance<{ input: unknown }>();
+  const Form = useFormCom<{ input: unknown }>()
+  const form = useFormInstance<{ input: unknown }>()
 
-  const { focusField, ...formIns } = form;
-  const { emit } = useFormEvent();
+  const { focusField, ...formIns } = form
+  const { emit } = useFormEvent()
 
   useEffect(() => {
-    form.setFieldValue('input', value);
-  }, [form, value]);
+    form.setFieldValue('input', value)
+  }, [form, value])
 
   return (
     <Form
@@ -24,12 +24,12 @@ const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
     >
       <Form.Item name="input">{children}</Form.Item>
     </Form>
-  );
-};
+  )
+}
 
-export default FormContainer;
+export default FormContainer
 
 interface FormContainerProps {
-  value?: unknown;
-  onChange?: (value: unknown, emit?: FormEventContextInstance['emit']) => void;
+  value?: unknown
+  onChange?: (value: unknown, emit?: FormEventContextInstance['emit']) => void
 }

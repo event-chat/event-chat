@@ -1,16 +1,16 @@
-import { NamepathType, checkDetail } from '@event-chat/core';
-import { FormItemProps as FormItemRawProps } from 'antd';
-import { ReactNode, RefObject } from 'react';
-import { ZodType } from 'zod';
-import FormInput, { FormInputProps } from './FormInput';
-import { FormItemProvider } from './FormProvider';
+import { NamepathType, checkDetail } from '@event-chat/core'
+import { FormItemProps as FormItemRawProps } from 'antd'
+import { ReactNode, RefObject } from 'react'
+import { ZodType } from 'zod'
+import FormInput, { FormInputProps } from './FormInput'
+import { FormItemProvider } from './FormProvider'
 import {
   FormEventInstance,
   FormInputInstance,
   useFormCom,
   useFormInstance,
   useFormItemEmit,
-} from './utils';
+} from './utils'
 
 const FormItem = <Schema extends ZodType, ValueType = unknown>({
   async,
@@ -27,9 +27,9 @@ const FormItem = <Schema extends ZodType, ValueType = unknown>({
   transform,
   ...props
 }: FormItemProps<Schema, ValueType>) => {
-  const { group, name: formName } = useFormInstance<ValueType>();
-  const [inputRef, emit] = useFormItemEmit(item);
-  const Form = useFormCom<ValueType>();
+  const { group, name: formName } = useFormInstance<ValueType>()
+  const [inputRef, emit] = useFormItemEmit(item)
+  const Form = useFormCom<ValueType>()
 
   return (
     <>
@@ -69,17 +69,17 @@ const FormItem = <Schema extends ZodType, ValueType = unknown>({
         </Form.Item>
       )}
     </>
-  );
-};
+  )
+}
 
-export default FormItem;
+export default FormItem
 
 interface FormItemProps<Schema extends ZodType, ValueType = unknown>
   extends Omit<FormItemRawProps, 'children' | 'initialValue' | 'name'>, FormInputProps<Schema> {
   children?:
     | ReactNode
-    | ((form: FormEventInstance<NamepathType, string | undefined, ValueType>) => ReactNode);
-  initialValue?: unknown;
-  item?: RefObject<FormInputInstance>;
-  transform?: (value: unknown) => unknown;
+    | ((form: FormEventInstance<NamepathType, string | undefined, ValueType>) => ReactNode)
+  initialValue?: unknown
+  item?: RefObject<FormInputInstance>
+  transform?: (value: unknown) => unknown
 }

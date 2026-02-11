@@ -1,16 +1,15 @@
-import FormEvent from '@event-chat/antd-item';
-import { Form, type FormListOperation, Input } from 'antd';
-import type { FC } from 'react';
-import Button, { type ButtonProps } from '@/components/Button';
-import { safetyPrint } from '@/utils/fields';
+import FormEvent from '@event-chat/antd-item'
+import { Form, type FormListOperation, Input } from 'antd'
+import type { FC } from 'react'
+import Button, { type ButtonProps } from '@/components/Button'
+import { safetyPrint } from '@/utils/fields'
 
 const ListFooter: FC<AddButtonProps> = ({ add, onClick, latest = -1 }) => (
   <>
     <Form.Item dependencies={[['name', latest]]} label={`受控字段${latest}`}>
       {(formIns) => {
-        const value =
-          latest > -1 ? safetyPrint(formIns.getFieldValue(['name', latest])) : undefined;
-        return <Input value={value} disabled />;
+        const value = latest > -1 ? safetyPrint(formIns.getFieldValue(['name', latest])) : undefined
+        return <Input value={value} disabled />
       }}
     </Form.Item>
     <Form.Item colon={false} label={` `}>
@@ -20,11 +19,11 @@ const ListFooter: FC<AddButtonProps> = ({ add, onClick, latest = -1 }) => (
       </Button>
     </Form.Item>
   </>
-);
+)
 
 const FormList: FC = () => {
-  const [formEvent] = FormEvent.useForm({ group: 'form-list' });
-  const [form] = Form.useForm();
+  const [formEvent] = FormEvent.useForm({ group: 'form-list' })
+  const [form] = Form.useForm()
   return (
     <div className="max-w-150">
       <FormEvent form={formEvent} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
@@ -71,11 +70,11 @@ const FormList: FC = () => {
         </Form.List>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default FormList;
+export default FormList
 
 interface AddButtonProps extends Pick<ButtonProps, 'onClick'>, Pick<FormListOperation, 'add'> {
-  latest?: number;
+  latest?: number
 }

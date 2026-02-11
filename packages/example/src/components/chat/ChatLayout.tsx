@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren, ReactNode } from 'react';
+import type { FC, PropsWithChildren, ReactNode } from 'react'
 
 const ChatLayout: FC<PropsWithChildren<ChatLayoutProps>> = ({
   children,
@@ -15,12 +15,12 @@ const ChatLayout: FC<PropsWithChildren<ChatLayoutProps>> = ({
       </div>
     )}
   </div>
-);
+)
 
-export default ChatLayout;
+export default ChatLayout
 
 interface ChatLayoutProps {
-  extra?: ReactNode;
-  footer?: number;
-  title?: ReactNode;
+  extra?: ReactNode
+  footer?: number
+  title?: ReactNode
 }

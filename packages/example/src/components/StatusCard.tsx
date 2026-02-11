@@ -1,6 +1,6 @@
-import { type FC, useMemo } from 'react';
-import { tv } from 'tailwind-variants';
-import { isKey } from '@/utils/fields';
+import { type FC, useMemo } from 'react'
+import { tv } from 'tailwind-variants'
+import { isKey } from '@/utils/fields'
 
 const card = tv({
   slots: {
@@ -35,21 +35,21 @@ const card = tv({
   defaultVariants: {
     status: 'default',
   },
-});
+})
 
 const iconMap = Object.freeze({
   default: '…',
   failed: '×',
   success: '✓',
   waiting: '○',
-});
+})
 
 const StatusCard: FC<StatusCardProps> = ({ code, text, status = 'default' }) => {
-  const { base, icon, color } = card({ status });
+  const { base, icon, color } = card({ status })
   const iconText = useMemo(
     () => (isKey(status, iconMap) ? iconMap[status] : iconMap.default),
     [status]
-  );
+  )
 
   return (
     <div className={base()}>
@@ -61,15 +61,15 @@ const StatusCard: FC<StatusCardProps> = ({ code, text, status = 'default' }) => 
         <p>{text}</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default StatusCard;
+export default StatusCard
 
 export interface StatusCardProps {
-  code?: 100 | 200 | 300 | 400 | 500;
-  status?: keyof typeof iconMap;
-  text?: string;
+  code?: 100 | 200 | 300 | 400 | 500
+  status?: keyof typeof iconMap
+  text?: string
 }
 
 // const codeMap = [100, 200, 300, 400, 500] as const

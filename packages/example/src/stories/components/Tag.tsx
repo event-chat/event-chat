@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react'
 
 const colorMap = Object.freeze({
   danger: 'text-red-700',
@@ -6,21 +6,21 @@ const colorMap = Object.freeze({
   info: 'text-blue-700',
   success: 'text-green-700',
   warning: 'text-yellow-700',
-});
+})
 
 const Tag: FC<PropsWithChildren<TagProps>> = ({ children, type = 'default' }) => {
-  const color = colorMap[type];
+  const color = colorMap[type]
   return (
     <span
       className={`sb-anchor inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium ${color}`}
     >
       {children}
     </span>
-  );
-};
+  )
+}
 
-export default Tag;
+export default Tag
 
 interface TagProps {
-  type?: keyof typeof colorMap;
+  type?: keyof typeof colorMap
 }

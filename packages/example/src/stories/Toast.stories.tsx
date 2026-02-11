@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from 'storybook-react-rsbuild';
-import Toast from './Toast';
+import type { Meta, StoryObj } from 'storybook-react-rsbuild'
+import Toast from './Toast'
 
 const meta: Meta<typeof Toast> = {
   args: {
@@ -31,34 +31,34 @@ const meta: Meta<typeof Toast> = {
       <Story {...args} />
     </div>
   ),
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Info: Story = {};
+export const Info: Story = {}
 
 export const Success: Story = {
   args: {
     children: 'Success emmit',
     type: 'success',
   },
-};
+}
 
 export const Error: Story = {
   args: {
     children: 'Error emmit',
     type: 'error',
   },
-};
+}
 
 export const Warning: Story = {
   args: {
     children: 'Warning emmit',
     type: 'warning',
   },
-};
+}
 
 export const DurationZero: Story = {
   args: {
@@ -67,4 +67,4 @@ export const DurationZero: Story = {
     title: '这条消息不会自动消失',
     message: '需要手动点击关闭 Toast',
   },
-};
+}

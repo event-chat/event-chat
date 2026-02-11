@@ -1,13 +1,13 @@
-import type { FC } from 'react';
-import { isKey } from '@/utils/fields';
-import type { ChatItemType } from '../utils';
+import type { FC } from 'react'
+import { isKey } from '@/utils/fields'
+import type { ChatItemType } from '../utils'
 
 const statusMap = Object.freeze({
   error: '👾 [error] 操作异常',
   faild: '😞 [faild] 处理失败',
   success: '😎 [success] 完成处理',
   waiting: '⏳️ [waiting] 处理中',
-});
+})
 
 const bgColorMap = [
   'bg-amber-600',
@@ -15,7 +15,7 @@ const bgColorMap = [
   'bg-gray-600',
   'bg-lime-600',
   'bg-rose-600',
-] as const;
+] as const
 
 const textColorMap = [
   'text-amber-600',
@@ -23,17 +23,17 @@ const textColorMap = [
   'text-gray-600',
   'text-lime-600',
   'text-rose-600',
-] as const;
+] as const
 
 const getColor = <T extends string>(colorMap: readonly T[], id?: string) =>
   colorMap[
     (id?.replace(/=/g, '').slice(-1).charCodeAt(0) ?? Number(String(Math.random()).slice(-1))) %
       colorMap.length
-  ];
+  ]
 
 const RenderCard: FC<RenderCardProps> = ({ item: { description, id, ingredients, title } }) => {
-  const bgcolor = getColor(bgColorMap, id);
-  const textcolor = getColor(textColorMap, id);
+  const bgcolor = getColor(bgColorMap, id)
+  const textcolor = getColor(textColorMap, id)
   return (
     <div className="card-shadow overflow-hidden rounded-xl bg-white transition-transform duration-300 hover:scale-[1.02]">
       <div className={`${bgcolor} p-6 text-white`}>
@@ -61,13 +61,13 @@ const RenderCard: FC<RenderCardProps> = ({ item: { description, id, ingredients,
           </h3>
           <ul className="space-y-2 text-gray-700">
             {ingredients.map((ingredient, idx) => {
-              const keyname = `${ingredient}:${idx}`;
+              const keyname = `${ingredient}:${idx}`
               return (
                 <li className="flex items-center" key={keyname}>
                   <span className={`h-2 w-2 rounded-full ${bgcolor} mr-2`} />
                   {ingredient}
                 </li>
-              );
+              )
             })}
           </ul>
         </div>
@@ -79,31 +79,31 @@ const RenderCard: FC<RenderCardProps> = ({ item: { description, id, ingredients,
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const RenderMessage: FC<RenderMessageProps> = ({ item: { message, status } }) => {
-  const typeKey = isKey(status, statusMap) ? status : 'error';
-  return <>{[statusMap[typeKey], message].filter(Boolean).join(': ')}</>;
-};
+  const typeKey = isKey(status, statusMap) ? status : 'error'
+  return <>{[statusMap[typeKey], message].filter(Boolean).join(': ')}</>
+}
 
 const RenderSchema: FC<RenderReviceProps> = ({ item }) =>
   'message' in item && item.message !== undefined ? (
     <RenderMessage item={item} />
   ) : (
     <RenderCard item={item} />
-  );
+  )
 
-export default RenderSchema;
+export default RenderSchema
 
 interface RenderCardProps {
-  item: ChatItemType['content'] & { message?: never };
+  item: ChatItemType['content'] & { message?: never }
 }
 
 interface RenderMessageProps {
-  item: ChatItemType['content'] & { message: string };
+  item: ChatItemType['content'] & { message: string }
 }
 
 interface RenderReviceProps {
-  item: ChatItemType['content'];
+  item: ChatItemType['content']
 }

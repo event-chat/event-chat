@@ -1,6 +1,6 @@
-import type { EventChatOptions } from '@event-chat/core';
-import { type FC, useEffect, useRef } from 'react';
-import { safetyPrint } from '@/utils/fields';
+import type { EventChatOptions } from '@event-chat/core'
+import { type FC, useEffect, useRef } from 'react'
+import { safetyPrint } from '@/utils/fields'
 
 // 格式化时间为易读格式
 const formatTime = (date: Date) =>
@@ -11,20 +11,20 @@ const formatTime = (date: Date) =>
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-  }).format(date);
+  }).format(date)
 
 export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
-  const wrapRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     Promise.resolve()
       .then(() => {
         wrapRef.current?.scrollTo({
           top: wrapRef.current.scrollHeight - wrapRef.current.clientHeight,
           behavior: 'smooth',
-        });
+        })
       })
-      .catch(() => {});
-  }, [errors]);
+      .catch(() => {})
+  }, [errors])
 
   return errors.length === 0 ? (
     <div className="rounded-lg bg-gray-50 p-8 text-center text-gray-500">暂无错误记录</div>
@@ -32,8 +32,8 @@ export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
     <div className="max-h-80 overflow-auto" ref={wrapRef}>
       <div className="mx-auto w-full max-w-4xl space-y-4 px-4 py-2">
         {errors.map((error, index) => {
-          const keyname = `${index}:${Math.random()}`;
-          const { time } = error;
+          const keyname = `${index}:${Math.random()}`
+          const { time } = error
           return (
             <div
               key={keyname}
@@ -60,19 +60,19 @@ export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
 // 复用你定义的类型
-export type EerrorItem = NonNullable<Parameters<NonNullable<EventChatOptions<string>['debug']>>[0]>;
+export type EerrorItem = NonNullable<Parameters<NonNullable<EventChatOptions<string>['debug']>>[0]>
 
 // 错误列表组件
 interface ErrorResultListProps {
-  errors: EerrorItem[]; // 错误列表数据
+  errors: EerrorItem[] // 错误列表数据
 }
 
 // 组件使用示例

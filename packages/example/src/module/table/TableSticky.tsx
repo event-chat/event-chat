@@ -1,6 +1,6 @@
-import { Tag } from 'antd';
-import type { FC } from 'react';
-import Table, { TBody, Td, Th, Thead, Tr } from '@/components/Table';
+import { Tag } from 'antd'
+import type { FC } from 'react'
+import Table, { TBody, Td, Th, Thead, Tr } from '@/components/Table'
 
 const TableSticky: FC = () => (
   <Table className={{ wrap: 'sb-unstyled' }} maxHeight={200} stickyHeader>
@@ -55,6 +55,6 @@ const TableSticky: FC = () => (
       </Tr>
     </TBody>
   </Table>
-);
+)
 
-export default TableSticky;
+export default TableSticky

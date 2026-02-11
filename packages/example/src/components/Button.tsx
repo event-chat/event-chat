@@ -1,12 +1,12 @@
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { forwardRef } from 'react';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { forwardRef } from 'react'
 
 const sizeClasses = Object.freeze({
   sm: 'px-3 py-1.5 rounded-md text-sm',
   md: 'px-4 py-2 rounded-md text-base',
   lg: 'px-6 py-2.5 rounded-lg text-lg',
-});
+})
 
 const variantClasses = Object.freeze({
   outline: 'button-outline',
@@ -16,7 +16,7 @@ const variantClasses = Object.freeze({
   success: 'button-success',
   text: 'button-text',
   warning: 'button-warning',
-});
+})
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -36,26 +36,26 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variantClasses[variant],
       sizeClasses[size],
       className,
-    ].join(' ');
+    ].join(' ')
 
     return (
       <button {...props} className={combinedClasses} disabled={disabled || loading} ref={ref}>
         {loading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
         {children}
       </button>
-    );
+    )
   }
-);
+)
 
 if (process.env.NODE_ENV !== 'production') {
-  Button.displayName = 'Button';
+  Button.displayName = 'Button'
 }
 
-export default Button;
+export default Button
 
 // 定义按钮的属性类型
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  loading?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: keyof typeof variantClasses;
+  loading?: boolean
+  size?: 'sm' | 'md' | 'lg'
+  variant?: keyof typeof variantClasses
 }

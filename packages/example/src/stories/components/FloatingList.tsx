@@ -1,36 +1,36 @@
-import { type FC, useEffect, useRef, useState } from 'react';
-import { type CategoryListProps, getCatalogItemStyle } from '../utils/list';
+import { type FC, useEffect, useRef, useState } from 'react'
+import { type CategoryListProps, getCatalogItemStyle } from '../utils/list'
 
 const FloatingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const allowRef = useRef(true);
+  const [isExpanded, setIsExpanded] = useState(false)
+  const allowRef = useRef(true)
   useEffect(() => {
     function closeHandle() {
       if (allowRef.current) {
-        setIsExpanded(false);
+        setIsExpanded(false)
       } else {
-        allowRef.current = true;
+        allowRef.current = true
       }
     }
 
     function stopClose(event: Event) {
-      const { target } = event;
-      allowRef.current = false;
+      const { target } = event
+      allowRef.current = false
       if (target instanceof HTMLElement && target.closest('.control-btn')) {
-        setIsExpanded((current) => !current);
+        setIsExpanded((current) => !current)
       }
     }
-    const floatingList = document.querySelector('.floating-list');
-    if (floatingList) floatingList.addEventListener('click', stopClose);
-    document.body.addEventListener('click', closeHandle);
+    const floatingList = document.querySelector('.floating-list')
+    if (floatingList) floatingList.addEventListener('click', stopClose)
+    document.body.addEventListener('click', closeHandle)
     return () => {
-      document.body.removeEventListener('click', closeHandle);
+      document.body.removeEventListener('click', closeHandle)
 
-      if (floatingList) floatingList.addEventListener('click', stopClose);
-      allowRef.current = true;
-      setIsExpanded(false);
-    };
-  }, [setIsExpanded]);
+      if (floatingList) floatingList.addEventListener('click', stopClose)
+      allowRef.current = true
+      setIsExpanded(false)
+    }
+  }, [setIsExpanded])
 
   return (
     <div className="floating-list fixed right-6 bottom-6 z-50">
@@ -77,7 +77,7 @@ const FloatingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
           <div className="max-h-84 overflow-y-auto">
             <ul className="m-0 border-t border-gray-100 px-2 py-2">
               {list.map(({ name, tag, title }) => {
-                const { indent, color } = getCatalogItemStyle(tag);
+                const { indent, color } = getCatalogItemStyle(tag)
                 return (
                   <li
                     className={` ${indent} ${color} sb-anchor cursor-pointer rounded-md py-2 text-sm transition-colors hover:bg-gray-50 hover:text-gray-900`}
@@ -86,14 +86,14 @@ const FloatingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
                   >
                     {title}
                   </li>
-                );
+                )
               })}
             </ul>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FloatingList;
+export default FloatingList

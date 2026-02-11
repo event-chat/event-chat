@@ -1,9 +1,9 @@
-import z from 'zod';
-import type { ChatItemProps } from '@/components/chat/utils';
+import z from 'zod'
+import type { ChatItemProps } from '@/components/chat/utils'
 
 export const statusEnum = z.enum(['error', 'faild', 'success', 'waiting'], {
   error: (issue) => (issue.input === undefined ? '未提供状态信息' : '提供的状态超出范围'),
-});
+})
 
 export const subSchema = z.object({
   message: z
@@ -12,7 +12,7 @@ export const subSchema = z.object({
     })
     .min(5, { error: '输入的消息最少 5 个字符' }),
   status: statusEnum,
-});
+})
 
 export const pubSchema = z.object(
   {
@@ -29,21 +29,21 @@ export const pubSchema = z.object(
   {
     error: '提交的格式和要求的不匹配',
   }
-);
+)
 
 export const checkStatus = ({ status }: z.infer<typeof subSchema>, list: ChatItemType[]) => {
-  const current = list.slice(-1)[0]?.content.status;
-  return current ? current === 'waiting' || status === current : status === 'waiting';
-};
+  const current = list.slice(-1)[0]?.content.status
+  return current ? current === 'waiting' || status === current : status === 'waiting'
+}
 
 export type ChatItemType = Omit<ChatItemProps, 'content'> & {
-  content: ContentReceiveType | ContentSendType;
-};
+  content: ContentReceiveType | ContentSendType
+}
 
-type ContentReceiveType = z.infer<typeof pubSchema> & { message?: never };
+type ContentReceiveType = z.infer<typeof pubSchema> & { message?: never }
 
 type ContentSendType = {
-  message: string;
-  status: z.infer<typeof statusEnum>;
-  id?: string;
-};
+  message: string
+  status: z.infer<typeof statusEnum>
+  id?: string
+}

@@ -9,13 +9,13 @@ import {
   SubPrivate,
   SubSchema,
   SubSchemaExtra,
-} from '@/module/pubsub';
-import type { NamepathType } from '@event-chat/core';
-import type { FC } from 'react';
-import ExtraGuid from '@/components/ExtraGuid';
-import Layout from '@/components/Layout';
-import ChatLayout from '@/components/chat/ChatLayout';
-import { isKey } from '@/utils/fields';
+} from '@/module/pubsub'
+import type { NamepathType } from '@event-chat/core'
+import type { FC } from 'react'
+import ExtraGuid from '@/components/ExtraGuid'
+import Layout from '@/components/Layout'
+import ChatLayout from '@/components/chat/ChatLayout'
+import { isKey } from '@/utils/fields'
 
 const GroupChat: FC = () => (
   <Layout
@@ -43,7 +43,7 @@ const GroupChat: FC = () => (
     ]}
     title="Event-chat-group"
   />
-);
+)
 
 const NormalChat: FC = () => (
   <Layout
@@ -57,7 +57,7 @@ const NormalChat: FC = () => (
     ]}
     title="Event-chat-nolimit"
   />
-);
+)
 
 const SchemaChat: FC = () => (
   <Layout
@@ -71,7 +71,7 @@ const SchemaChat: FC = () => (
     ]}
     title="Event-chat-by-zod-schema"
   />
-);
+)
 
 const TokenChat: FC = () => (
   <Layout
@@ -89,23 +89,23 @@ const TokenChat: FC = () => (
     ]}
     title="Event-chat-private"
   />
-);
+)
 
 const demoMap = Object.freeze({
   GroupChat,
   NormalChat,
   SchemaChat,
   TokenChat,
-});
+})
 
 const EventChat: FC<EventChatProps> = ({ name }) => {
-  const Demo = isKey(name, demoMap) ? demoMap[name] : null;
-  return Demo ? <Demo /> : null;
-};
+  const Demo = isKey(name, demoMap) ? demoMap[name] : null
+  return Demo ? <Demo /> : null
+}
 
-export default EventChat;
+export default EventChat
 
 export interface EventChatProps {
   /* 演示类型 */
-  name: NamepathType;
+  name: NamepathType
 }
