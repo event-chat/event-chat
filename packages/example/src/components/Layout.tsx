@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react'
 
 const Layout: FC<LayoutProps> = ({ list, title }) => (
   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -6,15 +6,15 @@ const Layout: FC<LayoutProps> = ({ list, title }) => (
       <h2 className="text-3xl font-bold underline">{title}</h2>
     </div>
     {list?.map((item, idx) => {
-      const keyname = `${idx}:${Math.random()}`;
-      return <div key={keyname}>{item}</div>;
+      const keyname = `${idx}:${Math.random()}`
+      return <div key={keyname}>{item}</div>
     })}
   </div>
-);
+)
 
-export default Layout;
+export default Layout
 
 interface LayoutProps {
-  list?: ReactNode[];
-  title?: ReactNode;
+  list?: ReactNode[]
+  title?: ReactNode
 }

@@ -1,16 +1,16 @@
-import { createToken, useEventChat } from '@event-chat/core';
-import { type FC, useRef, useState } from 'react';
-import z from 'zod';
-import { pubPrivate, subPrivate, subPrivateResult, syncToken, toastOpen } from '@/utils/event';
-import { safetyPrint } from '@/utils/fields';
-import ChatList from '../../components/chat/ChatList';
-import ChatPanel from '../../components/chat/ChatPanel';
-import type { ChatItemType } from '../utils';
-import RenderSchema from './RenderSchema';
+import { createToken, useEventChat } from '@event-chat/core'
+import { type FC, useRef, useState } from 'react'
+import z from 'zod'
+import { pubPrivate, subPrivate, subPrivateResult, syncToken, toastOpen } from '@/utils/event'
+import { safetyPrint } from '@/utils/fields'
+import ChatList from '../../components/chat/ChatList'
+import ChatPanel from '../../components/chat/ChatPanel'
+import type { ChatItemType } from '../utils'
+import RenderSchema from './RenderSchema'
 
 const PubPrivate: FC = () => {
-  const [list, setList] = useState<ChatRecordType[]>([]);
-  const rollRef = useRef<HTMLDivElement>(null);
+  const [list, setList] = useState<ChatRecordType[]>([])
+  const rollRef = useRef<HTMLDivElement>(null)
 
   const { token, emit } = useEventChat(pubPrivate, {
     schema: z.object(
@@ -39,9 +39,9 @@ const PubPrivate: FC = () => {
         },
         time: new Date(),
         type: 'receive',
-      });
-      setList(uplist);
-      emit({ detail: { id: detail.id, type: 'send' }, name: subPrivateResult });
+      })
+      setList(uplist)
+      emit({ detail: { id: detail.id, type: 'send' }, name: subPrivateResult })
       emit({
         detail: {
           message: '这条 toast 也是 event-chat 示例',
@@ -49,12 +49,12 @@ const PubPrivate: FC = () => {
           type: 'success',
         },
         name: toastOpen,
-      });
+      })
     },
     debug: (result) => {
-      const { issues = [] } = result?.error ?? {};
-      const { data } = result ?? {};
-      const id: unknown = typeof data === 'object' && data ? Reflect.get(data, 'id') : undefined;
+      const { issues = [] } = result?.error ?? {}
+      const { data } = result ?? {}
+      const id: unknown = typeof data === 'object' && data ? Reflect.get(data, 'id') : undefined
 
       if (issues.length > 0) {
         emit({
@@ -64,14 +64,14 @@ const PubPrivate: FC = () => {
             type: 'error',
           },
           name: toastOpen,
-        });
+        })
       }
 
       if (id) {
-        emit({ detail: { id: safetyPrint(id), type: 'faild' }, name: subPrivateResult });
+        emit({ detail: { id: safetyPrint(id), type: 'faild' }, name: subPrivateResult })
       }
     },
-  });
+  })
 
   return (
     <>
@@ -92,14 +92,14 @@ const PubPrivate: FC = () => {
             id: createToken('pub-private'),
             message: detail,
             status: 'success',
-          });
+          })
           const uplist = list.concat({
             time: new Date(),
             type: 'send',
             content,
-          });
-          emit({ name: subPrivate, detail: content });
-          setList(uplist);
+          })
+          emit({ name: subPrivate, detail: content })
+          setList(uplist)
         }}
       >
         <ChatList
@@ -111,11 +111,11 @@ const PubPrivate: FC = () => {
         />
       </ChatPanel>
     </>
-  );
-};
+  )
+}
 
-export default PubPrivate;
+export default PubPrivate
 
 type ChatRecordType = Omit<ChatItemType, 'content'> & {
-  content: ChatItemType['content'] & { message: string };
-};
+  content: ChatItemType['content'] & { message: string }
+}

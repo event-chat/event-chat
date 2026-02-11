@@ -1,10 +1,10 @@
-import FormEventRaw from '@event-chat/antd-item';
-import { ConfigProvider, Form, theme } from 'antd';
-import type { Meta, StoryObj } from 'storybook-react-rsbuild';
-import AntdItem from './AntdItem';
-import FormEvent from './components/FormEvent';
+import FormEventRaw from '@event-chat/antd-item'
+import { ConfigProvider, Form, theme } from 'antd'
+import type { Meta, StoryObj } from 'storybook-react-rsbuild'
+import AntdItem from './AntdItem'
+import FormEvent from './components/FormEvent'
 
-FormEventRaw.observer(Form);
+FormEventRaw.observer(Form)
 
 const meta = {
   args: {
@@ -32,46 +32,46 @@ const meta = {
   ],
   subcomponents: { FormEvent },
   title: 'Document/AntdItem',
-} satisfies Meta<typeof AntdItem>;
+} satisfies Meta<typeof AntdItem>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const FormEmit: Story = {};
+export const FormEmit: Story = {}
 
 export const FormUpdate: Story = {
   args: {
     name: 'FormUpdate',
   },
-};
+}
 
 export const FormUpdateFields: Story = {
   args: {
     name: 'FormUpdateFields',
   },
-};
+}
 
 export const FormList: Story = {
   args: {
     name: 'FormList',
   },
-};
+}
 
 export const FormSchema: Story = {
   args: {
     name: 'FormSchema',
   },
-};
+}
 
 export const FormRate: Story = {
   args: {
     name: 'FormRate',
   },
-};
+}
 
 export const FormAsync: Story = {
   args: {
     name: 'FormAsync',
   },
-};
+}

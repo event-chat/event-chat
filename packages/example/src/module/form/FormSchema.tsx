@@ -1,12 +1,12 @@
-import FormEvent from '@event-chat/antd-item';
-import { Form, Input, InputNumber } from 'antd';
-import { type FC, useState } from 'react';
-import z from 'zod';
-import { type EerrorItem, ErrorResultList } from '@/components/ErrorResultList';
+import FormEvent from '@event-chat/antd-item'
+import { Form, Input, InputNumber } from 'antd'
+import { type FC, useState } from 'react'
+import z from 'zod'
+import { type EerrorItem, ErrorResultList } from '@/components/ErrorResultList'
 
 const FormSchema: FC = () => {
-  const [debug, setDebug] = useState<EerrorItem[]>([]);
-  const [form] = FormEvent.useForm({ group: 'form-schema' });
+  const [debug, setDebug] = useState<EerrorItem[]>([])
+  const [form] = FormEvent.useForm({ group: 'form-schema' })
   return (
     <div className="max-w-150">
       <FormEvent form={form} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
@@ -29,7 +29,7 @@ const FormSchema: FC = () => {
           name={['target', 'number']}
           schema={z.number().nullish()}
           debug={(log) => {
-            if (log) setDebug((current) => current.concat([log]));
+            if (log) setDebug((current) => current.concat([log]))
           }}
         >
           <InputNumber disabled />
@@ -41,7 +41,7 @@ const FormSchema: FC = () => {
         </Form.Item>
       </FormEvent>
     </div>
-  );
-};
+  )
+}
 
-export default FormSchema;
+export default FormSchema

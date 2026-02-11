@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from 'react'
 
-export const tagRange = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+export const tagRange = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
 
 export const getCatalogItemStyle = (tag: ListItemType['tag']) => {
   const styleMap = {
@@ -34,21 +34,21 @@ export const getCatalogItemStyle = (tag: ListItemType['tag']) => {
       fontSize: 'text-xs',
       color: 'text-gray-500',
     },
-  };
+  }
 
-  return styleMap[tag];
-};
+  return styleMap[tag]
+}
 
 export const isTagName = (name: string): name is ListItemType['tag'] =>
-  tagRange.map(String).includes(name);
+  tagRange.map(String).includes(name)
 
 export interface CategoryListProps {
-  list: ListItemType[];
-  scrollTo?: (name: string) => void;
+  list: ListItemType[]
+  scrollTo?: (name: string) => void
 }
 
 export type ListItemType = {
-  name: string;
-  tag: (typeof tagRange)[number];
-  title: ReactNode;
-};
+  name: string
+  tag: (typeof tagRange)[number]
+  title: ReactNode
+}

@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren, ReactNode } from 'react';
+import type { FC, PropsWithChildren, ReactNode } from 'react'
 
 const Card: FC<PropsWithChildren<CardProps>> = ({ children, footer, title }) =>
   title ? (
@@ -18,11 +18,11 @@ const Card: FC<PropsWithChildren<CardProps>> = ({ children, footer, title }) =>
       {children}
       {footer}
     </div>
-  );
+  )
 
-export default Card;
+export default Card
 
 interface CardProps {
-  footer?: ReactNode;
-  title?: ReactNode;
+  footer?: ReactNode
+  title?: ReactNode
 }

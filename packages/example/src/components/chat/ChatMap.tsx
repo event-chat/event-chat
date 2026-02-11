@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import type { ChatItemProps } from './utils';
+import type { FC } from 'react'
+import type { ChatItemProps } from './utils'
 
-const getTime = (datetime: Date) => datetime.toLocaleString().split(' ').pop();
+const getTime = (datetime: Date) => datetime.toLocaleString().split(' ').pop()
 
 export const Failed: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, header }) => (
   <div>
@@ -17,7 +17,7 @@ export const Failed: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, he
       </div>
     </div>
   </div>
-);
+)
 
 export const Receive: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, header, time }) => (
   <div>
@@ -33,7 +33,7 @@ export const Receive: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, h
       </div>
     </div>
   </div>
-);
+)
 
 export const Send: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, header, time }) => (
   <div>
@@ -49,7 +49,7 @@ export const Send: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, head
       </div>
     </div>
   </div>
-);
+)
 
 export const Waiting: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, header }) => (
   <div>
@@ -65,4 +65,4 @@ export const Waiting: FC<Omit<ChatItemProps, 'receive'>> = ({ content, footer, h
       </div>
     </div>
   </div>
-);
+)

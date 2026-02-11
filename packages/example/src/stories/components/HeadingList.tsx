@@ -1,11 +1,11 @@
-import type { FC } from 'react';
-import { type CategoryListProps, getCatalogItemStyle } from '../utils/list';
+import type { FC } from 'react'
+import { type CategoryListProps, getCatalogItemStyle } from '../utils/list'
 
 export const HeadingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
   return (
     <ul className="space-y-2">
       {list.map(({ name, tag, title }) => {
-        const { indent, fontSize, color } = getCatalogItemStyle(tag);
+        const { indent, fontSize, color } = getCatalogItemStyle(tag)
         return (
           <li
             className={` ${indent} ${fontSize} ${color} sb-anchor cursor-pointer rounded-md transition-colors hover:bg-gray-50`}
@@ -15,10 +15,10 @@ export const HeadingList: FC<CategoryListProps> = ({ list, scrollTo }) => {
               {title}
             </a>
           </li>
-        );
+        )
       })}
     </ul>
-  );
-};
+  )
+}
 
-export default HeadingList;
+export default HeadingList

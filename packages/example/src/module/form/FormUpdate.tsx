@@ -1,13 +1,13 @@
-import FormEvent from '@event-chat/antd-item';
-import { Divider, Form, Tag } from 'antd';
-import { type FC, useState } from 'react';
-import { FormButton, FormWrapper } from './FormModule';
-import { fieldInput, fieldRate } from './utils';
+import FormEvent from '@event-chat/antd-item'
+import { Divider, Form, Tag } from 'antd'
+import { type FC, useState } from 'react'
+import { FormButton, FormWrapper } from './FormModule'
+import { fieldInput, fieldRate } from './utils'
 
 const FormUpdate: FC = () => {
-  const [formEvent] = FormEvent.useForm({ group: 'form-update' });
-  const [formRaw] = Form.useForm();
-  const [alldata, setData] = useState<unknown[]>([]);
+  const [formEvent] = FormEvent.useForm({ group: 'form-update' })
+  const [formRaw] = Form.useForm()
+  const [alldata, setData] = useState<unknown[]>([])
   return (
     <>
       <FormWrapper
@@ -25,13 +25,13 @@ const FormUpdate: FC = () => {
           </>
         }
         onValuesChange={(...args) => {
-          setData(args);
+          setData(args)
         }}
       >
         <FormButton
           label="随机设值"
           onClick={() => {
-            formEvent.emit({ detail: String(Math.random()), name: fieldInput });
+            formEvent.emit({ detail: String(Math.random()), name: fieldInput })
           }}
         >
           emit
@@ -59,16 +59,16 @@ const FormUpdate: FC = () => {
           label="随机设值"
           onClick={() => {
             // 同时会更新 rate 值
-            const value = String(Math.random());
-            formRaw.setFieldValue(fieldInput, value);
-            formRaw.setFieldValue(fieldRate, value);
+            const value = String(Math.random())
+            formRaw.setFieldValue(fieldInput, value)
+            formRaw.setFieldValue(fieldRate, value)
           }}
         >
           emit
         </FormButton>
       </FormWrapper>
     </>
-  );
-};
+  )
+}
 
-export default FormUpdate;
+export default FormUpdate

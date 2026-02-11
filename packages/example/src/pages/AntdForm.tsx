@@ -7,11 +7,11 @@ import {
   FormSchema,
   FormUpdate,
   FormUpdateFields,
-} from '@/module/form';
-import FormAppend from '@/module/form/FormAppend';
-import { Tag } from 'antd';
-import type { FC } from 'react';
-import Card from '@/components/Card';
+} from '@/module/form'
+import FormAppend from '@/module/form/FormAppend'
+import { Tag } from 'antd'
+import type { FC } from 'react'
+import Card from '@/components/Card'
 
 const AntdForm: FC = () => (
   <div className="flex flex-col gap-16">
@@ -169,10 +169,10 @@ const AntdForm: FC = () => (
     >
       <FormAsync />
     </Card>
-    <Card>
+    <Card title="表单项主控字段">
       <FormAppend />
     </Card>
   </div>
-);
+)
 
-export default AntdForm;
+export default AntdForm

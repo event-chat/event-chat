@@ -1,6 +1,6 @@
-import type { FC, ReactNode } from 'react';
-import Table, { TBody, Td, Th, Thead, Tr } from '@/components/Table';
-import Tag from './Tag';
+import type { FC, ReactNode } from 'react'
+import Table, { TBody, Td, Th, Thead, Tr } from '@/components/Table'
+import Tag from './Tag'
 
 const TableList: FC<TableListProps> = ({ data }) => (
   <Table className={{ wrap: 'sb-unstyled' }}>
@@ -32,16 +32,16 @@ const TableList: FC<TableListProps> = ({ data }) => (
       ))}
     </TBody>
   </Table>
-);
+)
 
-export default TableList;
+export default TableList
 
 interface TableListProps {
-  data: DataItemType[];
+  data: DataItemType[]
 }
 
 type DataItemType = {
-  keyname: string;
-  desc?: ReactNode;
-  type?: string[];
-};
+  keyname: string
+  desc?: ReactNode
+  type?: string[]
+}

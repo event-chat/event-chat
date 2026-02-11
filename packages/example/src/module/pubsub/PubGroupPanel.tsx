@@ -1,21 +1,21 @@
-import { useEventChat } from '@event-chat/core';
-import { type FC, type PropsWithChildren, type ReactNode, useState } from 'react';
-import Switch from '@/components/Switch';
-import ChatPanel from '@/components/chat/ChatPanel';
-import { groupName, subGroupItems } from '@/utils/event';
+import { useEventChat } from '@event-chat/core'
+import { type FC, type PropsWithChildren, type ReactNode, useState } from 'react'
+import Switch from '@/components/Switch'
+import ChatPanel from '@/components/chat/ChatPanel'
+import { groupName, subGroupItems } from '@/utils/event'
 
 const GroupItem: FC<PropsWithChildren<{ title: ReactNode }>> = ({ children, title }) => (
   <div className="flex items-center gap-2">
     <span className="text-xs">{title}</span>
     {children}
   </div>
-);
+)
 
 const PubPanel: FC<PubPanelProps> = ({ disabled, group, name }) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false)
   const { emit } = useEventChat(name, {
     group,
-  });
+  })
 
   return (
     <ChatPanel
@@ -33,8 +33,8 @@ const PubPanel: FC<PubPanelProps> = ({ disabled, group, name }) => {
         </GroupItem>
       </div>
     </ChatPanel>
-  );
-};
+  )
+}
 
 const PubGroupPanel: FC = () => (
   <div className="grid grid-cols-1 gap-4">
@@ -42,12 +42,12 @@ const PubGroupPanel: FC = () => (
     <PubPanel group={groupName} name="pub-group-item-2" />
     <PubPanel name="pub-global-item" disabled />
   </div>
-);
+)
 
-export default PubGroupPanel;
+export default PubGroupPanel
 
 interface PubPanelProps {
-  name: string;
-  disabled?: boolean;
-  group?: string;
+  name: string
+  disabled?: boolean
+  group?: string
 }

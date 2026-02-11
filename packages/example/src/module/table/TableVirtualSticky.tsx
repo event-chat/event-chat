@@ -1,6 +1,6 @@
-import { Tag } from 'antd';
-import type { FC } from 'react';
-import Table, { TBody, Td, Th, Thead, Tr } from '@/components/TableVirtual';
+import { Tag } from 'antd'
+import type { FC } from 'react'
+import Table, { TBody, Td, Th, Thead, Tr } from '@/components/TableVirtual'
 
 const TableVirtualSticky: FC = () => (
   <Table className={{ wrap: 'sb-unstyled' }} maxHeight={200} stickyHeader>
@@ -55,6 +55,6 @@ const TableVirtualSticky: FC = () => (
       </Tr>
     </TBody>
   </Table>
-);
+)
 
-export default TableVirtualSticky;
+export default TableVirtualSticky

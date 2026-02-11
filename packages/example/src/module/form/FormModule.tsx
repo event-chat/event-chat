@@ -1,4 +1,4 @@
-import FormEvent from '@event-chat/antd-item';
+import FormEvent from '@event-chat/antd-item'
 import {
   Flex,
   Form,
@@ -8,21 +8,21 @@ import {
   type InputProps,
   Rate,
   Typography,
-} from 'antd';
-import { type FC, type PropsWithChildren, type ReactNode, forwardRef } from 'react';
-import Button, { type ButtonProps } from '@/components/Button';
-import { safetyPrint } from '@/utils/fields';
-import { fieldInput, fieldOrigin, fieldRate } from './utils';
+} from 'antd'
+import { type FC, type PropsWithChildren, type ReactNode, forwardRef } from 'react'
+import Button, { type ButtonProps } from '@/components/Button'
+import { safetyPrint } from '@/utils/fields'
+import { fieldInput, fieldOrigin, fieldRate } from './utils'
 
-const { Title } = Typography;
+const { Title } = Typography
 const RateInput = forwardRef<HTMLSpanElement, { value?: number }>(({ value = 0 }, ref) => (
   <Flex gap={8}>
     <Rate value={value} disabled />
     <span ref={ref}>({value})</span>
   </Flex>
-));
+))
 
-RateInput.displayName = 'RateInput';
+RateInput.displayName = 'RateInput'
 
 export const FormButton: FC<PropsWithChildren<FormButtonProps>> = ({
   children,
@@ -32,14 +32,14 @@ export const FormButton: FC<PropsWithChildren<FormButtonProps>> = ({
   <Form.Item label={label}>
     <Button {...props}>{children}</Button>
   </Form.Item>
-);
+)
 
 export const FormButtonEmit: FC<PropsWithChildren<FormButtonProps>> = ({
   children,
   onClick,
   ...props
 }) => {
-  const form = FormEvent.useFormInstance();
+  const form = FormEvent.useFormInstance()
   return (
     <FormButton
       {...props}
@@ -52,14 +52,14 @@ export const FormButtonEmit: FC<PropsWithChildren<FormButtonProps>> = ({
             },
           ],
           name: 'fields-update',
-        });
-        onClick?.(event);
+        })
+        onClick?.(event)
       }}
     >
       {children}
     </FormButton>
-  );
-};
+  )
+}
 
 const FormModule: FC<PropsWithChildren<FormModuleProps>> = ({ children, footer, ...props }) => {
   return (
@@ -72,7 +72,7 @@ const FormModule: FC<PropsWithChildren<FormModuleProps>> = ({ children, footer, 
           emit({
             detail: !rate ? 0 : safetyPrint(rate).slice(-1).charCodeAt(0),
             name: fieldRate,
-          });
+          })
         }}
       >
         <Input disabled />
@@ -82,20 +82,20 @@ const FormModule: FC<PropsWithChildren<FormModuleProps>> = ({ children, footer, 
       </FormEvent.Item>
       <Form.Item dependencies={[fieldRate]} label="受控响应">
         {(formIns) => {
-          const value = (Number(formIns.getFieldValue(fieldRate) ?? 0) % 10) / 2;
-          return <RateInput value={value} />;
+          const value = (Number(formIns.getFieldValue(fieldRate) ?? 0) % 10) / 2
+          return <RateInput value={value} />
         }}
       </Form.Item>
       {footer}
     </FormEvent>
-  );
-};
+  )
+}
 
 export const FormOrigin: FC<Pick<InputProps, 'onChange'>> = ({ onChange }) => (
   <FormEvent.Item label="主控表单" name={fieldOrigin}>
     <Input onChange={onChange} />
   </FormEvent.Item>
-);
+)
 
 export const FormWrapper: FC<PropsWithChildren<FormWrapper>> = ({
   children,
@@ -112,21 +112,21 @@ export const FormWrapper: FC<PropsWithChildren<FormWrapper>> = ({
       {children}
     </FormModule>
   </div>
-);
+)
 
-export default FormModule;
+export default FormModule
 
 interface FormButtonProps extends ButtonProps {
-  label?: ReactNode;
+  label?: ReactNode
 }
 
 interface FormModuleProps extends Omit<
   FormProps,
   'labelCol' | 'onChange' | 'title' | 'wrapperCol'
 > {
-  footer?: ReactNode;
+  footer?: ReactNode
 }
 
 interface FormWrapper extends FormModuleProps {
-  title?: ReactNode;
+  title?: ReactNode
 }

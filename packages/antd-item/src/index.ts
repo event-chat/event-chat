@@ -1,12 +1,12 @@
-import FormContainer from './FormContainer';
-import FormEventInner from './FormEvent';
-import FormItem from './FormItem';
-import FormList from './FormList';
-import { AntdCom, FormBaseInstance, useForm, useFormInstance } from './utils';
+import FormContainer from './FormContainer'
+import FormEventInner from './FormEvent'
+import FormItem from './FormItem'
+import FormList from './FormList'
+import { AntdCom, FormBaseInstance, useForm, useFormInstance } from './utils'
 
 const observer = (FormCom: FormBaseInstance): void => {
-  AntdCom.form = FormCom;
-};
+  AntdCom.form = FormCom
+}
 
 const FormEvent: typeof FormEventInner & FormExtraInstance = Object.assign(FormEventInner, {
   Container: FormContainer,
@@ -15,16 +15,16 @@ const FormEvent: typeof FormEventInner & FormExtraInstance = Object.assign(FormE
   observer,
   useForm,
   useFormInstance,
-});
+})
 
-export * from './utils';
-export default FormEvent;
+export * from './utils'
+export default FormEvent
 
 interface FormExtraInstance {
-  Container: typeof FormContainer;
-  Item: typeof FormItem;
-  List: typeof FormList;
-  observer: typeof observer;
-  useForm: typeof useForm;
-  useFormInstance: typeof useFormInstance;
+  Container: typeof FormContainer
+  Item: typeof FormItem
+  List: typeof FormList
+  observer: typeof observer
+  useForm: typeof useForm
+  useFormInstance: typeof useFormInstance
 }

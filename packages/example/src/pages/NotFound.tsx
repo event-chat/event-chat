@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC } from 'react'
 
 const NotFound: FC = () => (
   <div className="flex min-h-160 flex-col items-center justify-center px-4">
@@ -8,6 +8,6 @@ const NotFound: FC = () => (
       你访问的页面不存在、已被删除或网址输入错误，请返回首页重新探索。
     </p>
   </div>
-);
+)
 
-export default NotFound;
+export default NotFound

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from 'storybook-react-rsbuild';
-import { fn } from 'storybook/test';
-import Tabs, { TabContent, TabItem } from './Tabs';
+import type { Meta, StoryObj } from 'storybook-react-rsbuild'
+import { fn } from 'storybook/test'
+import Tabs, { TabContent, TabItem } from './Tabs'
 
 const meta: Meta<typeof Tabs> = {
   args: {
@@ -27,7 +27,7 @@ const meta: Meta<typeof Tabs> = {
   component: Tabs,
   decorators: [
     (_, context) => {
-      const { args } = context;
+      const { args } = context
       return (
         <div className="mx-auto flex max-w-200 flex-col gap-8 py-4">
           <div className="flex w-full items-center justify-center py-4">
@@ -39,15 +39,15 @@ const meta: Meta<typeof Tabs> = {
           </div>
           <TabContent {...args} />
         </div>
-      );
+      )
     },
   ],
   subcomponents: { TabItem },
   title: 'Example/Tabs',
-};
+}
 
-export default meta;
+export default meta
 
-export type Story = StoryObj<typeof meta>;
+export type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
+export const Default: Story = {}

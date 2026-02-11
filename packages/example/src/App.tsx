@@ -1,22 +1,22 @@
-import FormEvent from '@event-chat/antd-item';
-import { ConfigProvider, Form, theme } from 'antd';
-import { type FC, Suspense, lazy, useState } from 'react';
-import './App.css';
-import Tabs, { TabItem } from './components/Tabs';
-import Toast from './components/toast';
-import { isKey } from './utils/fields';
+import FormEvent from '@event-chat/antd-item'
+import { ConfigProvider, Form, theme } from 'antd'
+import { type FC, Suspense, lazy, useState } from 'react'
+import './App.css'
+import Tabs, { TabItem } from './components/Tabs'
+import Toast from './components/toast'
+import { isKey } from './utils/fields'
 
-const AntdForm = lazy(() => import('./pages/AntdForm'));
-const Components = lazy(() => import('./pages/Components'));
-const EventChat = lazy(() => import('./pages/EventChat'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+const AntdForm = lazy(() => import('./pages/AntdForm'))
+const Components = lazy(() => import('./pages/Components'))
+const EventChat = lazy(() => import('./pages/EventChat'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
-const Router = Object.freeze({ AntdForm, Components, EventChat });
-FormEvent.observer(Form);
+const Router = Object.freeze({ AntdForm, Components, EventChat })
+FormEvent.observer(Form)
 
 const App: FC = () => {
-  const [current, setCurrent] = useState('EventChat');
-  const IndexCom = isKey(current, Router) ? Router[current] : NotFound;
+  const [current, setCurrent] = useState('EventChat')
+  const IndexCom = isKey(current, Router) ? Router[current] : NotFound
 
   return (
     <>
@@ -25,7 +25,7 @@ const App: FC = () => {
         <Tabs defaultActive="EventChat" onChange={(detail) => setCurrent(String(detail))}>
           <TabItem name="EventChat">eventChat</TabItem>
           <TabItem name="AntdForm">antdForm</TabItem>
-          <TabItem name="Components">others</TabItem>
+          <TabItem name="Components">components</TabItem>
         </Tabs>
       </div>
       <ConfigProvider
@@ -46,7 +46,7 @@ const App: FC = () => {
         </Suspense>
       </ConfigProvider>
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

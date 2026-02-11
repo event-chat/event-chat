@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import ExtraGuid from '@/components/ExtraGuid';
+import type { FC } from 'react'
+import ExtraGuid from '@/components/ExtraGuid'
 
 const SubSchemaExtra: FC = () => (
   <ExtraGuid title="只接受以下类型的 JSON：">
@@ -16,6 +16,6 @@ const SubSchemaExtra: FC = () => (
 }`}</pre>
     <div className="pt-4 pb-1">也可以传一个错误的数据试试</div>
   </ExtraGuid>
-);
+)
 
-export default SubSchemaExtra;
+export default SubSchemaExtra

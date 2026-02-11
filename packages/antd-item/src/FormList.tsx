@@ -1,13 +1,13 @@
-import { checkDetail } from '@event-chat/core';
-import { Form as FormRaw } from 'antd';
-import { ComponentProps, RefObject, useMemo } from 'react';
-import { ZodType } from 'zod';
-import FormInput, { FormInputProps } from './FormInput';
-import { FormItemProvider } from './FormProvider';
-import { FormInputInstance, useFormCom, useFormItemEmit } from './utils';
+import { checkDetail } from '@event-chat/core'
+import { Form as FormRaw } from 'antd'
+import { ComponentProps, RefObject, useMemo } from 'react'
+import { ZodType } from 'zod'
+import FormInput, { FormInputProps } from './FormInput'
+import { FormItemProvider } from './FormProvider'
+import { FormInputInstance, useFormCom, useFormItemEmit } from './utils'
 
 const isNamepath = (value: unknown): value is number | string =>
-  typeof value === 'string' || Number.isInteger(value);
+  typeof value === 'string' || Number.isInteger(value)
 
 const FormList = <Schema extends ZodType>({
   async,
@@ -23,15 +23,15 @@ const FormList = <Schema extends ZodType>({
   onChange,
   ...props
 }: FormListProps<Schema>) => {
-  const Form = useFormCom();
+  const Form = useFormCom()
   const fieldName = useMemo(
     () =>
       (Array.isArray(name) ? name.filter(isNamepath) : undefined) ??
       (isNamepath(name) ? name : undefined),
     [name]
-  );
+  )
 
-  const [inputRef, emit] = useFormItemEmit(item);
+  const [inputRef, emit] = useFormItemEmit(item)
   return !fieldName ? null : (
     <>
       <Form.List
@@ -67,12 +67,12 @@ const FormList = <Schema extends ZodType>({
         />
       </Form.Item>
     </>
-  );
-};
+  )
+}
 
-export default FormList;
+export default FormList
 
 interface FormListProps<Schema extends ZodType>
   extends Omit<ComponentProps<typeof FormRaw.List>, 'name'>, FormInputProps<Schema> {
-  item?: RefObject<FormInputInstance>;
+  item?: RefObject<FormInputInstance>
 }

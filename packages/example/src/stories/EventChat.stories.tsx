@@ -1,14 +1,14 @@
-import type { EventChatOptions as EventChatOptionsType } from '@event-chat/core';
-import type { ComponentProps } from 'react';
-import type { Meta, StoryObj } from 'storybook-react-rsbuild';
-import type { ZodType } from 'zod';
-import EventChat from './EventChat';
-import EventChatOptions from './components/EventChatOptions';
-import EventChatResult from './components/EventChatResult';
+import type { EventChatOptions as EventChatOptionsType } from '@event-chat/core'
+import type { ComponentProps } from 'react'
+import type { Meta, StoryObj } from 'storybook-react-rsbuild'
+import type { ZodType } from 'zod'
+import EventChat from './EventChat'
+import EventChatOptions from './components/EventChatOptions'
+import EventChatResult from './components/EventChatResult'
 
 type EventChatAdditionalProps = ComponentProps<typeof EventChat> & {
-  options?: EventChatOptionsType<string, ZodType, string, string, true>;
-};
+  options?: EventChatOptionsType<string, ZodType, string, string, true>
+}
 
 const meta: Meta<EventChatAdditionalProps> = {
   args: {
@@ -40,32 +40,32 @@ const meta: Meta<EventChatAdditionalProps> = {
   ],
   subcomponents: { EventChatOptions, EventChatResult },
   title: 'Document/EventChat',
-};
+}
 
-export default meta;
+export default meta
 
-export type Story = StoryObj<typeof meta>;
+export type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
     name: 'NormalChat',
   },
-};
+}
 
 export const Schema: Story = {
   args: {
     name: 'SchemaChat',
   },
-};
+}
 
 export const Group: Story = {
   args: {
     name: 'GroupChat',
   },
-};
+}
 
 export const Token: Story = {
   args: {
     name: 'TokenChat',
   },
-};
+}
