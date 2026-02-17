@@ -1,10 +1,12 @@
-import { ArgsTable, Canvas, Controls, Description, Meta } from '@storybook/addon-docs/blocks';
-import EventChat from './EventChat';
-import EventChatStories, { Default, Group, Schema, Token } from './EventChat.stories';
-import './assets/story-styles.css';
-import ListObserver from './components/ListObserver';
-import TableList from './components/TableList';
-import Tag from './components/Tag';
+import { ArgsTable, Canvas, Controls, Description, Meta } from '@storybook/addon-docs/blocks'
+import EventChat from './EventChat'
+import EventChatStories, { Default, Group, Schema, Token } from './EventChat.stories'
+import './assets/story-styles.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import ListObserver from './components/ListObserver'
+import TableList from './components/TableList'
+import Tag from './components/Tag'
 
 <Meta
   component={EventChat}
@@ -20,6 +22,8 @@ import Tag from './components/Tag';
   }}
   title="useEventChat"
 />
+
+<Header />
 
 # `useEventChat`: 组件通信 `Hooks`
 
@@ -56,7 +60,7 @@ pnpm add @event-chat/core
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubNoLimit.tsx',
           '_blank'
-        );
+        )
       },
     },
     {
@@ -65,7 +69,7 @@ pnpm add @event-chat/core
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubNoLimit.tsx',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -163,9 +167,9 @@ pnpm add @event-chat/core
 
 ```typescript
 type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & {
-  data: unknown;
-  time: Date;
-};
+  data: unknown
+  time: Date
+}
 ```
 
 ### `emit`：发送消息的方法
@@ -208,7 +212,7 @@ type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & 
 类型如下，可以接受字符、数值、以及字符和数值的元祖：
 
 ```ts
-type NamepathType = number | string | Array<string | number> | Readonly<Array<string | number>>;
+type NamepathType = number | string | Array<string | number> | Readonly<Array<string | number>>
 ```
 
 - 可以定义为字符名称：`pub-mox`（推荐，简单直接推导）
@@ -230,7 +234,7 @@ type NamepathType = number | string | Array<string | number> | Readonly<Array<st
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubSchema.tsx',
           '_blank'
-        );
+        )
       },
     },
     {
@@ -239,7 +243,7 @@ type NamepathType = number | string | Array<string | number> | Readonly<Array<st
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubSchema.tsx',
           '_blank'
-        );
+        )
       },
     },
     {
@@ -248,7 +252,7 @@ type NamepathType = number | string | Array<string | number> | Readonly<Array<st
         window.open(
           'https://github.com/cgfeel/event-chat/tree/main/packages/example/src/components/toast',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -267,13 +271,13 @@ const { emit } = useEventChat('pub-mox', {
   async: true,
   schema: z.string().refine(async (id) => {
     // verify that ID exists in database
-    return true;
+    return true
   }),
   callback: ({ detail }) => {
     // print id is string
-    console.log('a----pub-mox', detail.id);
+    console.log('a----pub-mox', detail.id)
   },
-});
+})
 ```
 
 通过 `Zod` 的 `refine` 可以实现异步或同步的自定义校验规则，例如 `return type === 'customType'`
@@ -290,7 +294,7 @@ const { emit } = useEventChat('pub-mox', {
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubGroupPanel.tsx',
           '_blank'
-        );
+        )
       },
     },
     {
@@ -299,7 +303,7 @@ const { emit } = useEventChat('pub-mox', {
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubGroupPanel.tsx',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -315,14 +319,14 @@ const { emit } = useEventChat('pub-mox', {
 useEventChat('pub-mox', {
   callback: (record) => {
     // receive undefined
-    console.log('a----pub-mox', record.group);
+    console.log('a----pub-mox', record.group)
   },
-});
+})
 
 const { emit } = useEventChat('sub-mox', {
   group: 'form-detail-edit',
-});
-emit({ global: true, name: 'pub-mox' });
+})
+emit({ global: true, name: 'pub-mox' })
 ```
 
 由于“公屏“同名事件并没有提供 `group`，所以在回调函数的参数中属性 `group` 将得到 `undefined`，除非将其设为组内成员，否则无法拿到 `group` 具体值。
@@ -341,7 +345,7 @@ useEventChat('pub-mox', {
       // do somethine
     }
   },
-});
+})
 ```
 
 ### 同组件同事件名多群组
@@ -371,7 +375,7 @@ useEventChat('multiple-event', {
       // 1. manual checked
     }
   },
-});
+})
 
 useEventChat('multiple-event', {
   group: 'edit-group',
@@ -382,7 +386,7 @@ useEventChat('multiple-event', {
   callback: ({ detail }) => {
     // 2. auto checked by schema
   },
-});
+})
 
 useEventChat('multiple-event', {
   group: 'other-group',
@@ -393,7 +397,7 @@ useEventChat('multiple-event', {
   callback: ({ detail }) => {
     // 3. auto checked by different group names
   },
-});
+})
 ```
 
 ## `token`：私信
@@ -408,7 +412,7 @@ useEventChat('multiple-event', {
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/PubPrivate.tsx',
           '_blank'
-        );
+        )
       },
     },
     {
@@ -417,7 +421,7 @@ useEventChat('multiple-event', {
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/module/SubPrivate.tsx',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -444,7 +448,9 @@ useEventChat('pub-mox', {
   group: 'form-detail-edit',
   callback: (record) => console.log('a----pub-mox', record),
   debug: (result) => console.log('a----pub-log', result),
-});
+})
 ```
 
 调试方法中的参数 `result` 来自 `z.safeParse` 得到的错误结果，包含了 `emit` 发送的信息，以及错误原因等情况
+
+<Footer />
