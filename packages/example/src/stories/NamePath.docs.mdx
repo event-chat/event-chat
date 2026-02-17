@@ -10,6 +10,7 @@ import NamePathStories, {
   PointPath,
 } from './NamePath.stories'
 import './assets/story-styles.css'
+import Footer from './components/Footer'
 import Header from './components/Header'
 import ListObserver from './components/ListObserver'
 import Tag from './components/Tag'
@@ -302,4 +303,7 @@ useEventChat('aa.1.cc').emit('..[+10].dd')
 
 注意：
 
-- 当手动转义时，请勿在事件名中填写：相对路径、通配符等特殊符号作为事件名，会因违背了 `@formily/path` 路径规则，无法匹配。
+- 当手动转义时，请勿注册事件名时填写：相对路径、通配符等特殊符号，会因违背了 `@formily/path` 路径规则，无法匹配；
+- 相对路径、通配符等特殊符号是用于 `emit` 触发事件时使用
+
+<Footer />

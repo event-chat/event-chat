@@ -11,11 +11,15 @@ import AntdItemStories, {
   FormUpdateFields,
 } from './AntdItem.stories'
 import './assets/story-styles.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
 import ListObserver from './components/ListObserver'
 import TableList from './components/TableList'
 import Tag from './components/Tag'
 
 <Meta component={AntdItem} of={AntdItemStories} />
+
+<Header />
 
 # 扩展 `Antd` 的 `Form` 组件能力
 
@@ -688,3 +692,5 @@ const FormEvent: typeof FormEventInner & FormExtraInstance = Object.assign(FormE
   useFormInstance,
 })
 ```
+
+<Footer />
