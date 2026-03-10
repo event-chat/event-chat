@@ -1,18 +1,24 @@
+import ThemedCardRegister from '@/app/ThemedCardRegister.ts'
 import FormEvent from '@event-chat/antd-item'
 import { ConfigProvider, Form, theme } from 'antd'
 import { type FC, Suspense, lazy, useState } from 'react'
+import Tabs, { TabItem } from '@/components/Tabs'
+import Toast from '@/components/toast'
+import { isKey } from '@/utils/fields'
 import './App.css'
-import Tabs, { TabItem } from './components/Tabs'
-import Toast from './components/toast'
-import { isKey } from './utils/fields'
+
+if (!customElements.get('themed-card')) {
+  customElements.define('themed-card', ThemedCardRegister)
+}
 
 const AntdForm = lazy(() => import('./pages/AntdForm'))
 const Components = lazy(() => import('./pages/Components'))
 const EventChat = lazy(() => import('./pages/EventChat'))
+const Formily = lazy(() => import('./pages/Formily'))
 const NamePath = lazy(() => import('./pages/Namepath'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
-const Router = Object.freeze({ AntdForm, Components, EventChat, NamePath })
+const Router = Object.freeze({ AntdForm, Components, EventChat, Formily, NamePath })
 FormEvent.observer(Form)
 
 const App: FC = () => {
@@ -27,6 +33,7 @@ const App: FC = () => {
           <TabItem name="EventChat">eventChat</TabItem>
           <TabItem name="AntdForm">antdForm</TabItem>
           <TabItem name="NamePath">namePath</TabItem>
+          <TabItem name="Formily">formily</TabItem>
           <TabItem name="Components">components</TabItem>
         </Tabs>
       </div>
