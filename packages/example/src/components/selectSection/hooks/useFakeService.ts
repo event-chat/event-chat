@@ -1,0 +1,81 @@
+import { type FormPathPattern, isField, onFieldInit } from '@formily/core'
+import { action } from '@formily/reactive'
+import { useCallback, useRef } from 'react'
+import z from 'zod'
+import { getAction } from '../utils/fields'
+
+const getSectionScmema = (name: string) =>
+  z
+    .string({ message: `${name} 必须为字符类型` })
+    .refine((value) => value.trim() !== '', { message: `${name} 不能为空字符` })
+
+const sectionItem = z.object({
+  name: getSectionScmema('员工'),
+  section: getSectionScmema('部门'),
+  mail: z.string().optional(),
+})
+
+const data: SectionItem[] = [
+  { name: 'Levi', section: '技术-前端' },
+  { name: 'Adam', section: '产品' },
+  { name: 'Austin', section: 'UI' },
+  { name: 'David', section: '技术-前端' },
+  { name: 'John', section: 'HR' },
+  { name: 'Michael', section: '财务' },
+  { name: 'Nicholas', section: 'UI' },
+  { name: 'Peter', section: '产品' },
+  { name: 'Smith', section: '能效' },
+  { name: 'Jones', section: 'UX' },
+  { name: 'Williams', section: '财务' },
+]
+
+export const asyncDataSource = (
+  pattern: FormPathPattern,
+  service: () => Promise<SectionItem[]>
+) => {
+  onFieldInit(pattern, (field) => {
+    const actionIns = getAction(action)
+    if (isField(field) && actionIns) {
+      const callbackHandle = actionIns.bound((dataSource: SectionItem[]) => {
+        field.setDataSource(dataSource)
+        field.setLoading(false)
+        // field.dataSource = dataSource
+        // field.loading = false
+      })
+      field.setLoading(true)
+      service()
+        .then(callbackHandle)
+        .catch(() => {
+          field.setLoading(false)
+        })
+    }
+  })
+}
+
+export const isSectionItem = (value: unknown): value is SectionItem =>
+  sectionItem.safeParse(value).success
+
+export const useFakeService = (delay: number) => {
+  const delayRef = useRef(delay)
+  const request = useCallback(
+    (callback: FakeCallBackType) => {
+      setTimeout(
+        () =>
+          callback(
+            data.map((item) => ({
+              ...item,
+              mail: `${item.name.toLowerCase()}@mail.com`,
+            }))
+          ),
+        delayRef.current
+      )
+    },
+    [delayRef]
+  )
+
+  return [request] as const
+}
+
+export type SectionItem = z.infer<typeof sectionItem>
+
+type FakeCallBackType = (data: SectionItem[]) => void

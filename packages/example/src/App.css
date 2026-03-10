@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @layer components {
   .no-scrollbar::-webkit-scrollbar {
@@ -16,6 +17,14 @@
   .tabs-container {
     --selected-item-width: 0;
     --selected-item-position: 0;
+  }
+
+  .wraper {
+    @apply mb-25;
+  }
+
+  .wraper code:not(.consumer) {
+    @apply mx-0.5 my-0 border border-gray-400 bg-gray-100 p-1;
   }
 }
 
