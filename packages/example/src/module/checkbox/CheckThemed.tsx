@@ -2,6 +2,7 @@ import { Space } from 'antd'
 import type { FC, PropsWithChildren, ReactNode } from 'react'
 import { tv } from 'tailwind-variants'
 import Checkbox from '@/components/checkbox'
+import CheckGroup from '@/components/checkbox/CheckGroup'
 import Smile from '@/components/checkbox/Smile'
 import CardItem from '@/components/theme/CardItem'
 import ThemedCard from '@/components/theme/ThemedCard'
@@ -80,6 +81,33 @@ const CheckThemed: FC = () => (
               <Checkbox icon={<Smile />} size="2xl" indeterminate />
               <Checkbox icon={<Smile />} size="2xl" checked disabled />
               <Checkbox icon={<Smile />} size="2xl" disabled indeterminate />
+            </CheckItem>
+            <CheckItem title="group item">
+              <CheckGroup
+                options={[
+                  { label: '苹果', value: 'apple' },
+                  { disabled: true, label: '梨', value: 'pear' },
+                  { label: '香蕉', value: 'banana' },
+                  { label: '火龙果', value: 'pitaya' },
+                  { disabled: true, label: '橘子', value: 'orange' },
+                  { label: '西瓜', value: 'watermelon' },
+                ]}
+                value={['apple', 'orange']}
+              />
+            </CheckItem>
+            <CheckItem title="group children">
+              <CheckGroup value={['apple', 'orange']}>
+                <Checkbox value="apple">苹果</Checkbox>
+                <Checkbox value="pear" disabled>
+                  梨
+                </Checkbox>
+                <Checkbox value="banana">香蕉</Checkbox>
+                <Checkbox value="pitaya">火龙果</Checkbox>
+                <Checkbox value="orange" disabled>
+                  橘子
+                </Checkbox>
+                <Checkbox value="watermelon">西瓜</Checkbox>
+              </CheckGroup>
             </CheckItem>
           </div>
         </CardItem>
