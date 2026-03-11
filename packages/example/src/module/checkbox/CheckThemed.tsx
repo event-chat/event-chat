@@ -2,6 +2,7 @@ import { Space } from 'antd'
 import type { FC, PropsWithChildren, ReactNode } from 'react'
 import { tv } from 'tailwind-variants'
 import Checkbox from '@/components/checkbox'
+import Smile from '@/components/checkbox/Smile'
 import CardItem from '@/components/theme/CardItem'
 import ThemedCard from '@/components/theme/ThemedCard'
 
@@ -9,7 +10,7 @@ const themed = ['light', 'dark'] as const
 const styles = tv({
   slots: {
     item: 'flex h-6 overflow-hidden align-middle text-gray-400',
-    wrap: 'flex gap-2',
+    wrap: 'flex flex-wrap gap-6',
   },
 })
 
@@ -18,7 +19,7 @@ const { item, wrap } = styles()
 const CheckItem: FC<PropsWithChildren<CheckItemProps>> = ({ children, title = '' }) => (
   <Space direction="vertical">
     <div className={item()}>{title}</div>
-    <div className="flex gap-2">{children}</div>
+    <div className="flex items-start gap-2">{children}</div>
   </Space>
 )
 
@@ -53,6 +54,32 @@ const CheckThemed: FC = () => (
               <Checkbox disabled indeterminate>
                 西兰花
               </Checkbox>
+            </CheckItem>
+            <CheckItem title="color">
+              <Checkbox color="red" />
+              <Checkbox color="red" checked />
+              <Checkbox color="red" defaultChecked />
+              <Checkbox color="red" indeterminate />
+              <Checkbox color="red" disabled />
+              <Checkbox color="red" checked disabled />
+              <Checkbox color="red" defaultChecked disabled />
+              <Checkbox color="red" disabled indeterminate />
+            </CheckItem>
+            <CheckItem title="size">
+              <Checkbox size="xs">xs</Checkbox>
+              <Checkbox>sm (default)</Checkbox>
+              <Checkbox size="md">md</Checkbox>
+              <Checkbox size="lg">lg</Checkbox>
+              <Checkbox size="xl">xl</Checkbox>
+              <Checkbox size="2xl">2xl</Checkbox>
+            </CheckItem>
+            <CheckItem title="custom icon">
+              <Checkbox icon={<Smile />} size="2xl" />
+              <Checkbox icon={<Smile />} size="2xl" checked />
+              <Checkbox icon={<Smile />} size="2xl" defaultChecked />
+              <Checkbox icon={<Smile />} size="2xl" indeterminate />
+              <Checkbox icon={<Smile />} size="2xl" checked disabled />
+              <Checkbox icon={<Smile />} size="2xl" disabled indeterminate />
             </CheckItem>
           </div>
         </CardItem>
