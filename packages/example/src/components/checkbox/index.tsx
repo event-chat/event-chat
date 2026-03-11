@@ -1,5 +1,14 @@
-import { type FC, type PropsWithChildren, useEffect, useRef, useState } from 'react'
+import {
+  type FC,
+  type PropsWithChildren,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { tv } from 'tailwind-variants'
+import { CheckItemContext, CheckboxContext, type CheckboxContextInstance } from './utils'
 
 const styles = tv({
   slots: {
@@ -7,15 +16,44 @@ const styles = tv({
     input: 'peer sr-only',
     label:
       'group inline-flex cursor-pointer items-center justify-between gap-1 align-middle text-sm select-none has-disabled:cursor-not-allowed',
-    point: `absolute inset-0 flex items-center justify-center opacity-0 peer-disabled:opacity-100`,
+    point: `absolute inset-0 flex items-center justify-center fill-white stroke-white opacity-0 peer-disabled:opacity-100`,
     text: 'peer-disabled:text-gray-500',
   },
   variants: {
+    color: {
+      red: {
+        background: 'border-red-600 bg-red-100',
+      },
+    },
     disabled: {
       true: '',
     },
     indeterminate: {
       true: '',
+    },
+    size: {
+      '2xl': {
+        background: 'h-9 w-9 rounded-lg border-2 text-3xl',
+        label: 'gap-2 text-2xl',
+      },
+      lg: {
+        background: 'h-7 w-7 rounded-lg border-2 text-2xl',
+        label: 'gap-2 text-lg',
+      },
+      md: {
+        background: 'h-6 w-6 rounded-md border-2 text-2xl',
+        label: 'text-md gap-1.5',
+      },
+      sm: {
+        background: 'h-5 w-5 text-xl',
+      },
+      xl: {
+        background: 'h-8 w-8 rounded-lg border-2 text-3xl',
+        label: 'gap-2 text-xl',
+      },
+      xs: {
+        background: 'h-4 w-4 text-base',
+      },
     },
   },
   compoundSlots: [
@@ -44,6 +82,37 @@ const styles = tv({
       className: 'dark:peer-disabled:border-gray-600 peer-disabled:dark:bg-gray-700',
     },
     {
+      slots: ['background'],
+      color: 'red',
+      className: 'peer-checked:border-red-600 peer-checked:bg-red-600',
+    },
+    {
+      slots: ['background'],
+      color: 'red',
+      className: 'peer-indeterminate:border-red-600 peer-indeterminate:bg-red-600',
+    },
+    {
+      slots: ['background'],
+      color: 'red',
+      className: 'peer-disabled:border-red-200 peer-disabled:bg-red-100',
+    },
+    {
+      slots: ['background'],
+      color: 'red',
+      className: 'dark:border-red-800 dark:bg-red-950',
+    },
+    {
+      slots: ['background'],
+      color: 'red',
+      className: 'dark:peer-checked:border-red-900 dark:peer-indeterminate:border-red-600',
+    },
+    {
+      slots: ['background'],
+      color: 'red',
+      className:
+        'peer-disabled:opacity-60 dark:peer-disabled:border-red-950 peer-disabled:dark:bg-red-900',
+    },
+    {
       slots: ['label'],
       disabled: true,
       className: 'cursor-not-allowed',
@@ -56,7 +125,7 @@ const styles = tv({
   ],
 })
 
-const CheckPoint: FC<Pick<CheckboxProps, 'checked'>> = ({ checked }) => {
+const CheckPoint: FC<CheckPointProps> = ({ checked }) => {
   const svgRef = useRef<SVGPathElement>(null)
   const rectRef = useRef<SVGAnimationElement>(null)
   const checkRef = useRef<SVGAnimationElement>(null)
@@ -71,12 +140,16 @@ const CheckPoint: FC<Pick<CheckboxProps, 'checked'>> = ({ checked }) => {
   }, [checked])
 
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="0.7em"
+      height="0.7em"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         ref={svgRef}
-        id="toggle-shape"
         d="M3 7.5 L5.5 10 L11 4 L11 4 L11 4"
-        stroke="white"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -84,7 +157,6 @@ const CheckPoint: FC<Pick<CheckboxProps, 'checked'>> = ({ checked }) => {
       >
         <animate
           ref={rectRef}
-          id="toRect"
           attributeName="d"
           from="M3 7.5 L5.5 10 L11 4 L11 4 L11 4"
           to="M3 6 L11 6 L11 8 L3 8 L3 6"
@@ -94,7 +166,6 @@ const CheckPoint: FC<Pick<CheckboxProps, 'checked'>> = ({ checked }) => {
         />
         <animate
           ref={checkRef}
-          id="toCheck"
           attributeName="d"
           from="M3 6 L11 6 L11 8 L3 8 L3 6"
           to="M3 7.5 L5.5 10 L11 4 L11 4 L11 4"
@@ -110,17 +181,33 @@ const CheckPoint: FC<Pick<CheckboxProps, 'checked'>> = ({ checked }) => {
 const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
   checked,
   children,
+  color,
   defaultChecked,
   disabled,
+  icon,
   indeterminate,
+  value,
   onChange,
+  size = 'sm',
 }) => {
-  const [isChecked, setChecked] = useState(checked ?? defaultChecked ?? false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const {
+    disabled: groupDisabled,
+    value: groupValue,
+    onChange: itemOnChange,
+  } = useContext(CheckboxContext)
+  const [isChecked, setChecked] = useState<boolean | undefined>(() => {
+    if (groupValue === undefined) {
+      return checked ?? defaultChecked
+    }
+    return value ? groupValue?.includes(value) : false
+  })
 
+  const inputRef = useRef<HTMLInputElement>(null)
   const { background, input, label, point, text } = styles({
-    indeterminate: isChecked || indeterminate,
+    indeterminate: isChecked ?? indeterminate,
+    color,
     disabled,
+    size,
   })
 
   useEffect(() => {
@@ -131,22 +218,32 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
     if (checked !== undefined) setChecked(checked)
   }, [checked])
 
+  useEffect(() => {
+    if (groupValue) setChecked(value ? groupValue?.includes(value) : false)
+  }, [groupValue, value])
+
   return (
     <label className={label()}>
       <input
-        checked={isChecked}
+        checked={isChecked ?? false}
         className={input()}
-        disabled={disabled}
+        disabled={disabled ?? groupDisabled}
         ref={inputRef}
         type="checkbox"
         onChange={(e) => {
           if (checked === undefined) setChecked(e.target.checked)
-          onChange?.(e.target.checked)
+          if (itemOnChange) {
+            itemOnChange?.(value, e.target.checked)
+          } else {
+            onChange?.(e.target.checked)
+          }
         }}
       />
       <span className={background()}>
         <span className={point()}>
-          <CheckPoint checked={isChecked} />
+          <CheckItemContext.Provider value={{ checked: isChecked }}>
+            {icon ?? <CheckPoint checked={isChecked} />}
+          </CheckItemContext.Provider>
         </span>
       </span>
       <span className={text()}>{children}</span>
@@ -156,10 +253,15 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
 
 export default Checkbox
 
-interface CheckboxProps {
+interface CheckboxProps extends Pick<CheckboxContextInstance, 'disabled'> {
   checked?: boolean
+  color?: 'red'
   defaultChecked?: boolean
-  disabled?: boolean
+  icon?: ReactNode
   indeterminate?: boolean
+  size?: '2xl' | 'lg' | 'md' | 'sm' | 'xl' | 'xs'
+  value?: string | number
   onChange?: (value: boolean) => void
 }
+
+interface CheckPointProps extends Pick<CheckboxProps, 'checked'> {}
