@@ -9,4 +9,6 @@ export interface CheckboxContextInstance {
   onChange?: (field?: ValueType, checked?: boolean) => void
 }
 
+export type SizeType = '2xl' | 'lg' | 'md' | 'sm' | 'xl' | 'xs'
+
 export type ValueType = number | string

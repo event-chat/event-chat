@@ -8,13 +8,19 @@ import {
 } from 'react'
 import Checkbox from '.'
 import { useMemoFn } from '../selectSection/utils/fields'
-import { CheckboxContext, type CheckboxContextInstance, type ValueType } from './utils'
+import {
+  CheckboxContext,
+  type CheckboxContextInstance,
+  type SizeType,
+  type ValueType,
+} from './utils'
 
 const CheckGroup: FC<PropsWithChildren<CheckGroupProps>> = ({
   children,
   defaultValue,
   disabled,
   options,
+  size,
   value,
   onChange,
 }) => {
@@ -51,7 +57,7 @@ const CheckGroup: FC<PropsWithChildren<CheckGroupProps>> = ({
         options?.map((item, i) => {
           const keyname = `${item.value}:${i}`
           return (
-            <Checkbox disabled={item.disabled} key={keyname} value={item.value}>
+            <Checkbox disabled={item.disabled} key={keyname} size={size} value={item.value}>
               {item.label}
             </Checkbox>
           )
@@ -65,6 +71,7 @@ export default CheckGroup
 interface CheckGroupProps extends Omit<CheckboxContextInstance, 'onChange'> {
   defaultValue?: ValueType[]
   options?: ItemType[]
+  size?: SizeType
   onChange?: (value?: ValueType[]) => void
 }
 

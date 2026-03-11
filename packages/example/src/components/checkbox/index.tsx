@@ -8,7 +8,12 @@ import {
   useState,
 } from 'react'
 import { tv } from 'tailwind-variants'
-import { CheckItemContext, CheckboxContext, type CheckboxContextInstance } from './utils'
+import {
+  CheckItemContext,
+  CheckboxContext,
+  type CheckboxContextInstance,
+  type SizeType,
+} from './utils'
 
 const styles = tv({
   slots: {
@@ -259,7 +264,7 @@ interface CheckboxProps extends Pick<CheckboxContextInstance, 'disabled'> {
   defaultChecked?: boolean
   icon?: ReactNode
   indeterminate?: boolean
-  size?: '2xl' | 'lg' | 'md' | 'sm' | 'xl' | 'xs'
+  size?: SizeType
   value?: string | number
   onChange?: (value: boolean) => void
 }
