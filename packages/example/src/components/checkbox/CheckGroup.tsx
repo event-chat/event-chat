@@ -68,7 +68,7 @@ const CheckGroup: FC<PropsWithChildren<CheckGroupProps>> = ({
 
 export default CheckGroup
 
-interface CheckGroupProps extends Omit<CheckboxContextInstance, 'onChange'> {
+export interface CheckGroupProps extends Omit<CheckboxContextInstance, 'onChange'> {
   defaultValue?: ValueType[]
   options?: ItemType[]
   size?: SizeType

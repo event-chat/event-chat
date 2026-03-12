@@ -31,3 +31,9 @@ export const safetyPrint = (data: unknown, fallback = '') => {
     return fallback
   }
 }
+
+export type PickVariants<T, K extends keyof GetVariants<T>> = NonNullable<GetVariants<T>[K]>
+
+type GetVariants<T> = T extends (...args: [infer P, ...unknown[]]) => unknown
+  ? NonNullable<P>
+  : never

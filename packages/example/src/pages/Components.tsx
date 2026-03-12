@@ -1,4 +1,5 @@
-import CheckThemed from '@/module/checkbox/CheckThemed'
+import ButtonThemed from '@/module/componentsDemo/ButtonThemed'
+import CheckThemed from '@/module/componentsDemo/CheckThemed'
 import TableSticky from '@/module/table/TableSticky'
 import TableVirtualSticky from '@/module/table/TableVirtualSticky'
 import { Tag } from 'antd'
@@ -41,12 +42,23 @@ const Components: FC = () => {
       <Card
         title={
           <>
-            <Tag>Table</Tag> 吸顶组件：模拟滚动条
+            <Tag>Checkbox</Tag> 多选框
           </>
         }
       >
         <div className="py-4">
           <CheckThemed />
+        </div>
+      </Card>
+      <Card
+        title={
+          <>
+            <Tag>Checkbox</Tag> 多选框
+          </>
+        }
+      >
+        <div className="py-4">
+          <ButtonThemed />
         </div>
       </Card>
     </div>

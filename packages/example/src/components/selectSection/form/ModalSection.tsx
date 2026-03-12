@@ -1,5 +1,6 @@
 import { Form, type FormProps, Modal, type ModalProps } from 'antd'
 import { forwardRef, useImperativeHandle, useState } from 'react'
+import Button from '@/components/Button'
 import type { SectionItem } from '../hooks/useFakeService'
 import SectionInput from './SectionInput'
 
@@ -20,6 +21,12 @@ const ModalSection = forwardRef<ModalSectionInstance, ModalSectionProps>(({ name
 
   return (
     <Modal
+      footer={
+        <div>
+          <Button variant="outline">取消选择</Button>
+          <Button>确认选择</Button>
+        </div>
+      }
       maskClosable={false}
       open={open}
       style={{ maxWidth: 700 }}
