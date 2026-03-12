@@ -1,7 +1,8 @@
 import { ExpressionScope, observer, useForm } from '@formily/react'
-import { Avatar, Checkbox, type CheckboxProps, Col, Row, Space, Typography } from 'antd'
+import { Avatar, Col, Row, Space, Typography } from 'antd'
 import { type FC, type PropsWithChildren, useMemo } from 'react'
 import { cn } from 'tailwind-variants'
+import Checkbox, { type CheckboxProps } from '@/components/checkbox'
 import { useGroupScope } from '../hooks/useSelectCollapse'
 
 const { Text } = Typography

@@ -2,8 +2,10 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { FormItem } from '@formily/antd-v5'
 import { isField } from '@formily/core'
 import { connect, createSchemaField, mapProps } from '@formily/react'
-import { Card, Checkbox, Col, Input, Row, Select } from 'antd'
+import { Card, Col, Input, Row, Select } from 'antd'
 import type { FC, PropsWithChildren } from 'react'
+import Checkbox from '@/components/checkbox'
+import CheckGroupRaw from '@/components/checkbox/CheckGroup'
 import RecentChoices from './components/RecentChoices'
 import ScrollWapper from './components/ScrollWrapper'
 import SectionCollapse from './components/SectionCollapse'
@@ -21,7 +23,7 @@ const CardHeader: FC = ({ children }: PropsWithChildren) => (
 )
 
 const CheckGroup = connect(
-  Checkbox.Group,
+  CheckGroupRaw,
   mapProps({
     dataSource: 'options',
   })
@@ -53,7 +55,7 @@ const SchemaField = createSchemaField({
     CardHeader,
     Col,
     Checkbox: Object.assign(InternalCheckbox, {
-      __ANT_CHECKBOX: true,
+      __ANT_CHECKBOX: false,
       Group: CheckGroup,
     }),
     FormItem,

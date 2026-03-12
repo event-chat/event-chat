@@ -53,6 +53,7 @@ const SectionSchema: FC = () => (
             <SchemaField.Boolean
               name="pick"
               x-component="Checkbox"
+              x-component-props={{ color: 'blue', size: 'xs' }}
               x-reactions={[
                 {
                   dependencies: ['....#dataSource', '..section#value'],
@@ -198,7 +199,7 @@ const SectionSchema: FC = () => (
                 <SchemaField.Void
                   name="section-name"
                   x-component="SectionCollapse.UserCheckBox"
-                  x-component-props={{ eventName: 'select-user' }}
+                  x-component-props={{ color: 'blue', eventName: 'select-user', size: 'xs' }}
                   x-decorator="SectionCollapse.PanelDecorator"
                 >
                   <SchemaField.Void
@@ -331,7 +332,7 @@ const SectionSchema: FC = () => (
                 <SchemaField.Void
                   name="section-name"
                   x-component="SectionCollapse.UserCheckBox"
-                  x-component-props={{ eventName: 'select-user' }}
+                  x-component-props={{ color: 'blue', eventName: 'select-user', size: 'xs' }}
                   x-decorator="SectionCollapse.PanelDecorator"
                 >
                   <SchemaField.Void

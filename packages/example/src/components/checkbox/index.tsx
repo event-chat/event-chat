@@ -1,9 +1,11 @@
 import {
+  type ChangeEvent,
   type FC,
   type PropsWithChildren,
   type ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -13,6 +15,7 @@ import {
   CheckboxContext,
   type CheckboxContextInstance,
   type SizeType,
+  type ValueType,
 } from './utils'
 
 const styles = tv({
@@ -26,6 +29,9 @@ const styles = tv({
   },
   variants: {
     color: {
+      blue: {
+        background: 'border-blue-600 bg-blue-100',
+      },
       red: {
         background: 'border-red-600 bg-red-100',
       },
@@ -118,6 +124,37 @@ const styles = tv({
         'peer-disabled:opacity-60 dark:peer-disabled:border-red-950 peer-disabled:dark:bg-red-900',
     },
     {
+      slots: ['background'],
+      color: 'blue',
+      className: 'peer-checked:border-blue-600 peer-checked:bg-blue-600',
+    },
+    {
+      slots: ['background'],
+      color: 'blue',
+      className: 'peer-indeterminate:border-blue-600 peer-indeterminate:bg-blue-600',
+    },
+    {
+      slots: ['background'],
+      color: 'blue',
+      className: 'peer-disabled:border-blue-200 peer-disabled:bg-blue-100',
+    },
+    {
+      slots: ['background'],
+      color: 'blue',
+      className: 'dark:border-blue-800 dark:bg-blue-950',
+    },
+    {
+      slots: ['background'],
+      color: 'blue',
+      className: 'dark:peer-checked:border-blue-900 dark:peer-indeterminate:border-blue-600',
+    },
+    {
+      slots: ['background'],
+      color: 'blue',
+      className:
+        'peer-disabled:opacity-60 dark:peer-disabled:border-blue-950 peer-disabled:dark:bg-blue-900',
+    },
+    {
       slots: ['label'],
       disabled: true,
       className: 'cursor-not-allowed',
@@ -130,7 +167,8 @@ const styles = tv({
   ],
 })
 
-const CheckPoint: FC<CheckPointProps> = ({ checked }) => {
+const CheckPoint: FC = () => {
+  const { checked } = useContext(CheckItemContext)
   const svgRef = useRef<SVGPathElement>(null)
   const rectRef = useRef<SVGAnimationElement>(null)
   const checkRef = useRef<SVGAnimationElement>(null)
@@ -215,6 +253,8 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
     size,
   })
 
+  const defaultIcon = useMemo(() => icon ?? <CheckPoint />, [icon])
+
   useEffect(() => {
     if (inputRef.current) inputRef.current.indeterminate = indeterminate ?? false
   }, [inputRef, indeterminate])
@@ -240,14 +280,14 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
           if (itemOnChange) {
             itemOnChange?.(value, e.target.checked)
           } else {
-            onChange?.(e.target.checked)
+            onChange?.(e)
           }
         }}
       />
       <span className={background()}>
         <span className={point()}>
           <CheckItemContext.Provider value={{ checked: isChecked }}>
-            {icon ?? <CheckPoint checked={isChecked} />}
+            {defaultIcon}
           </CheckItemContext.Provider>
         </span>
       </span>
@@ -258,15 +298,13 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
 
 export default Checkbox
 
-interface CheckboxProps extends Pick<CheckboxContextInstance, 'disabled'> {
+export interface CheckboxProps extends Pick<CheckboxContextInstance, 'disabled'> {
   checked?: boolean
-  color?: 'red'
+  color?: 'blue' | 'red'
   defaultChecked?: boolean
   icon?: ReactNode
   indeterminate?: boolean
   size?: SizeType
-  value?: string | number
-  onChange?: (value: boolean) => void
+  value?: ValueType
+  onChange?: (value: ChangeEvent<HTMLInputElement>) => void
 }
-
-interface CheckPointProps extends Pick<CheckboxProps, 'checked'> {}
