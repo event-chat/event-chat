@@ -23,9 +23,12 @@ const styles = tv({
         'border-amber-700 bg-amber-600 text-white hover:bg-amber-700 focus-visible:ring-amber-500 disabled:hover:bg-amber-600',
     },
     size: {
+      '2xl': 'rounded-2xl border-3 px-8 py-5 text-2xl shadow-2xl',
+      lg: 'rounded-lg border-2 px-6 py-2.5 text-lg shadow-lg',
+      md: 'rounded-md px-4 py-2 text-base shadow-md',
       sm: 'rounded-md px-3 py-1.5 text-sm',
-      md: 'rounded-md px-4 py-2 text-base',
-      lg: 'rounded-lg px-6 py-2.5 text-lg',
+      xl: 'rounded-xl border-2 px-7 py-3.5 text-xl shadow-xl',
+      xs: 'rounded-md px-2 py-1 text-xs',
     },
   },
   compoundVariants: [
@@ -97,12 +100,10 @@ if (process.env.NODE_ENV !== 'production') {
 export default Button
 
 // 定义按钮的属性类型
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, Pick<SlotsType, 'size'> {
   loading?: boolean
-  size?: SizeType
-  variant?: ColorType
+  variant?: SlotsType['color']
 }
 
-type ColorType = PickVariants<typeof styles, 'color'>
-
-type SizeType = PickVariants<typeof styles, 'size'>
+type SlotsType = PickVariants<typeof styles, 'color' | 'size'>

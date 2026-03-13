@@ -22,8 +22,10 @@ const ModalSection = forwardRef<ModalSectionInstance, ModalSectionProps>(({ name
   return (
     <Modal
       footer={
-        <div>
-          <Button variant="outline">取消选择</Button>
+        <div className="flex justify-end gap-3 pb-2" data-theme="dark">
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            取消选择
+          </Button>
           <Button>确认选择</Button>
         </div>
       }
@@ -40,11 +42,13 @@ const ModalSection = forwardRef<ModalSectionInstance, ModalSectionProps>(({ name
         setOpen(false)
       }}
     >
-      <Form form={form} name={name}>
-        <Form.Item name="section">
-          <SectionInput />
-        </Form.Item>
-      </Form>
+      <div data-theme="dark">
+        <Form form={form} name={name}>
+          <Form.Item name="section">
+            <SectionInput />
+          </Form.Item>
+        </Form>
+      </div>
     </Modal>
   )
 })
