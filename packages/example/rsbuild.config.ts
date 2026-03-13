@@ -14,6 +14,16 @@ export default defineConfig({
       },
     }),
   ],
+  html: {
+    tags: [
+      {
+        tag: 'html',
+        attrs: {
+          lang: 'zh-CN',
+        }
+      }
+    ]
+  },
   // 库模式配置（React 库开发）
   output: {
     // externals: ['react', 'react-dom', 'zod'],

@@ -6,14 +6,9 @@ import {
   useEffect,
   useState,
 } from 'react'
-import Checkbox from '.'
+import Checkbox, { type SizeType } from '.'
 import { useMemoFn } from '../selectSection/utils/fields'
-import {
-  CheckboxContext,
-  type CheckboxContextInstance,
-  type SizeType,
-  type ValueType,
-} from './utils'
+import { CheckboxContext, type CheckboxContextInstance, type ValueType } from './utils'
 
 const CheckGroup: FC<PropsWithChildren<CheckGroupProps>> = ({
   children,

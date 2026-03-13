@@ -10,11 +10,11 @@ import {
   useState,
 } from 'react'
 import { tv } from 'tailwind-variants'
+import type { PickVariants } from '@/utils/fields'
 import {
   CheckItemContext,
   CheckboxContext,
   type CheckboxContextInstance,
-  type SizeType,
   type ValueType,
 } from './utils'
 
@@ -247,7 +247,7 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
 
   const inputRef = useRef<HTMLInputElement>(null)
   const { background, input, label, point, text } = styles({
-    indeterminate: isChecked ?? indeterminate,
+    indeterminate: isChecked ? true : indeterminate,
     color,
     disabled,
     size,
@@ -298,13 +298,15 @@ const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
 
 export default Checkbox
 
-export interface CheckboxProps extends Pick<CheckboxContextInstance, 'disabled'> {
+export interface CheckboxProps extends Pick<CheckboxContextInstance, 'disabled'>, SlotsType {
   checked?: boolean
-  color?: 'blue' | 'red'
   defaultChecked?: boolean
   icon?: ReactNode
   indeterminate?: boolean
-  size?: SizeType
   value?: ValueType
   onChange?: (value: ChangeEvent<HTMLInputElement>) => void
 }
+
+export type SizeType = SlotsType['size']
+
+type SlotsType = PickVariants<typeof styles, 'color' | 'size'>

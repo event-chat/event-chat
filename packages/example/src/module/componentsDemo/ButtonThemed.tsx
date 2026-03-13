@@ -39,9 +39,12 @@ const ButtonThemed: FC = () => (
       </Button>
     </CheckItem>
     <CheckItem title="大小">
+      <Button size="xs">xs</Button>
       <Button size="sm">sm (default)</Button>
       <Button size="md">md</Button>
       <Button size="lg">lg</Button>
+      <Button size="xl">xl</Button>
+      <Button size="2xl">2xl</Button>
     </CheckItem>
   </BaseCard>
 )
