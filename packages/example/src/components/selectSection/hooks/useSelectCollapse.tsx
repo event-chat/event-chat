@@ -11,9 +11,10 @@ export const useGroupScope = () => {
   const { $lookup, $record, $records: records } = useExpressionScope() as GroupScopeType
   const { expand, group, section, values } = $record ?? {}
   const { $lookup: parent, pattern, schema, search, deleteSection, updateActive } = $lookup ?? {}
-  const { userMap } = parent ?? {}
+  const { userMap, event } = parent ?? {}
 
   return Object.freeze({
+    event,
     expand,
     group,
     pattern,
@@ -120,6 +121,7 @@ export type CollapseItem = Record<string, Set<string>>
 export type CollapseLookupType = {
   $lookup: {
     userMap?: Record<string, SectionItem>
+    event?: Partial<Record<'group' | 'prefix', string>>
   }
   pattern: SelectSchema<SectionItem>['x-pattern']
   schema: CollapseSchema

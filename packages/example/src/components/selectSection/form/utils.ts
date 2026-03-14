@@ -3,6 +3,7 @@ import type { SectionItem } from '../hooks/useFakeService'
 import { filterValue } from '../utils/fields'
 
 const effectContext = createEffectContext<ProviderInstance>()
+const itemName = 'section'
 const section = 'user-map.section'
 
 const provide = (instance: ProviderInstance) => effectContext.provide(instance)
@@ -21,7 +22,7 @@ export const fieldChangeHandle = () => {
   })
 }
 
-export { section, provide }
+export { itemName, section, provide }
 
 interface ProviderInstance {
   name: string

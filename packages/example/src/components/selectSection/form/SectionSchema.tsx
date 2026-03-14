@@ -6,14 +6,16 @@ import {
 } from '@ant-design/icons'
 import type { FC } from 'react'
 import SchemaField from '../SchemaField'
+import type { EventType } from '../event'
 import { defaultItem } from '../hooks/useSelectCollapse'
 
-const SectionSchema: FC = () => (
+const SectionSchema: FC<EventType> = (props) => (
   <SchemaField>
     <SchemaField.Object
       name="user-map"
       x-component="UserMapRecord"
       x-component-props={{
+        ...props,
         theme: {
           components: {
             Select: {
@@ -33,7 +35,7 @@ const SectionSchema: FC = () => (
         >
           <SchemaField.String
             name="search-list"
-            x-component="Input"
+            x-component="EventInput"
             x-component-props={{
               allowClear: true,
               placeholder: '输入部门或员工名称进行筛选',
@@ -156,8 +158,8 @@ const SectionSchema: FC = () => (
                   },
                 },
                 {
-                  dependencies: ['.search-list#value'],
-                  when: '{{ !!$deps[0] && $deps[0] !== $self.data.searchKey }}',
+                  dependencies: ['.search-list#value', '....#dataSource'],
+                  when: '{{ !!$deps[0] && $deps[1] && $deps[0] !== $self.data.searchKey }}',
                   fulfill: {
                     // run: 'console.log("a----eee", $deps)',
                     state: {

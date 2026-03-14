@@ -23,7 +23,7 @@ const styles = tv({
     background: `relative inline-block h-5 w-5 rounded border border-gray-900 bg-gray-100 shadow transition-all duration-200`,
     input: 'peer sr-only',
     label:
-      'group inline-flex cursor-pointer items-center justify-between gap-1 align-middle text-sm select-none has-disabled:cursor-not-allowed',
+      'group inline-flex cursor-pointer items-center justify-between gap-1.5 align-middle text-sm select-none has-disabled:cursor-not-allowed',
     point: `absolute inset-0 flex items-center justify-center fill-white stroke-white opacity-0 peer-disabled:opacity-100`,
     text: 'peer-disabled:text-gray-500',
   },

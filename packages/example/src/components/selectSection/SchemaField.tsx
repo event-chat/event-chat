@@ -6,6 +6,7 @@ import { Card, Col, Input, Row, Select } from 'antd'
 import type { FC, PropsWithChildren } from 'react'
 import Checkbox from '@/components/checkbox'
 import CheckGroupRaw from '@/components/checkbox/CheckGroup'
+import EventInput from './components/EventInput'
 import RecentChoices from './components/RecentChoices'
 import ScrollWapper from './components/ScrollWrapper'
 import SectionCollapse from './components/SectionCollapse'
@@ -58,6 +59,7 @@ const SchemaField = createSchemaField({
       __ANT_CHECKBOX: false,
       Group: CheckGroup,
     }),
+    EventInput,
     FormItem,
     Input,
     RecentChoices,

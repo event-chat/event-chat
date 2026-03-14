@@ -13,7 +13,12 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ['Document', ['EventChat', 'AntdItem', 'NamePath'], 'Example', ['Toast', 'Tabs']],
+        order: [
+          'Document',
+          ['EventChat', 'AntdItem', 'NamePath'],
+          'Example',
+          ['Toast', 'Tabs', 'Formily'],
+        ],
       },
     },
   },

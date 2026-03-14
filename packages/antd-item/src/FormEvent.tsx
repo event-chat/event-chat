@@ -46,7 +46,7 @@ const FormEvent = <
     const { focusField, ...formIns } = form
     formIns.group = formGroup
     return (
-      <Form {...props} form={{ ...formIns, focusField: focusField ?? (() => {}) }}>
+      <Form {...props} form={{ ...formIns, focusField: focusField ?? (() => {}) }} name={formName}>
         <FormProvider group={formGroup} name={formName} emit={form.emit}>
           {children}
         </FormProvider>

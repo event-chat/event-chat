@@ -1,4 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons'
+import FormEvent, { useFormEvent } from '@event-chat/antd-item'
 import { createForm, onFieldValueChange } from '@formily/core'
 import { type FC, useMemo, useState } from 'react'
 import { createModalFormEffect } from '../event'
@@ -6,11 +7,13 @@ import { useFakeService } from '../hooks/useFakeService'
 import { getRandomInt, useMemoFn } from '../utils/fields'
 import SectionBase, { type SectionInputProps } from './SectionBase'
 import SectionSchema from './SectionSchema'
-import { fieldChangeHandle, provide, section } from './utils'
+import { fieldChangeHandle, itemName, provide, section } from './utils'
 
-const SectionInput: FC<SectionInputProps> = ({ value, onChange }) => {
+const SectionInputForm: FC<SectionInputProps> = ({ value, onChange }) => {
   const [mount, setMount] = useState(false)
   const changeHandle = useMemoFn(onChange)
+
+  const { group } = useFormEvent()
 
   const [request] = useFakeService(getRandomInt(500, 3000))
   const form = useMemo(
@@ -36,9 +39,15 @@ const SectionInput: FC<SectionInputProps> = ({ value, onChange }) => {
 
   return (
     <SectionBase fieldName={section} form={form} mount={mount} value={value}>
-      <SectionSchema />
+      <SectionSchema group={group} prefix={itemName} />
     </SectionBase>
   )
 }
+
+const SectionInput: FC = () => (
+  <FormEvent.Item name={itemName}>
+    <SectionInputForm />
+  </FormEvent.Item>
+)
 
 export default SectionInput
