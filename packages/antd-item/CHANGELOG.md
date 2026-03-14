@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.8](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.7...antd-item@v0.3.8) (2026-03-14)
+
+
+### Bug Fixes
+
+* update FormEvent add formName & add formily demo ([f5ec8fa](https://github.com/event-chat/event-chat/commit/f5ec8fafa42f4adc6d742356ed13da621ec6bf75))
+* update FormEvent add formName & add formily demo ([3416ed3](https://github.com/event-chat/event-chat/commit/3416ed39de8e34aedd70b377121121d731fc3bfc))
+
 ## [0.3.7](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.6...antd-item@v0.3.7) (2026-02-16)
 
 
