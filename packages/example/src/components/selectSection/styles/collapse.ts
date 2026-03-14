@@ -21,6 +21,7 @@ const genCollapseStyle: GenerateStyle = (token) => {
       },
       [`& .searchChecked`]: {
         backgroundColor: '#ff0',
+        color: 'rgba(0, 0, 0, .88)',
       },
     },
   }

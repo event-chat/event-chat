@@ -48,6 +48,11 @@ export const createModalFormEffect = (request: ReturnType<typeof useFakeService>
   })
 }
 
+export type EventType = {
+  group?: string
+  prefix?: string
+}
+
 export type PayloadType = {
   group: string[]
   section: string
