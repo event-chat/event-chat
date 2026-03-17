@@ -134,6 +134,7 @@ export type FormBaseInstance<ValueType = unknown> = FormType<ValueType> & {
   >
   List: FC<Pick<ComponentProps<typeof Form.List>, 'children' | 'initialValue' | 'name' | 'rules'>>
   useFormInstance: <Value>() => FormInsType<Value>
+  useForm: <Value>() => [FormInsType<Value>]
 }
 
 // 内部剔除掉 6 的新特新改为可选项，保留公共属性
