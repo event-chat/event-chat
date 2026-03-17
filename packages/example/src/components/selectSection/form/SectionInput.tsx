@@ -12,7 +12,6 @@ import { fieldChangeHandle, itemName, provide, section } from './utils'
 const SectionInputForm: FC<SectionInputProps> = ({ value, onChange }) => {
   const [mount, setMount] = useState(false)
   const changeHandle = useMemoFn(onChange)
-
   const { group } = useFormEvent()
 
   const [request] = useFakeService(getRandomInt(500, 3000))
