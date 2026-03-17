@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.9](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.8...antd-item@v0.3.9) (2026-03-17)
+
+
+### Bug Fixes
+
+* update antd-item add useForm ([ba574d5](https://github.com/event-chat/event-chat/commit/ba574d575570907e2ae1c57e7768a437d9adf156))
+* update antd-item add useForm ([a1abcfd](https://github.com/event-chat/event-chat/commit/a1abcfdbdfddc205f2c0b9d1a27fdc570110a216))
+
 ## [0.3.8](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.7...antd-item@v0.3.8) (2026-03-14)
 
 
