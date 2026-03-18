@@ -1,64 +1,56 @@
-import { Mock, afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core'
+import { describe, expect, rstest, test } from '@rstest/core'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { Form, FormInstance, Input } from 'antd'
-import { ReactNode } from 'react'
 import FormEvent from '../src'
-import FormContainer from '../src/FormContainer'
 import * as utils from '../src/utils'
 
-const renderFromItem = () => {
-  const formRef = { current: null } as { current: FormInstance | null }
+const renderFromItem = (
+  initialValues?: Record<string, unknown>,
+  onChange?: (value: unknown, emit?: utils.FormEventContextInstance['emit']) => void
+) => {
+  const formRef: { current: FormInstance | null } = { current: null }
+  const fieldName = 'test-item'
+
   const TestComponent = () => {
     const [form] = Form.useForm()
     formRef.current = form
     return (
-      <FormEvent form={form}>
-        <FormEvent.Item name="test-item">
-          <FormContainer>
+      <FormEvent form={form} initialValues={initialValues}>
+        <FormEvent.Item name={fieldName}>
+          <FormEvent.Container onChange={onChange}>
             <Input data-testid="test-input" />
-          </FormContainer>
+          </FormEvent.Container>
         </FormEvent.Item>
       </FormEvent>
     )
   }
 
   const renderResult = render(<TestComponent />)
-  return { formRef, renderResult }
+  return { fieldName, formRef, renderResult }
 }
 
-afterEach(() => {
-  rstest.restoreAllMocks()
-})
-
-beforeEach(() => {
-  rstest.clearAllMocks()
-
-  const mockMediaQueryList = {
-    matches: false,
-    addEventListener: rstest.fn(),
-    removeEventListener: rstest.fn(),
-    dispatchEvent: rstest.fn(),
-  }
-
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: rstest.fn().mockReturnValue(mockMediaQueryList),
-  })
-})
-
 describe('FormContainer', () => {
-  // 测试 1：组件基础渲染
-  test('组件能正常渲染子组件', () => {
+  test('测试 1：组件能正常渲染子组件', () => {
+    const useFormCom = rstest.spyOn(utils, 'useFormCom').mockReturnValue(Form)
     renderFromItem()
 
-    // expect(screen.getByTestId('form-item')).toBeInTheDocument()
     expect(screen.getByTestId('test-input')).toBeInTheDocument()
     expect(window.matchMedia).toHaveBeenCalled()
+
+    // FormEvent、FormInitialization、FormEvent.Item、FormEvent.Container
+    expect(useFormCom).toHaveBeenCalledTimes(4)
+    useFormCom.mockRestore()
   })
 
-  test('测试输入', async () => {
-    const { formRef } = renderFromItem()
+  test('测试 2：测试输入，触发表单更新', () => {
+    const onChangeFn = rstest.fn()
+    const mockEmit = rstest.fn()
 
+    const useFormEventSpy = rstest.spyOn(utils, 'useFormEvent').mockReturnValue({
+      emit: mockEmit,
+    })
+
+    const { fieldName, formRef } = renderFromItem(undefined, onChangeFn)
     const inputElement = screen.getByTestId('test-input')
 
     const inputValue = '你好，测试内容'
@@ -67,6 +59,65 @@ describe('FormContainer', () => {
     })
 
     expect(inputElement).toHaveValue(inputValue)
-    console.log(formRef.current?.getFieldsValue())
+    expect(formRef.current).not.toBeNull()
+    expect(formRef.current?.getFieldsValue()).toEqual({ [fieldName]: inputValue })
+
+    expect(onChangeFn).toHaveBeenCalled()
+    expect(onChangeFn).toHaveBeenCalledTimes(1)
+    expect(onChangeFn).toHaveBeenCalledWith(inputValue, mockEmit)
+
+    expect(mockEmit).not.toHaveBeenCalled()
+
+    useFormEventSpy.mockRestore()
+  })
+
+  test('测试 3：设置表单初始值', () => {
+    const inputValue = '表单默认值'
+    const { formRef } = renderFromItem({ ['test-item']: inputValue })
+    const inputElement = screen.getByTestId('test-input')
+
+    expect(inputElement).toBeInTheDocument()
+    expect(inputElement).toHaveValue(inputValue)
+
+    expect(formRef.current).not.toBeNull()
+    expect(formRef.current?.getFieldsValue()).toEqual({ ['test-item']: inputValue })
+  })
+
+  test('测试 4：测试执行过程', () => {
+    const setFieldValueMock = rstest.fn(
+      (name: Parameters<FormInstance['setFieldValue']>[0], value: unknown) => [name, value]
+    )
+
+    const useFormMock = rstest.fn(<Value,>(value?: FormInstance<Value>) => {
+      const [formInstance] = Form.useForm(value)
+      return [
+        Object.assign({}, formInstance, {
+          setFieldValue: (name: Parameters<FormInstance['setFieldValue']>[0], value: unknown) => {
+            setFieldValueMock(name, value)
+            return formInstance.setFieldValue(name, value)
+          },
+        }),
+      ]
+    })
+
+    const useFormCom = rstest.spyOn(utils, 'useFormCom').mockReturnValue(
+      Object.assign({}, Form, {
+        useForm: useFormMock,
+      })
+    )
+
+    const initValue = '初始化数据'
+    render(
+      <FormEvent.Container value={initValue}>
+        <Input />
+      </FormEvent.Container>
+    )
+
+    expect(useFormCom).toHaveBeenCalledTimes(1)
+    expect(useFormMock).toHaveBeenCalledTimes(1)
+    expect(setFieldValueMock).toHaveBeenCalledTimes(1)
+    expect(setFieldValueMock).toHaveBeenCalledWith('input', initValue)
+
+    useFormCom.mockRestore()
   })
 })
