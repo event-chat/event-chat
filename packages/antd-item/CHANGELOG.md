@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.10](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.9...antd-item@v0.3.10) (2026-03-18)
+
+
+### Bug Fixes
+
+* add FormProvider test ([9b8c7bb](https://github.com/event-chat/event-chat/commit/9b8c7bb361d88b10f882a44411150b7181bfca32))
+* add FormProvider test ([2af1714](https://github.com/event-chat/event-chat/commit/2af171412dc1568246a76e9cb3c1f47a9f44495c))
+
 ## [0.3.9](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.8...antd-item@v0.3.9) (2026-03-17)
 
 
