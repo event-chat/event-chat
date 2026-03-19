@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.11](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.10...antd-item@v0.3.11) (2026-03-19)
+
+
+### Bug Fixes
+
+* add utils test ([3a2e328](https://github.com/event-chat/event-chat/commit/3a2e3286f75b174c35a237fe01d65cd77e707f27))
+* add utils test ([3ca6064](https://github.com/event-chat/event-chat/commit/3ca606461da63b6017c9b7567404175af5d3eece))
+
 ## [0.3.10](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.9...antd-item@v0.3.10) (2026-03-18)
 
 
