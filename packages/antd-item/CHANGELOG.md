@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.12](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.11...antd-item@v0.3.12) (2026-03-20)
+
+
+### Bug Fixes
+
+* add formInstance test ([26643e8](https://github.com/event-chat/event-chat/commit/26643e87b0f05d268638e9990a2e9874b0a27c14))
+* add formInstance test ([8893b5c](https://github.com/event-chat/event-chat/commit/8893b5c7afbc3363b3de0c335eb2ea08c864e51d))
+
 ## [0.3.11](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.10...antd-item@v0.3.11) (2026-03-19)
 
 
