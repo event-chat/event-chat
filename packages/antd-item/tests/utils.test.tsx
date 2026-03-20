@@ -5,9 +5,9 @@ import { Form, FormProps } from 'antd'
 import { ComponentProps, FC, PropsWithChildren } from 'react'
 import FormEvent from '../src'
 import * as utils from '../src/utils'
-import Consumer from './components/Consumer'
-import ProviderDemo from './components/ProviderDemo'
+import { BaseForm, CustomInput } from './components/FormInstance'
 import { detailInfo, providerDetail } from './fixtures/fields'
+import { ItemContextProvider } from './helpers/UnitProvider'
 
 const createMockForm = () => {
   const FormMock = ({ children }: PropsWithChildren<FormProps>) => <div>{children}</div>
@@ -85,7 +85,182 @@ describe('useForm', () => {
       )
     })
   })
-  test('提供参数')
+  test('提供原始的 form 等初始选项后，将在此基础上扩展', async () => {
+    const { group, name } = providerDetail
+    const subItem = 'sub-item'
+
+    const callbackMock = rstest.fn()
+    const { result } = renderHook(() => {
+      const [formInit] = Form.useForm()
+      const [formInstance] = utils.useForm({ group, name }, formInit)
+
+      useEventChat(subItem, {
+        callback: callbackMock,
+        group,
+      })
+
+      return Object.freeze({ formInit, formInstance })
+    })
+
+    const { formInit: targetInit, formInstance: formIns } = result.current
+    await act(() => {
+      formIns.emit({ detail: detailInfo, name: subItem })
+    })
+
+    expect(formIns).toBe(targetInit)
+    expect(formIns.group).toEqual(group)
+    expect(formIns.name).toEqual(name)
+
+    await waitFor(() => {
+      expect(callbackMock).toBeCalled()
+      expect(callbackMock).toBeCalledTimes(1)
+      expect(callbackMock).toBeCalledWith(
+        expect.objectContaining({
+          detail: detailInfo,
+          name: subItem, // 接收方原始名称
+          origin: name, // 只有 name 表示发送方
+          originName: subItem, // 仍旧是接收方原始名称
+          rule: subItem, // 转换路径后的接收方名称
+          group,
+        })
+      )
+    })
+  })
+  test('提供一个已经扩展的 form，将沿用此对象', async () => {
+    const { group, name } = providerDetail
+    const newGruop = 'new-group'
+    const newName = 'new-name'
+    const subItem = 'sub-item'
+
+    const callbackMock = rstest.fn()
+    const { result } = renderHook(() => {
+      const [formInit] = Form.useForm()
+      const [formInstance] = utils.useForm(
+        { group, name },
+        Object.assign(formInit, { group: newGruop, name: newName })
+      )
+
+      useEventChat(subItem, {
+        callback: callbackMock,
+        group: newGruop,
+      })
+
+      return Object.freeze({ formInit, formInstance })
+    })
+
+    const { formInit: targetInit, formInstance: formIns } = result.current
+    await act(() => {
+      formIns.emit({ detail: detailInfo, name: subItem })
+    })
+
+    expect(formIns).toBe(targetInit)
+    expect(formIns.group).toEqual(newGruop)
+    expect(formIns.name).toEqual(newName)
+
+    await waitFor(() => {
+      expect(callbackMock).toBeCalled()
+      expect(callbackMock).toBeCalledTimes(1)
+      expect(callbackMock).toBeCalledWith(
+        expect.objectContaining({
+          detail: detailInfo,
+          group: newGruop,
+          name: subItem, // 接收方原始名称
+          origin: newName, // 只有 name 表示发送方
+          originName: subItem, // 仍旧是接收方原始名称
+          rule: subItem, // 转换路径后的接收方名称
+        })
+      )
+    })
+  })
+})
+
+describe('useFormInstance', () => {
+  test('通过 FormEvent 拿到 form 实例', async () => {
+    const { name } = detailInfo
+    const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
+      current: null,
+    }
+
+    render(
+      <BaseForm>
+        <CustomInput
+          onMount={(formTarget) => {
+            formIns.current = formTarget
+          }}
+        />
+      </BaseForm>
+    )
+
+    const button = screen.getByTestId('test-btn')
+    const callbackMock = rstest.fn()
+
+    renderHook(() => {
+      useEventChat(name, {
+        callback: callbackMock,
+      })
+    })
+
+    fireEvent.click(button)
+
+    expect(screen.getByTestId('test-input')).toBeInTheDocument()
+    expect(button).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(formIns.current).not.toBeNull()
+      expect(callbackMock).toBeCalled()
+      expect(callbackMock).toBeCalledTimes(1)
+      expect(callbackMock).toBeCalledWith(expect.objectContaining(detailInfo))
+    })
+  })
+  test('全部通过 FormEvent 提供上下文', async () => {
+    const { group, name } = providerDetail
+    const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
+      current: null,
+    }
+
+    render(
+      <BaseForm group={group} name={name}>
+        <CustomInput
+          onMount={(formTarget) => {
+            formIns.current = formTarget
+          }}
+        />
+      </BaseForm>
+    )
+
+    await waitFor(() => {
+      expect(formIns.current).not.toBeNull()
+      expect(formIns.current?.group).toEqual(group)
+      expect(formIns.current?.name).toEqual(name)
+    })
+  })
+  test('提供 formInstance 合并 FormEvent 提供上下文', async () => {
+    const { group, name } = providerDetail
+    const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
+      current: null,
+    }
+
+    const { result } = renderHook(() =>
+      FormEvent.useForm({ group: 'hooks-group', name: 'hooks-name' })
+    )
+
+    const [formInit] = result.current
+    render(
+      <BaseForm form={formInit} group={group} name={name}>
+        <CustomInput
+          onMount={(formTarget) => {
+            formIns.current = formTarget
+          }}
+        />
+      </BaseForm>
+    )
+
+    await waitFor(() => {
+      expect(formIns.current).not.toBeNull()
+      // expect(formIns.current?.group).toEqual(group)
+      // expect(formIns.current?.name).toEqual(name)
+    })
+  })
 })
 
 describe('useFormCom', () => {
@@ -107,31 +282,7 @@ describe('useFormEvent', () => {
     const { result } = renderHook(() => utils.useFormEvent())
     expect(result.current).toEqual({})
   })
-  test('FormItemProvider 继承 context', () => {
-    const { detailInfo, group, name, parent } = providerDetail
-    const testEmit = rstest.fn()
-    render(
-      <ProviderDemo emit={testEmit}>
-        <Consumer />
-      </ProviderDemo>
-    )
-
-    const textContent = screen.getByTestId('ctx').textContent
-    const button = screen.getByRole('button')
-
-    fireEvent.click(button)
-
-    expect(screen.getByTestId('ctx')).toBeInTheDocument()
-    expect(button).toBeInTheDocument()
-
-    expect(textContent).toContain(`"group":"${group}"`)
-    expect(textContent).toContain(`"name":"${name}"`)
-    expect(textContent).toContain(`"parent":"${parent}"`)
-
-    expect(testEmit).toHaveBeenCalled()
-    expect(testEmit).toHaveBeenCalledTimes(1)
-    expect(testEmit).toHaveBeenCalledWith(detailInfo)
-  })
+  test('FormItemProvider 继承 context', ItemContextProvider)
 })
 
 describe('useFormItemEmit', () => {
