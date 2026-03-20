@@ -4,6 +4,7 @@ import { FormItemProvider, FormProvider } from '../src/FormProvider'
 import Consumer from './components/Consumer'
 import ProviderDemo from './components/ProviderDemo'
 import { providerDetail } from './fixtures/fields'
+import { ItemContextProvider } from './helpers/UnitProvider'
 
 describe('FormProvider', () => {
   test('测试 1：FormProvider 能正常渲染子组件', () => {
@@ -20,31 +21,7 @@ describe('FormProvider', () => {
     expect(text.textContent).toContain(`"group":"${group}"`)
     expect(text.textContent).toContain(`"name":"${name}"`)
   })
-  test('测试 2：FormItemProvider 继承 context', () => {
-    const { detailInfo, group, name, parent } = providerDetail
-    const testEmit = rstest.fn()
-    render(
-      <ProviderDemo emit={testEmit}>
-        <Consumer />
-      </ProviderDemo>
-    )
-
-    const textContent = screen.getByTestId('ctx').textContent
-    const button = screen.getByRole('button')
-
-    fireEvent.click(button)
-
-    expect(screen.getByTestId('ctx')).toBeInTheDocument()
-    expect(button).toBeInTheDocument()
-
-    expect(textContent).toContain(`"group":"${group}"`)
-    expect(textContent).toContain(`"name":"${name}"`)
-    expect(textContent).toContain(`"parent":"${parent}"`)
-
-    expect(testEmit).toHaveBeenCalled()
-    expect(testEmit).toHaveBeenCalledTimes(1)
-    expect(testEmit).toHaveBeenCalledWith(detailInfo)
-  })
+  test('测试 2：FormItemProvider 继承 context', ItemContextProvider)
   test('测试 3：FormItemProvider 覆盖 context', () => {
     const { detailInfo } = providerDetail
     const newParent = 'newParent'
