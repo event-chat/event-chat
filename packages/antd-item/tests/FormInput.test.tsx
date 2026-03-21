@@ -2,9 +2,11 @@ import { EventChatOptions, NamepathType, useEventChat } from '@event-chat/core'
 import { describe, expect, rstest, test } from '@rstest/core'
 import { act, render, renderHook } from '@testing-library/react'
 import { useRef } from 'react'
-import { FormInputInstance } from '../src'
+import z from 'zod'
+import FormEvent, { FormInputInstance } from '../src'
 import FormInput from '../src/FormInput'
-import { detailInfo } from './fixtures/fields'
+import { FormItemProvider } from '../src/FormProvider'
+import { detailInfo, providerDetail } from './fixtures/fields'
 
 describe('FormInput', () => {
   test('测试 1：不提供任何上下文，发起通信', async () => {
@@ -63,6 +65,82 @@ describe('FormInput', () => {
     expect(onChangeMock).toBeCalledTimes(1)
     expect(onChangeMock).toBeCalledWith(
       record.detail,
+      expect.objectContaining({ emit: targetRef.current?.emit })
+    )
+  })
+  test('测试 2：提供 name、schema、上下文，发起通信', async () => {
+    const { group, name } = providerDetail
+    const errorDetail = { price: 2, type: 'strawberry' }
+
+    const callbackMock = rstest.fn()
+    const debugMock = rstest.fn()
+
+    const { result } = renderHook(() => {
+      const { emit: targgerEmit } = useEventChat(detailInfo.name, { group })
+      const inputRef = useRef<FormInputInstance>(null)
+
+      return [inputRef, targgerEmit] as const
+    })
+
+    const [targetRef, emit] = result.current
+    render(
+      <FormEvent group={group}>
+        <FormInput
+          name={name}
+          ref={targetRef}
+          schema={z.object({
+            price: z.number().min(1).max(100),
+            type: z.union([z.literal('apple'), z.literal('banana'), z.literal('origin')]),
+          })}
+          callback={callbackMock}
+          debug={debugMock}
+        />
+      </FormEvent>
+    )
+
+    await act(() => {
+      emit({ detail: { price: 5, type: 'origin' }, name })
+      emit({ detail: errorDetail, name })
+    })
+
+    expect(callbackMock).toBeCalledTimes(1)
+    expect(callbackMock).toBeCalledWith(
+      expect.objectContaining({ detail: { price: 5, type: 'origin' }, name }),
+      expect.objectContaining({ emit: targetRef.current?.emit })
+    )
+
+    expect(debugMock).toBeCalledTimes(1)
+    expect(debugMock).toBeCalledWith(expect.objectContaining({ data: errorDetail }))
+  })
+  test('测试 3：提供 parent 会自动组合上下文，发起通信', async () => {
+    const { group, name } = providerDetail
+    const callbackMock = rstest.fn()
+
+    const { result } = renderHook(() => {
+      const { emit: targgerEmit } = useEventChat(detailInfo.name, { group })
+      const inputRef = useRef<FormInputInstance>(null)
+
+      return [inputRef, targgerEmit] as const
+    })
+
+    const [targetRef, emit] = result.current
+    const sendInfo = { detail: 'test', name: [detailInfo.name, name] }
+
+    render(
+      <FormEvent group={group}>
+        <FormItemProvider parent={detailInfo.name} emit={() => {}}>
+          <FormInput name={name} ref={targetRef} callback={callbackMock} />
+        </FormItemProvider>
+      </FormEvent>
+    )
+
+    await act(() => {
+      emit(sendInfo)
+    })
+
+    expect(callbackMock).toBeCalledTimes(1)
+    expect(callbackMock).toBeCalledWith(
+      expect.objectContaining(sendInfo),
       expect.objectContaining({ emit: targetRef.current?.emit })
     )
   })
