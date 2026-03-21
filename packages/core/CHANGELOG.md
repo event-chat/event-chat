@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.13](https://github.com/event-chat/event-chat/compare/core@v0.2.12...core@v0.2.13) (2026-03-21)
+
+
+### Bug Fixes
+
+* update core ts test and up FormInput test ([ca30bd2](https://github.com/event-chat/event-chat/commit/ca30bd2c566cedd77e4a9e4f170dbe5ad203cc22))
+* update core ts test and up FormInput test ([a0b85c1](https://github.com/event-chat/event-chat/commit/a0b85c1e52f9669d664226810aa365fac18baeeb))
+
 ## [0.2.12](https://github.com/event-chat/event-chat/compare/core@v0.2.11...core@v0.2.12) (2026-03-21)
 
 
