@@ -3,6 +3,7 @@ import { PropsWithChildren, useMemo } from 'react'
 import { FormProvider } from './FormProvider'
 import { FormEventInstance, getStringValue, useForm, useFormCom } from './utils'
 
+// 这里传入的 group 和 name 都是处理好优先级的
 const FormInitialization = <
   Name extends string,
   Group extends string | undefined = undefined,
@@ -15,7 +16,11 @@ const FormInitialization = <
   ...props
 }: PropsWithChildren<FormProps<Name, Group, ValuesType>>) => {
   const Form = useFormCom<ValuesType>()
-  const [formInstance] = useForm({ group, name }, form)
+  const [formInstance] = useForm(
+    { group, name },
+    form ? Object.assign(form, { group, name }) : form
+  )
+
   return (
     <Form {...props} form={formInstance} name={formInstance.name}>
       <FormProvider group={formInstance.group} name={formInstance.name} emit={formInstance.emit}>
@@ -42,7 +47,7 @@ const FormEvent = <
   const formGroup = useMemo(() => getStringValue([form?.group, group]), [form?.group, group])
   const Form = useFormCom<ValuesType>()
 
-  if (form?.emit && form.name === formName && form.group === formGroup) {
+  if (form?.emit && form.group === formGroup && form.name === formName) {
     const { focusField, ...formIns } = form
     formIns.group = formGroup
     return (
