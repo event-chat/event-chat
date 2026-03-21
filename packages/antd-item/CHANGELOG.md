@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.14](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.13...antd-item@v0.3.14) (2026-03-21)
+
+
+### Bug Fixes
+
+* update core ts test and up FormInput test ([ca30bd2](https://github.com/event-chat/event-chat/commit/ca30bd2c566cedd77e4a9e4f170dbe5ad203cc22))
+* update core ts test and up FormInput test ([a0b85c1](https://github.com/event-chat/event-chat/commit/a0b85c1e52f9669d664226810aa365fac18baeeb))
+
 ## [0.3.13](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.12...antd-item@v0.3.13) (2026-03-21)
 
 
