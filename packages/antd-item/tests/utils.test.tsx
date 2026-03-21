@@ -6,7 +6,7 @@ import { ComponentProps, FC, PropsWithChildren } from 'react'
 import FormEvent from '../src'
 import * as utils from '../src/utils'
 import { BaseForm, CustomInput } from './components/FormInstance'
-import { detailInfo, providerDetail } from './fixtures/fields'
+import { baseFormData, detailInfo, providerDetail } from './fixtures/fields'
 import { ItemContextProvider } from './helpers/UnitProvider'
 
 const createMockForm = () => {
@@ -234,17 +234,15 @@ describe('useFormInstance', () => {
       expect(formIns.current?.name).toEqual(name)
     })
   })
-  test('提供 formInstance 合并 FormEvent 提供上下文', async () => {
+  test('提供不同的 group 和 name，根据优先级提供上下文', async () => {
     const { group, name } = providerDetail
     const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
       current: null,
     }
 
-    const { result } = renderHook(() =>
-      FormEvent.useForm({ group: 'hooks-group', name: 'hooks-name' })
-    )
-
+    const { result } = renderHook(() => FormEvent.useForm(baseFormData))
     const [formInit] = result.current
+
     render(
       <BaseForm form={formInit} group={group} name={name}>
         <CustomInput
@@ -257,8 +255,60 @@ describe('useFormInstance', () => {
 
     await waitFor(() => {
       expect(formIns.current).not.toBeNull()
-      // expect(formIns.current?.group).toEqual(group)
-      // expect(formIns.current?.name).toEqual(name)
+      expect(formIns.current?.group).toEqual(baseFormData.group)
+      expect(formIns.current?.name).toEqual(name)
+
+      expect(formInit.group).toEqual(baseFormData.group)
+      expect(formInit.name).toEqual(name)
+    })
+  })
+  test('从 FormInstance 获取上下文', async () => {
+    const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
+      current: null,
+    }
+
+    const { result } = renderHook(() => FormEvent.useForm(baseFormData))
+    const [formInit] = result.current
+
+    render(
+      <BaseForm form={formInit}>
+        <CustomInput
+          onMount={(formTarget) => {
+            formIns.current = formTarget
+          }}
+        />
+      </BaseForm>
+    )
+
+    await waitFor(() => {
+      expect(formIns.current).not.toBeNull()
+      expect(formIns.current?.group).toEqual(formInit.group)
+      expect(formIns.current?.name).toEqual(formInit.name)
+    })
+  })
+  test('FormInstance 和 FormEvent 上下文相同', async () => {
+    const { group, name } = baseFormData
+    const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
+      current: null,
+    }
+
+    const { result } = renderHook(() => FormEvent.useForm(baseFormData))
+    const [formInit] = result.current
+
+    render(
+      <BaseForm form={formInit} group={group} name={name}>
+        <CustomInput
+          onMount={(formTarget) => {
+            formIns.current = formTarget
+          }}
+        />
+      </BaseForm>
+    )
+
+    await waitFor(() => {
+      expect(formIns.current).not.toBeNull()
+      expect(formIns.current?.group).toEqual(formInit.group)
+      expect(formIns.current?.name).toEqual(formInit.name)
     })
   })
 })

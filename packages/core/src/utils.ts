@@ -124,7 +124,7 @@ export type DetailType<
 > & {
   detail: WasProvided<Schema> extends true ? z.output<Exclude<Schema, undefined>> : unknown
   group: WasProvided<Group> extends true ? Exclude<Group, undefined> : undefined
-  origin: string
+  origin: NamepathType
   type: WasProvided<Type> extends true ? Exclude<Type, undefined> : undefined
   token: Token extends true ? string : undefined
 }

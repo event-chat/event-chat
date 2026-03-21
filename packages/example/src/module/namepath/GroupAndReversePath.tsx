@@ -7,7 +7,7 @@ const { Title } = Typography
 const groupName = 'aa.*(bb,kk,dd,ee.*(oo,gg).gg).cc'
 const reverseName = '*(!aa,bb,cc)'
 
-const fields = ['kk', 'aa.bb.cc', 'aa.kk.cc', 'aa.dd.cc', 'aa.ee.oo.gg.cc', 'aa.ee.gg.gg.cc']
+const fields = ['kk', 'aa', 'aa.bb.cc', 'aa.kk.cc', 'aa.dd.cc', 'aa.ee.oo.gg.cc', 'aa.ee.gg.gg.cc']
 
 const GroupAndReversePath: FC = () => {
   const [form] = FormEvent.useForm()
