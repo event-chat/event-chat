@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.13](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.12...antd-item@v0.3.13) (2026-03-21)
+
+
+### Bug Fixes
+
+* core type issue ([743e85b](https://github.com/event-chat/event-chat/commit/743e85bbc23a3f76a0349f1d46092943297e162f))
+* core type issue ([ca1ba9c](https://github.com/event-chat/event-chat/commit/ca1ba9c7f7b046564cc87add8a0e2e2459140c28))
+
 ## [0.3.12](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.11...antd-item@v0.3.12) (2026-03-20)
 
 
