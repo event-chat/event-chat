@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.15](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.14...antd-item@v0.3.15) (2026-03-22)
+
+
+### Bug Fixes
+
+* add FormList test ([afd5a88](https://github.com/event-chat/event-chat/commit/afd5a881188b880856570136a06224847e5ff1d3))
+* add FormList test ([7ffe845](https://github.com/event-chat/event-chat/commit/7ffe845c744f3596ff58ce4793b134bd0b6ec192))
+
 ## [0.3.14](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.13...antd-item@v0.3.14) (2026-03-21)
 
 
