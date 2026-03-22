@@ -126,6 +126,7 @@ export interface FormEventInstance<
 
 export interface FormInputInstance extends Required<Pick<FormEventContextInstance, 'emit'>> {}
 
+// 必须要分离 initialValue，同名字段会生成 2 个，避免重复定义初始值
 export type FormBaseInstance<ValueType = unknown> = FormType<ValueType> & {
   Item: FC<
     Pick<FormItemProps, 'hidden' | 'initialValue' | 'name' | 'rules'> & {
