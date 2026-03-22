@@ -144,4 +144,32 @@ describe('FormInput', () => {
       expect.objectContaining({ emit: targetRef.current?.emit })
     )
   })
+  test('测试 4：不同的组，不能相互通信', async () => {
+    const { group, name } = providerDetail
+    const callbackMock = rstest.fn()
+
+    const { result } = renderHook(() => {
+      const { emit: targgerEmit } = useEventChat(detailInfo.name)
+      const inputRef = useRef<FormInputInstance>(null)
+
+      return [inputRef, targgerEmit] as const
+    })
+
+    const [targetRef, emit] = result.current
+    const sendInfo = { detail: 'test', name: [detailInfo.name, name] }
+
+    render(
+      <FormEvent group={group}>
+        <FormItemProvider parent={detailInfo.name} emit={() => {}}>
+          <FormInput name={name} ref={targetRef} callback={callbackMock} />
+        </FormItemProvider>
+      </FormEvent>
+    )
+
+    await act(() => {
+      emit(sendInfo)
+    })
+
+    expect(callbackMock).not.toBeCalled()
+  })
 })

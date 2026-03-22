@@ -1,7 +1,5 @@
 import { describe, expect, rstest, test } from '@rstest/core'
 import { render, renderHook, screen, waitFor } from '@testing-library/react'
-import { Form, FormInstance, Input } from 'antd'
-import { ReactNode } from 'react'
 import FormEvent from '../src'
 import * as utils from '../src/utils'
 import { BaseForm, CustomInput } from './components/FormInstance'
@@ -18,14 +16,27 @@ const createUnitlsSpy = () => {
 describe('FormEvent', () => {
   test('测试 1：组件能正常渲染子组件', () => {
     const { getStringValueSpy, useFormComSpy, useFormSpy } = createUnitlsSpy()
+    const formIns: { current: ReturnType<typeof utils.useFormInstance> | null } = {
+      current: null,
+    }
+
     render(
       <BaseForm>
-        <CustomInput />
+        <CustomInput
+          onMount={(formTarget) => {
+            formIns.current = formTarget
+          }}
+        />
       </BaseForm>
     )
 
     expect(screen.getByTestId('test-input')).toBeInTheDocument()
     expect(window.matchMedia).toHaveBeenCalled()
+
+    // 能够拿到 formInstance，但 group 是 undefined
+    expect(formIns.current).not.toBeNull()
+    expect(formIns.current?.group).toBeUndefined()
+    expect(formIns.current?.name).not.toBeUndefined()
 
     // FormEvent
     expect(getStringValueSpy).toBeCalledTimes(2)
