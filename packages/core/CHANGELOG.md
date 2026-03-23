@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.14](https://github.com/event-chat/event-chat/compare/core@v0.2.13...core@v0.2.14) (2026-03-23)
+
+
+### Bug Fixes
+
+* up core remove onLost and update debug method arg add status ([1835dcf](https://github.com/event-chat/event-chat/commit/1835dcf6516d3e251d8c18d9f58b7fd787a89f18))
+* up core remove onLost and update debug method arg add status ([88d2fd0](https://github.com/event-chat/event-chat/commit/88d2fd05235a9ee272ebb157436c016a3b5bda6e))
+
 ## [0.2.13](https://github.com/event-chat/event-chat/compare/core@v0.2.12...core@v0.2.13) (2026-03-21)
 
 
