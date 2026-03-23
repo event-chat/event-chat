@@ -97,7 +97,7 @@ const FormRate: FC = () => {
 
   const debugHandle = useCallback(
     (name: string, log?: EerrorItem) => {
-      if (log) {
+      if (log?.status === 'invalid') {
         setDebug((current) =>
           current.concat([{ ...log, data: `[${name}]: ${safetyPrint(log.data) ?? ''}` }])
         )

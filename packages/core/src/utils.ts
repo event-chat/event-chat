@@ -2,6 +2,9 @@ import { Path } from '@formily/path'
 import { ZodType, z } from 'zod'
 import eventBus from './eventBus'
 
+// 暂时不用默认前缀，避免破坏 Path 本身的缓存
+const defaultName = ''
+
 // eventName 在 formily 中是没有缓存的，这里补一层缓存
 const eventMap: Record<string | number, string> = {}
 const cacheEventName = (name: NamepathType, path?: string) => {
@@ -18,8 +21,6 @@ const cacheEventName = (name: NamepathType, path?: string) => {
 const escapeSpecialSymbols = (text: string | number) =>
   typeof text === 'number' ? text : text.replace(/([*~[\],:.])/g, '\\$1')
 
-// 暂时不用默认前缀，避免破坏 Path 本身的缓存
-export const defaultName = ''
 export const defaultLang = Object.freeze({
   customError: 'Does not meet the requirements for custom filtering',
   detailError: 'validate faild',
@@ -29,7 +30,7 @@ export const defaultLang = Object.freeze({
   tokenProvider: 'Not providing tokens as expected.',
 })
 
-export const EventName = 'custom-event-chat-11.18'
+export const EventName = 'custom-event-chat'
 export const createEvent = <Detail, Name extends NamepathType = string>(
   detail: EventDetailType<Detail, Name>
 ) =>
@@ -60,7 +61,7 @@ export const getEventName = (name: NamepathType, filter?: typeof escapeSpecialSy
   const cachePath = cacheEventName(name)
   if (cachePath) return cachePath
 
-  // 只过滤 eventName
+  // 只过滤数组形式的 eventName
   const eventName =
     (Array.isArray(name) ? name.map(filter ?? escapeSpecialSymbols) : undefined) ??
     (typeof name === 'object' ? [] : [name])
@@ -83,7 +84,7 @@ export const getEventName = (name: NamepathType, filter?: typeof escapeSpecialSy
   }
 }
 
-export const isResultType = (data: unknown): data is ResultType =>
+export const isResultType = (data: unknown): data is z.ZodError =>
   typeof data === 'object' && data !== null && 'success' in data && !data.success
 
 export function mountEvent(event: CustomDetailEvent) {
@@ -107,9 +108,8 @@ export interface EventChatOptions<
   token?: Token
   type?: Type
   callback?: (target: DetailType<Name, Schema, Group, Type, Token>) => void
-  debug?: (result?: ResultType) => void
+  debug?: (result: ResultType) => void
   filter?: (detail: Omit<EventDetailType<unknown>, 'detail'>) => boolean | PromiseLike<boolean>
-  onLost?: (info: LostType) => void
 }
 
 export type DetailType<
@@ -151,8 +151,9 @@ export type NamepathType =
   | Array<string | number>
   | Readonly<Array<string | number>>
 
-export type ResultType<Schema = unknown> = Omit<z.ZodSafeParseError<Schema>, 'data'> & {
+export type ResultType<Schema = unknown> = Partial<Omit<z.ZodSafeParseError<Schema>, 'data'>> & {
   data: unknown
+  status: 'emit' | 'init' | 'invalid' | 'lost'
   time: Date
 }
 
@@ -169,10 +170,4 @@ export type WasProvided<T, Default = undefined> =
 
 interface CustomDetailEvent extends Event {
   detail?: EventDetailType
-}
-
-type LostType = {
-  name: NamepathType
-  type: 'emit' | 'init'
-  origin?: NamepathType
 }

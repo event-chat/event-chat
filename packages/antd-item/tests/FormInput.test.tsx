@@ -1,6 +1,6 @@
 import { EventChatOptions, NamepathType, useEventChat } from '@event-chat/core'
 import { describe, expect, rstest, test } from '@rstest/core'
-import { act, render, renderHook } from '@testing-library/react'
+import { act, render, renderHook, waitFor } from '@testing-library/react'
 import { useRef } from 'react'
 import z from 'zod'
 import FormEvent, { FormInputInstance } from '../src'
@@ -93,14 +93,21 @@ describe('FormInput', () => {
             type: z.union([z.literal('apple'), z.literal('banana'), z.literal('origin')]),
           })}
           callback={callbackMock}
-          debug={debugMock}
+          debug={(logtar) => {
+            console.log('a----log', logtar)
+            debugMock(logtar)
+          }}
         />
       </FormEvent>
     )
 
+    await waitFor(() => {
+      expect(debugMock).toBeCalledTimes(1)
+      expect(debugMock).toBeCalledWith(expect.objectContaining({ status: 'init' }))
+    })
+
     await act(() => {
       emit({ detail: { price: 5, type: 'origin' }, name })
-      emit({ detail: errorDetail, name })
     })
 
     expect(callbackMock).toBeCalledTimes(1)
@@ -109,8 +116,14 @@ describe('FormInput', () => {
       expect.objectContaining({ emit: targetRef.current?.emit })
     )
 
-    expect(debugMock).toBeCalledTimes(1)
-    expect(debugMock).toBeCalledWith(expect.objectContaining({ data: errorDetail }))
+    await act(() => {
+      emit({ detail: errorDetail, name })
+    })
+
+    expect(debugMock).toBeCalledTimes(2)
+    expect(debugMock).toBeCalledWith(
+      expect.objectContaining({ data: errorDetail, status: 'invalid' })
+    )
   })
   test('测试 3：提供 parent 会自动组合上下文，发起通信', async () => {
     const { group, name } = providerDetail

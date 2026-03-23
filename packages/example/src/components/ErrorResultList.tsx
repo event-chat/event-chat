@@ -55,7 +55,7 @@ export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
                 <p className="mb-1 text-sm font-medium text-red-600">错误原因：</p>
                 <div className="rounded-md bg-red-50 p-2 text-xs text-red-700">
                   <ul className="list-inside list-disc space-y-1">
-                    <li>{error.error.message}</li>
+                    <li>{error.error?.message}</li>
                   </ul>
                 </div>
               </div>

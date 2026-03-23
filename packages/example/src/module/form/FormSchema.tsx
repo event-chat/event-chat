@@ -29,7 +29,7 @@ const FormSchema: FC = () => {
           name={['target', 'number']}
           schema={z.number().nullish()}
           debug={(log) => {
-            if (log) setDebug((current) => current.concat([log]))
+            if (log.status === 'invalid') setDebug((current) => current.concat([log]))
           }}
         >
           <InputNumber disabled />

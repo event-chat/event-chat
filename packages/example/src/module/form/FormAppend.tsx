@@ -26,30 +26,28 @@ const InputEmit: FC<InputEmitProps> = ({ remove, ...props }) => {
   )
 }
 
-const ListForm: FC = () => {
-  return (
-    <FormEvent group="list-form" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-      <FormEvent.Item colon={false} label={` `}>
-        <Title level={5}>在表单组件中通过上下文发起更新</Title>
-      </FormEvent.Item>
-      <FormEvent.List initialValue={[{ 'target-input': 'levi' }]} name="target-list">
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map(({ key, name }) => (
-              <FormEvent.Item key={key} label={`受控表单${name + 1}`} name={[name, 'target-input']}>
-                <InputEmit remove={() => remove(name)} />
-              </FormEvent.Item>
-            ))}
-            <FormEvent.Item colon={false} label={` `}>
-              {/* antd 非 6.0 把默认提供的按钮加到 Form.Item 会报 findDomNode 的 bug */}
-              <Button onClick={add}>+ 添加受控表单</Button>
+const ListForm: FC = () => (
+  <FormEvent group="list-form" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+    <FormEvent.Item colon={false} label={` `}>
+      <Title level={5}>在表单组件中通过上下文发起更新</Title>
+    </FormEvent.Item>
+    <FormEvent.List initialValue={[{ 'target-input': 'levi' }]} name="target-list">
+      {(fields, { add, remove }) => (
+        <>
+          {fields.map(({ key, name }) => (
+            <FormEvent.Item key={key} label={`受控表单${name + 1}`} name={[name, 'target-input']}>
+              <InputEmit remove={() => remove(name)} />
             </FormEvent.Item>
-          </>
-        )}
-      </FormEvent.List>
-    </FormEvent>
-  )
-}
+          ))}
+          <FormEvent.Item colon={false} label={` `}>
+            {/* antd 非 6.0 把默认提供的按钮加到 Form.Item 会报 findDomNode 的 bug */}
+            <Button onClick={add}>+ 添加受控表单</Button>
+          </FormEvent.Item>
+        </>
+      )}
+    </FormEvent.List>
+  </FormEvent>
+)
 
 const OriginForm: FC = () => {
   const inputRef = useRef<FormInputInstance>(null)
