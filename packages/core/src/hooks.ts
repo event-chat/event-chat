@@ -10,7 +10,6 @@ import {
   combinePath,
   createEvent,
   createToken,
-  defaultName,
   getConditionKey,
   getEventName,
   isResultType,
@@ -49,10 +48,11 @@ export function useEventChat<
 
   const errorHandle = useCallback(
     (error: unknown, data: unknown, time: Date) => {
-      if (error instanceof Error && options.current?.debug)
-        options.current.debug(
-          isResultType(error.cause) ? { ...error.cause, data, time } : undefined
-        )
+      const { debug } = options.current ?? {}
+      if (error instanceof Error && debug) {
+        const cause = isResultType(error.cause) ? error.cause : undefined
+        debug?.({ ...cause, status: 'invalid', data, time })
+      }
     },
     [options]
   )
@@ -82,21 +82,25 @@ export function useEventChat<
     <Detail, CustomName extends NamepathType>(
       detail: Omit<EventDetailType<Detail, CustomName>, ExcludeKey>
     ) => {
+      const { group, type, debug } = options.current ?? {}
+      const time = new Date()
       try {
         const rule = combinePath(detail.name, nameRc.current)
         const event = createEvent({
           ...detail,
-          group: options.current?.group,
           origin: nameRc.current,
           originName: detail.name,
-          time: new Date(),
-          type: options.current?.type,
+          group,
           id,
           rule,
+          time,
+          type,
         })
+
+        debug?.({ data: event.detail, status: 'emit', time })
         document.body.dispatchEvent(event)
-      } catch {
-        options.current?.onLost?.({ name: detail.name, origin: nameRc.current, type: 'emit' })
+      } catch (error) {
+        debug?.({ data: { name: nameRc.current, detail, error }, status: 'lost', time })
       }
     },
     [id, nameRc, options]
@@ -110,10 +114,8 @@ export function useEventChat<
   }, [])
 
   useEffect(() => {
-    if (!(name === '' || (Array.isArray(name) && name.length === 0)) && eventName === defaultName) {
-      options.current?.onLost?.({ type: 'init', name })
-    }
-  }, [eventName, name, options])
+    options.current?.debug?.({ data: { name: nameRc.current }, status: 'init', time: new Date() })
+  }, [nameRc, options])
 
   useEffect(() => {
     eventBus.on(eventName, callbackHandle)

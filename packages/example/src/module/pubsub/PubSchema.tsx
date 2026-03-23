@@ -41,6 +41,7 @@ const PubSchema: FC = () => {
       }
     },
     debug: (result) => {
+      if (result.status !== 'invalid') return
       const { issues = [] } = result?.error ?? {}
       const { data } = result ?? {}
       const id: unknown = typeof data === 'object' && data ? Reflect.get(data, 'id') : undefined
@@ -110,7 +111,7 @@ const PubSchema: FC = () => {
             content: result.success
               ? result.data
               : {
-                  message: result.error.issues[0].message,
+                  message: result.error.issues.slice(-1)[0].message,
                   status: 'error',
                 },
             time: new Date(),
