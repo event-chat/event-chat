@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.17](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.16...antd-item@v0.3.17) (2026-03-24)
+
+
+### Bug Fixes
+
+* add debug demo ([1a502b6](https://github.com/event-chat/event-chat/commit/1a502b6e985cdb379f585b810b93c29da5885155))
+* add debug demo ([703e179](https://github.com/event-chat/event-chat/commit/703e1799e1f4445c4ad60eb015dd0559385c6647))
+
 ## [0.3.16](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.15...antd-item@v0.3.16) (2026-03-23)
 
 
