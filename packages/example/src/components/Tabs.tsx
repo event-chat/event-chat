@@ -10,16 +10,46 @@ import {
   useRef,
   useState,
 } from 'react'
+import { tv } from 'tailwind-variants'
 import z from 'zod'
 import { tabItem, tabsContainer, tabsPick } from '@/utils/event'
 
+const scrollClasses = ['', 'shadow-inset-l-sm', 'shadow-inset-r-sm', 'shadow-inset-x-sm']
+function scrollStart(this: HTMLDivElement) {
+  scrollClasses.forEach((itemClass) => {
+    if (itemClass) this.classList.remove(itemClass)
+  })
+}
+function scrollHandle(this: HTMLDivElement) {
+  const leftPoint = this.scrollLeft > 0 ? 1 : 0
+  const rightPoint = this.scrollLeft + this.clientWidth >= this.scrollWidth ? 0 : 2
+  scrollStart.call(this)
+
+  const itemClass = scrollClasses[leftPoint + rightPoint]
+  if (itemClass) this.classList.add(itemClass)
+}
+
 const TabContext = createContext({ group: '' })
+const styles = tv({
+  slots: {
+    active:
+      'absolute h-full w-(--selected-item-width) translate-x-(--selected-item-position) rounded-sm border border-slate-300 bg-white shadow-sm transition-[width,translate] duration-300',
+    base: 'relative max-w-full transform-[translateZ(0)] rounded',
+    button:
+      'cursor-pointer rounded-sm px-2 py-1 text-base font-medium text-slate-900 transition duration-200 hover:text-slate-600 focus:outline-none focus-visible:ring-2',
+    list: 'relative flex items-center gap-1',
+    menu: 'relative',
+    nav: 'tabs-container no-scrollbar shadow-inset-r-sm relative w-full max-w-full overflow-x-auto rounded border bg-slate-100 p-1',
+  },
+})
 
 const TabItem: FC<PropsWithChildren<TabItemProps>> = ({ children, name }) => {
   const [active, setActive] = useState(false)
   const id = useId()
 
   const takeKey = useMemo(() => name ?? id, [id, name])
+  const { button: btnStyle } = styles()
+
   const { group } = useContext(TabContext)
   const { emit } = useEventChat(tabItem, {
     callback: ({ detail }) => setActive(detail === takeKey),
@@ -33,7 +63,7 @@ const TabItem: FC<PropsWithChildren<TabItemProps>> = ({ children, name }) => {
   return (
     <li className={active ? 'active' : undefined}>
       <button
-        className="cursor-pointer rounded-sm px-2 py-1 text-sm font-medium text-slate-900 transition duration-200 hover:text-slate-600 focus:outline-none focus-visible:ring-2"
+        className={btnStyle()}
         type="button"
         onClick={() => {
           if (!active) emit({ detail: takeKey, name: tabsContainer })
@@ -54,9 +84,12 @@ const Tabs: FC<PropsWithChildren<TabsProps>> = ({
 }) => {
   const [defaultActiveKey] = useState(defaultActive)
   const wrapRef = useRef<HTMLDivElement>(null)
+  const navRef = useRef<HTMLDivElement>(null)
   const defaultGroup = useId()
 
   const group = useMemo(() => groupKey ?? defaultGroup, [defaultGroup, groupKey])
+  const { active: activeStyle, base, list, menu, nav } = styles()
+
   const { emit } = useEventChat(tabsContainer, {
     schema: z.union([z.string(), z.number(), z.symbol()]),
     callback: ({ detail }) => {
@@ -87,18 +120,39 @@ const Tabs: FC<PropsWithChildren<TabsProps>> = ({
   })
 
   useEffect(() => {
+    const { current } = navRef
+    const resizeObserver = new ResizeObserver(() => {
+      if (!current) return
+      if (current.clientWidth < current.scrollWidth) {
+        scrollHandle.call(current)
+      } else {
+        scrollStart.call(current)
+      }
+    })
+
+    if (current) {
+      current.addEventListener('scroll', scrollHandle)
+      resizeObserver.observe(current)
+    }
+    return () => {
+      if (current) {
+        current.removeEventListener('scroll', scrollHandle)
+        resizeObserver.unobserve(current)
+        resizeObserver.disconnect()
+      }
+    }
+  }, [navRef])
+
+  useEffect(() => {
     emit({ detail: active ?? defaultActiveKey, name: tabItem })
   }, [active, defaultActiveKey, emit])
 
   return (
-    <div className="relative transform-[translateZ(0)] rounded" ref={wrapRef}>
-      <nav className="tabs-container relative w-full rounded border bg-slate-100 p-1">
-        <div className="relative">
-          <div
-            className="absolute h-full w-(--selected-item-width) translate-x-(--selected-item-position) rounded-sm border border-slate-300 bg-white shadow-sm transition-[width,translate] duration-300"
-            data-slider
-          />
-          <ul className="relative flex items-center gap-1">
+    <div className={base()} ref={wrapRef}>
+      <nav className={nav()} ref={navRef}>
+        <div className={menu()}>
+          <div className={activeStyle()} data-slider />
+          <ul className={list()}>
             <TabContext.Provider value={{ group }}>{children}</TabContext.Provider>
           </ul>
         </div>

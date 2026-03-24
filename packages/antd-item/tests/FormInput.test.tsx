@@ -93,10 +93,7 @@ describe('FormInput', () => {
             type: z.union([z.literal('apple'), z.literal('banana'), z.literal('origin')]),
           })}
           callback={callbackMock}
-          debug={(logtar) => {
-            console.log('a----log', logtar)
-            debugMock(logtar)
-          }}
+          debug={debugMock}
         />
       </FormEvent>
     )

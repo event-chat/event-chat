@@ -17,7 +17,7 @@ const { item, wrap } = styles()
 const CheckItem: FC<PropsWithChildren<CheckItemProps>> = ({ children, title = '' }) => (
   <Space direction="vertical">
     <div className={item()}>{title}</div>
-    <div className="flex items-start gap-2">{children}</div>
+    <div className="flex flex-wrap items-start gap-2">{children}</div>
   </Space>
 )
 
