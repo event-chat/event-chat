@@ -51,13 +51,7 @@ const Components: FC = () => {
           <CheckThemed />
         </div>
       </Card>
-      <Card
-        title={
-          <>
-            <Tag>Checkbox</Tag> 多选框
-          </>
-        }
-      >
+      <Card title="按钮">
         <div className="py-4">
           <ButtonThemed />
         </div>

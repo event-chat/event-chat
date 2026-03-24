@@ -35,6 +35,10 @@
   --color-toast-warning: #f59e0b;
   --color-toast-info: #3b82f6;
   --shadow-card: 0 4px 20px -2px rgb(0 0 0 / 10%);
+  --shadow-inset-l-sm: inset 3px 0px 5px -2px rgb(0 0 0 / 50%);
+  --shadow-inset-r-sm: inset -3px 0px 5px -2px rgb(0 0 0 / 50%);
+  --shadow-inset-x-sm:
+    inset -3px 0px 5px -2px rgb(0 0 0 / 50%), inset 3px 0px 5px -2px rgb(0 0 0 / 50%);
 
   @keyframes toast-in {
     0% {
