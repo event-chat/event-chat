@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.16](https://github.com/event-chat/event-chat/compare/core@v0.2.15...core@v0.2.16) (2026-03-25)
+
+
+### Bug Fixes
+
+* up tips text ([daf9307](https://github.com/event-chat/event-chat/commit/daf9307ca99902256a9eab196747b1b2cbc096bc))
+* up validate debug tips ([8077a20](https://github.com/event-chat/event-chat/commit/8077a206d705bc9f3dae25825176dd30d3817e3d))
+* up validate debug tips ([9e517a1](https://github.com/event-chat/event-chat/commit/9e517a19c6f1a2180da2bffa812e16510b681c89))
+
 ## [0.2.15](https://github.com/event-chat/event-chat/compare/core@v0.2.14...core@v0.2.15) (2026-03-25)
 
 
