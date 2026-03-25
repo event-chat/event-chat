@@ -23,7 +23,6 @@ const escapeSpecialSymbols = (text: string | number) =>
 
 export const defaultLang = Object.freeze({
   customError: 'Does not meet the requirements for custom filtering',
-  detailError: 'validate faild',
   groupEmpty: 'Do not accept record with group.',
   groupProvider: 'Non group members.',
   tokenEmpty: 'Do not accept record with token.',
@@ -84,7 +83,7 @@ export const getEventName = (name: NamepathType, filter?: typeof escapeSpecialSy
   }
 }
 
-export const isResultType = (data: unknown): data is z.ZodError =>
+export const isResultType = (data: unknown): data is z.ZodSafeParseError<unknown> =>
   typeof data === 'object' && data !== null && 'success' in data && !data.success
 
 export function mountEvent(event: CustomDetailEvent) {
@@ -103,7 +102,7 @@ export interface EventChatOptions<
 > {
   async?: boolean
   group?: Group
-  lang?: Record<keyof typeof defaultLang, string>
+  lang?: Partial<Record<keyof typeof defaultLang, string>>
   schema?: Schema
   token?: Token
   type?: Type
