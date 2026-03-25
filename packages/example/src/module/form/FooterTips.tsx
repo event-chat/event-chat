@@ -6,7 +6,7 @@ const FooterTips: FC<PropsWithChildren<FooterTipsProps>> = ({ children, title = 
     <Divider orientation="left" plain>
       {title}
     </Divider>
-    <div>{children}</div>
+    <div className="leading-8">{children}</div>
   </>
 )
 

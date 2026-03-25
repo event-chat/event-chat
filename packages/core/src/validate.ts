@@ -26,7 +26,9 @@ export const checkDetail = <
     return result.then((cause) =>
       cause.success
         ? cause
-        : Promise.reject(new Error(cause.error.issues[0].message ?? detailError, { cause }))
+        : Promise.reject(
+            new Error(cause.error.issues.slice(-1)[0].message ?? detailError, { cause })
+          )
     )
   }
   return Promise.reject(new Error(detailError))
@@ -70,7 +72,11 @@ export const checkLiteral = <
         .safeParseAsync(data)
 
   return result.then((cause) => {
-    if (!cause.success) return Promise.reject(new Error(detailError, { cause }))
+    if (!cause.success)
+      return Promise.reject(
+        new Error(cause.error.issues.slice(-1)[0].message ?? detailError, { cause })
+      )
+
     const resultData = {
       ...data,
       token: currentToken,
