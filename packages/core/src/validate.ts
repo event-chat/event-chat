@@ -25,7 +25,7 @@ export const checkDetail = <
       cause.success ? cause : Promise.reject(new Error('', { cause }))
     )
   }
-  return Promise.reject(new Error('schema requird'))
+  return Promise.reject(new Error('schema required'))
 }
 
 export const checkLiteral = <
