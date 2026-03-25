@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.15](https://github.com/event-chat/event-chat/compare/core@v0.2.14...core@v0.2.15) (2026-03-25)
+
+
+### Bug Fixes
+
+* up core validate faild message ([2db5b24](https://github.com/event-chat/event-chat/commit/2db5b2498b325c86e62dbf4d63f4a8fd20dea58d))
+* up core validate faild message ([968febf](https://github.com/event-chat/event-chat/commit/968febf4f445096c48b74d5ab35540caa0e71f64))
+
 ## [0.2.14](https://github.com/event-chat/event-chat/compare/core@v0.2.13...core@v0.2.14) (2026-03-23)
 
 
