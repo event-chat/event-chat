@@ -1,17 +1,10 @@
 import FormEvent, { type FormInputInstance } from '@event-chat/antd-item'
 import { type FormItemProps, Input } from 'antd'
 import { type ComponentProps, type ReactNode, useRef } from 'react'
-import { tv } from 'tailwind-variants'
 import type { ZodType } from 'zod'
+import { styles } from './utils'
 
 const subField = 'subscriber'
-const styles = tv({
-  slots: {
-    message: 'rounded bg-gray-800 p-4',
-    warp: 'flex max-w-150 flex-col gap-2',
-  },
-})
-
 const { message, warp } = styles()
 
 const Publisher = <Schema extends ZodType>({

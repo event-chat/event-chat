@@ -17,21 +17,15 @@ export const checkDetail = <
   Token extends boolean | undefined = undefined,
 >(
   detail: unknown,
-  { async, lang, schema }: EventChatOptions<Name, Schema, Group, Type, Token>
+  { async, schema }: EventChatOptions<Name, Schema, Group, Type, Token>
 ) => {
-  const { detailError } = lang ?? defaultLang
   if (schema) {
     const result = async ? schema.safeParseAsync(detail) : Promise.resolve(schema.safeParse(detail))
-
     return result.then((cause) =>
-      cause.success
-        ? cause
-        : Promise.reject(
-            new Error(cause.error.issues.slice(-1)[0].message ?? detailError, { cause })
-          )
+      cause.success ? cause : Promise.reject(new Error('', { cause }))
     )
   }
-  return Promise.reject(new Error(detailError))
+  return Promise.reject(new Error('schema required'))
 }
 
 export const checkLiteral = <
@@ -45,8 +39,10 @@ export const checkLiteral = <
   { group, lang, token, filter }: EventChatOptions<Name, Schema, Group, Type, Token>,
   currentToken?: string
 ) => {
-  const { customError, detailError, groupEmpty, groupProvider, tokenEmpty, tokenProvider } =
-    lang ?? defaultLang
+  const { customError, groupEmpty, groupProvider, tokenEmpty, tokenProvider } = {
+    ...defaultLang,
+    ...lang,
+  }
   const schema = z.object({
     group: literalCondition(group ?? data.global, groupProvider, groupEmpty),
     token: literalCondition(token ? currentToken : data.global, tokenProvider, tokenEmpty),
@@ -72,10 +68,7 @@ export const checkLiteral = <
         .safeParseAsync(data)
 
   return result.then((cause) => {
-    if (!cause.success)
-      return Promise.reject(
-        new Error(cause.error.issues.slice(-1)[0].message ?? detailError, { cause })
-      )
+    if (!cause.success) return Promise.reject(new Error('', { cause }))
 
     const resultData = {
       ...data,
