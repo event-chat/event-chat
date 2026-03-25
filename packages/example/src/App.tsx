@@ -34,7 +34,7 @@ const App: FC = () => {
           <TabItem name="EventChat">eventChat</TabItem>
           <TabItem name="AntdForm">antdForm</TabItem>
           <TabItem name="NamePath">namePath</TabItem>
-          <TabItem name="DebugLog">debug</TabItem>
+          <TabItem name="DebugLog">debug & error</TabItem>
           <TabItem name="Formily">formily</TabItem>
           <TabItem name="Components">components</TabItem>
         </Tabs>
