@@ -102,6 +102,7 @@ const DebugLog: FC = () => {
           <FooterTips>
             <p>
               收发都是同一事件名的情况下，不建议在 <Tag>debug</Tag> 中使用 <Tag>emit</Tag>
+              ，为了方便这里使用 <Tag>@event-chat/core</Tag> 进行演示
             </p>
             <ul className="ml-6 list-disc py-4">
               <li>
@@ -149,7 +150,8 @@ const DebugLog: FC = () => {
             </ul>
             <p>
               自定义方法 <Tag>filter</Tag> 接受一个回调参数，来自发送方向接收方提供的{' '}
-              <Tag>emit</Tag> 消息对象，详细见 <Tag>callback</Tag>。这 5
+              <Tag>emit</Tag> 消息对象，和 <Tag>callback</Tag>{' '}
+              回调接受的信息一致，详细可以查看对应文档。这 5
               个错误信息默认展示英文，为了便于查看错误信息允许通过属性 <Tag>lang</Tag>{' '}
               自定义对应的信息
             </p>
