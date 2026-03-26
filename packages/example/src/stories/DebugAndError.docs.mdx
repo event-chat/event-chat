@@ -1,6 +1,11 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
 import DebugAndError from './DebugAndError'
-import NamePathStories, { PublisherInput } from './DebugAndError.stories'
+import NamePathStories, {
+  ErrorDemo,
+  PublisherInput,
+  SingleEvent,
+  SubscriberInput,
+} from './DebugAndError.stories'
 import Header from './components/Header'
 import ListObserver from './components/ListObserver'
 
@@ -27,7 +32,7 @@ import ListObserver from './components/ListObserver'
       title: 'Code in GitHub',
       onClick: () => {
         window.open(
-          'https://github.com/event-chat/event-chat/blob/main/packages/example/src/module/namepath/PointPath.tsx',
+          'https://github.com/event-chat/event-chat/blob/main/packages/example/src/module/DebugDemo/PublisherInput.tsx',
           '_blank'
         )
       },
@@ -36,3 +41,101 @@ import ListObserver from './components/ListObserver'
   of={PublisherInput}
   sourceState="none"
 />
+
+通过 `useEventChat` 返回的 `emit` 发起的更新，并在自身 `Hooks` 上通过 `debug` 调试日志。
+
+当发送信息的事件名，并非 `emit` 所属的事件对象时，可以接受到 3 类信息：
+
+- `init`：主控的 `Hooks` 初始化后触发
+- `emit`：随每次消息发送而触发，无论发送的消息最终是否会被接收
+- `lost`：发送消息时遇到异常不能继续，通常是路径解析异常，`emit` 和 `lost` 二者会根据发送情况只能出现其中 1 个
+
+常用于主控方发送消息后，受控方没有正常响应时进行调试。因为在发送过程中，尤其 `@event-chat/antd-item` 这样的组件，开发者只能看到提供的路径名，而发送过程中提交的信息、计算的路径可以通过 `debug` 回调函数中获取
+
+在 `emit` 类型的消息中，可以看到 4 个名称：
+
+- `name`：接收方名称，在发送方看到的是发送方提供的名称，接收方通过 `callback` 拿到的是自身的事件名，二者经过计算会变为一致的路径名，而发送和接收在定义的时候可能不一样
+- `origin`：发送方名称，用于证明来源的事件名
+- `originName`：发送方提供的接收方名称，不做任何转化
+- `rule`：发送后经过计算的名称
+
+## 跟踪订阅者
+
+<Canvas
+  className="doc-render"
+  additionalActions={[
+    {
+      title: 'Code in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/event-chat/event-chat/blob/main/packages/example/src/module/DebugDemo/SubscriberInput.tsx',
+          '_blank'
+        )
+      },
+    },
+  ]}
+  of={SubscriberInput}
+  sourceState="none"
+/>
+
+在接受事件名的 `useEventCaht` 上通过 `debug` 方法获取调试日志，可以接受到 2 类信息：
+
+- `init`：受控的 `Hooks` 初始化后触发
+- `invalid`：发送方通过路径名发送和接受事件名匹配相符，但不符合受控接受规则，例如：组名不符、`schema` 不符等，若发送的信息匹配接受规则，会通过 `callback` 回调信息，不会触发 `debug`
+
+常用于主控发送的消息已匹配接收方事件名，但未被接受方匹配的消息；因为开发者只能看到设置的规则，而发送的消息为何没有匹配规则，可以通过 `debug` 获取具体原因。
+
+## 收发一起跟踪
+
+<Canvas
+  className="doc-render"
+  additionalActions={[
+    {
+      title: 'Code in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/event-chat/event-chat/blob/main/packages/example/src/module/DebugDemo/SingleEvent.tsx',
+          '_blank'
+        )
+      },
+    },
+  ]}
+  of={SingleEvent}
+  sourceState="none"
+/>
+
+收发都是同一事件名的情况下，不建议在 `debug` 中使用 `emit`，为了方便这里使用 `@event-chat/core` 进行演示
+
+- 如果要 `emit` 仅限 `status` 为 `init` 和 `invalid` 的调试信息，否则会陷入无限循环
+- 其他类型的调试信息，可以创建一个新的 `emit` 发送
+
+## 提示中的错误信息
+
+<Canvas
+  className="doc-render"
+  additionalActions={[
+    {
+      title: 'Code in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/event-chat/event-chat/blob/main/packages/example/src/module/DebugDemo/ErrorDemo.tsx',
+          '_blank'
+        )
+      },
+    },
+  ]}
+  of={ErrorDemo}
+  sourceState="none"
+/>
+
+为了便于演示，这里直接通过 `@event-chat/core` 进行演示
+
+通常验证发送消息的错误信息，通过 `zod` 在相应的 `schema` 中使用 `error` 去定义（`zod v3.0` 通过 `message` 定义）。除此之外还内置了 5 个错误信息：
+
+- `customError`：自定义错误规则的错误信息，在接收方提供一个 `filter` 属性方法进行校验
+- `groupEmpty`：非群组成员接收到来自群组成员的消息
+- `groupProvider`：群组成员接收到来自非群组成员的消息
+- `tokenEmpty`：非私信成员接受到私信
+- `tokenProvider`：私信成员接受到非私信
+
+自定义方法 `filter` 接受一个回调参数，来自发送方向接收方提供的 `emit` 消息对象，和 `callback` 回调接受的信息一致，详细可以查看对应文档。这 5 个错误信息默认展示英文，为了便于查看错误信息允许通过属性 `lang` 自定义对应的信息
