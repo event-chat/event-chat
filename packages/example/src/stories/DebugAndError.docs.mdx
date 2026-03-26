@@ -1,0 +1,38 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import DebugAndError from './DebugAndError'
+import NamePathStories, { PublisherInput } from './DebugAndError.stories'
+import Header from './components/Header'
+import ListObserver from './components/ListObserver'
+
+<Meta component={DebugAndError} of={NamePathStories} />
+
+<Header />
+
+# 调试和错误信息
+
+## 介绍
+
+`debug` 是 `@event-chat/core` 默认提供的调试方法，用于开发者方便调试使用；这里为了符合实际开发的情况，使用 `@event-chat/antd-item` 做演示。
+
+## 目录
+
+<ListObserver />
+
+## 跟踪发布者
+
+<Canvas
+  className="doc-render"
+  additionalActions={[
+    {
+      title: 'Code in GitHub',
+      onClick: () => {
+        window.open(
+          'https://github.com/event-chat/event-chat/blob/main/packages/example/src/module/namepath/PointPath.tsx',
+          '_blank'
+        )
+      },
+    },
+  ]}
+  of={PublisherInput}
+  sourceState="none"
+/>

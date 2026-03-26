@@ -1,4 +1,7 @@
 export { default as ErrorDemo } from './ErrorDemo'
 export { default as Publisher } from './Publisher'
+export { default as PublisherInput } from './PublisherInput'
 export { default as ScrollMessageList } from './ScrollMessageList'
+export { default as SingleEvent } from './SingleEvent'
+export { default as SubscriberInput } from './SubscriberInput'
 export * from './utils'
