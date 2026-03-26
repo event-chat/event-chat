@@ -36,7 +36,7 @@ const styles = tv({
       'absolute h-full w-(--selected-item-width) translate-x-(--selected-item-position) rounded-sm border border-slate-300 bg-white shadow-sm transition-[width,translate] duration-300',
     base: 'relative max-w-full transform-[translateZ(0)] rounded',
     button:
-      'cursor-pointer rounded-sm px-2 py-1 text-base font-medium text-slate-900 transition duration-200 hover:text-slate-600 focus:outline-none focus-visible:ring-2',
+      'cursor-pointer rounded-sm px-2 py-1 text-base font-medium whitespace-nowrap text-slate-900 transition duration-200 hover:text-slate-600 focus:outline-none focus-visible:ring-2',
     list: 'relative flex items-center gap-1',
     menu: 'relative',
     nav: 'tabs-container no-scrollbar shadow-inset-r-sm relative w-full max-w-full overflow-x-auto rounded border bg-slate-100 p-1',

@@ -1,56 +1,8 @@
-import {
-  ErrorDemo,
-  Publisher,
-  ScrollMessageList,
-  schema,
-  scrollEventName,
-} from '@/module/DebugDemo'
+import { ErrorDemo, PublisherInput, SingleEvent, SubscriberInput } from '@/module/DebugDemo'
 import { FooterTips } from '@/module/form'
-import FormEvent from '@event-chat/antd-item'
 import { Tag } from 'antd'
 import type { FC } from 'react'
 import Card from '@/components/Card'
-
-const PublisherInput: FC = () => {
-  const [form] = FormEvent.useForm({ group: 'publisher-input' })
-  return (
-    <Publisher
-      extra="只有长度大于 5 的纯数字的字符类型才能触发更新"
-      form={form}
-      list={<ScrollMessageList />}
-      schema={schema}
-      pubDebug={(detail) => {
-        // 放入队列以便组件入栈后收集初始化通知
-        Promise.resolve()
-          .then(() => form.emit({ name: scrollEventName, detail }))
-          .catch(() => ({}))
-      }}
-    />
-  )
-}
-
-const SubscriberInput: FC = () => {
-  const [form] = FormEvent.useForm({ group: 'subscriber-input' })
-  return (
-    <Publisher
-      extra="只有长度大于 5 的纯数字的字符类型才能触发更新"
-      form={form}
-      list={<ScrollMessageList />}
-      schema={schema}
-      subDebug={(detail) => {
-        // 放入队列以便组件入栈后收集初始化通知
-        Promise.resolve()
-          .then(() =>
-            form.emit({
-              detail: { ...detail, error: detail.error?.issues.slice(-1)[0].message },
-              name: scrollEventName,
-            })
-          )
-          .catch(() => ({}))
-      }}
-    />
-  )
-}
 
 const DebugLog: FC = () => {
   return (
@@ -149,10 +101,31 @@ const DebugLog: FC = () => {
         footer={
           <FooterTips>
             <p>
+              收发都是同一事件名的情况下，不建议在 <Tag>debug</Tag> 中使用 <Tag>emit</Tag>
+            </p>
+            <ul className="ml-6 list-disc py-4">
+              <li>
+                如果要 <Tag>emit</Tag> 仅限 <Tag>status</Tag> 为 <Tag>init</Tag> 和{' '}
+                <Tag>invalid</Tag> 的调试信息，否则会陷入无限循环
+              </li>
+              <li>
+                其他类型的调试信息，可以创建一个新的 <Tag>emit</Tag> 发送
+              </li>
+            </ul>
+          </FooterTips>
+        }
+        title="收发一起跟踪"
+      >
+        <SingleEvent />
+      </Card>
+      <Card
+        footer={
+          <FooterTips>
+            <p>
               为了便于演示，这里直接通过 <Tag>@event-chat/core</Tag> 进行演示
             </p>
             <p>
-              通常发送消息的验证的错误信息，通过 <Tag>zod</Tag> 在相应 <Tag>schema</Tag> 中使用{' '}
+              通常验证发送消息的错误信息，通过 <Tag>zod</Tag> 在相应的 <Tag>schema</Tag> 中使用{' '}
               <Tag>error</Tag> 去定义（<Tag>zod v3.0</Tag> 通过 <Tag>message</Tag>{' '}
               定义）。除此之外还内置了 5 个错误信息：
             </p>
@@ -176,7 +149,9 @@ const DebugLog: FC = () => {
             </ul>
             <p>
               自定义方法 <Tag>filter</Tag> 接受一个回调参数，来自发送方向接收方提供的{' '}
-              <Tag>emit</Tag> 消息对象，详细见 <Tag>callback</Tag>。
+              <Tag>emit</Tag> 消息对象，详细见 <Tag>callback</Tag>。这 5
+              个错误信息默认展示英文，为了便于查看错误信息允许通过属性 <Tag>lang</Tag>{' '}
+              自定义对应的信息
             </p>
           </FooterTips>
         }

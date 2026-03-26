@@ -15,7 +15,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Document',
-          ['EventChat', 'AntdItem', 'NamePath'],
+          ['EventChat', 'AntdItem', 'NamePath', 'DebugAndError'],
           'Example',
           ['Toast', 'Tabs', 'Formily'],
         ],
