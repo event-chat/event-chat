@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.17](https://github.com/event-chat/event-chat/compare/core@v0.2.16...core@v0.2.17) (2026-03-27)
+
+
+### Bug Fixes
+
+* update rules message ([1ba1ef0](https://github.com/event-chat/event-chat/commit/1ba1ef0ba4627c29a1b14d12f289a82133cf0093))
+* update rules message ([7c9d5f6](https://github.com/event-chat/event-chat/commit/7c9d5f627b9d8966740c8627d5d10ddb36a49b19))
+
 ## [0.2.16](https://github.com/event-chat/event-chat/compare/core@v0.2.15...core@v0.2.16) (2026-03-25)
 
 
