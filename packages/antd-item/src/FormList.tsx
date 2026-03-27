@@ -1,7 +1,7 @@
 import { checkDetail } from '@event-chat/core'
 import { Form as FormRaw } from 'antd'
 import { ComponentProps, RefObject, useMemo } from 'react'
-import { ZodType } from 'zod'
+import z from 'zod'
 import FormInput, { FormInputProps } from './FormInput'
 import { FormItemProvider } from './FormProvider'
 import { FormInputInstance, useFormCom, useFormItemEmit } from './utils'
@@ -9,13 +9,13 @@ import { FormInputInstance, useFormCom, useFormItemEmit } from './utils'
 const isNamepath = (value: unknown): value is number | string =>
   typeof value === 'string' || Number.isInteger(value)
 
-const FormList = <Schema extends ZodType>({
+const FormList = <Schema extends z.ZodArray | z.ZodOptional<z.ZodArray>>({
   async,
   initialValue,
   item,
   name,
   rules,
-  schema,
+  schema: sma,
   type,
   callback,
   children,
@@ -24,6 +24,8 @@ const FormList = <Schema extends ZodType>({
   ...props
 }: FormListProps<Schema>) => {
   const Form = useFormCom()
+  const schema = useMemo(() => (sma ?? z.array(z.unknown())) as Schema, [sma])
+
   const fieldName = useMemo(
     () =>
       (Array.isArray(name) ? name.filter(isNamepath) : undefined) ??
@@ -72,7 +74,7 @@ const FormList = <Schema extends ZodType>({
 
 export default FormList
 
-interface FormListProps<Schema extends ZodType>
+interface FormListProps<Schema extends z.ZodArray | z.ZodOptional<z.ZodArray>>
   extends Omit<ComponentProps<typeof FormRaw.List>, 'name'>, FormInputProps<Schema> {
   item?: RefObject<FormInputInstance>
 }

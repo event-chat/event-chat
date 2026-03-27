@@ -7,9 +7,19 @@ export const baseFormData = Object.freeze({
   name: 'base-name',
 })
 
+export const errorMessage = {
+  item: '列表项数据类型不正确',
+  list: '列表数据必须为数组类型',
+}
+
 export const listBaseInitial = [{ itemDemo: '0' }, { itemDemo: '1' }]
 
-export const listBaseSchema = z.array(z.object({ itemDemo: z.string() }))
+export const listBaseSchema = z.array(
+  z.object({ itemDemo: z.string() }, { error: errorMessage.item }),
+  {
+    error: errorMessage.list,
+  }
+)
 
 export const listFieldName = Object.freeze({
   item: 'itemDemo',

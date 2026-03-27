@@ -20,9 +20,12 @@ export const checkDetail = <
   { async, schema }: EventChatOptions<Name, Schema, Group, Type, Token>
 ) => {
   if (schema) {
+    // 这里的错误提示将作为 message 提供给消费方，例如 @event-chat/antd-item 的 rules
     const result = async ? schema.safeParseAsync(detail) : Promise.resolve(schema.safeParse(detail))
     return result.then((cause) =>
-      cause.success ? cause : Promise.reject(new Error('', { cause }))
+      cause.success
+        ? cause
+        : Promise.reject(new Error(cause.error.issues.slice(-1)[0].message, { cause }))
     )
   }
   return Promise.reject(new Error('schema required'))
