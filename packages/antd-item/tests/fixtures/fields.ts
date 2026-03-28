@@ -1,5 +1,9 @@
 import z from 'zod'
 
+const rateNumSchema = z
+  .number({ error: '分母必须是数字类型' })
+  .min(1, { error: '最小数值必须大于等于 1' })
+
 export const detailInfo = Object.freeze({ detail: 'click-detail', name: 'test-click' })
 
 export const baseFormData = Object.freeze({
@@ -31,6 +35,11 @@ export const providerDetail = Object.freeze({
   name: 'providerName',
   parent: 'parentName',
   detailInfo,
+})
+
+export const rateNumDetail = z.object({
+  denominator: rateNumSchema,
+  numerator: rateNumSchema,
 })
 
 export const renderItemTestid = (index: number) =>
