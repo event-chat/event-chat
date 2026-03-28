@@ -32,6 +32,16 @@ export const safetyPrint = (data: unknown, fallback = '') => {
   }
 }
 
+export type PickPatial<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+export type PickPatialAnother<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]?: T[P]
+}
+
+export type PickRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>
+export type PickRequiredAnother<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: T[P]
+}
+
 export type PickVariants<T, K extends keyof GetVariants<T>> = [K] extends [never]
   ? never
   : {
