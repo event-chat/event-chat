@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.19](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.18...antd-item@v0.3.19) (2026-03-28)
+
+
+### Bug Fixes
+
+* add rate demo ([eeade3d](https://github.com/event-chat/event-chat/commit/eeade3d476d61720d2281f4b834fd844854a39a5))
+* add rate demo ([cb3e891](https://github.com/event-chat/event-chat/commit/cb3e8910e4f16dfa9480090d1a82bf583a9bda4a))
+
 ## [0.3.18](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.17...antd-item@v0.3.18) (2026-03-27)
 
 
