@@ -6,10 +6,10 @@ import { type FC, useState } from 'react'
 import z from 'zod'
 
 const featchMail = (email: string) =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     setTimeout(() => {
       const result = /.*\d$/.test(email.split('@')[0])
-      return result ? resolve(email) : reject(new Error('该邮箱已注册，邮箱账号必须数字结尾'))
+      return resolve(result)
     }, 2000)
   })
 
@@ -32,10 +32,15 @@ const FormAsync: FC = () => {
                 error: '邮箱地址必须以 @event.chat 结尾',
               })
               .pipe(
-                z.email().refine((email) => {
-                  setLoading(true)
-                  return featchMail(email).finally(() => setLoading(false))
-                })
+                z.email().refine(
+                  (email) => {
+                    setLoading(true)
+                    return featchMail(email).finally(() => setLoading(false))
+                  },
+                  {
+                    error: '该邮箱已注册，邮箱账号必须数字结尾',
+                  }
+                )
               )
           )}
           validateTrigger="onBlur"
