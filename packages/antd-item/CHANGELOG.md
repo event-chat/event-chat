@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.20](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.19...antd-item@v0.3.20) (2026-03-29)
+
+
+### Bug Fixes
+
+* success formitem test ([0ffd59e](https://github.com/event-chat/event-chat/commit/0ffd59e753818aeb84197a16830719e062f8a539))
+* success formitem test ([fe3634d](https://github.com/event-chat/event-chat/commit/fe3634d903d8b58ad87ca7d961f059563e96d2ae))
+
 ## [0.3.19](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.18...antd-item@v0.3.19) (2026-03-28)
 
 
