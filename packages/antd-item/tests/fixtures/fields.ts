@@ -42,5 +42,7 @@ export const rateNumDetail = z.object({
   numerator: rateNumSchema,
 })
 
+export const rateInputSchema = z.templateLiteral([z.number(), ':', z.number()])
+
 export const renderItemTestid = (index: number) =>
   [listFieldName.list, index, listFieldName.item].join('.')
