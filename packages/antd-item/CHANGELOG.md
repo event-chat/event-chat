@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.21](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.20...antd-item@v0.3.21) (2026-03-30)
+
+
+### Bug Fixes
+
+* add item type test ([309ceae](https://github.com/event-chat/event-chat/commit/309ceae087e1dd8ff5b95619a319e09d829adc9a))
+* add item type test ([69d4298](https://github.com/event-chat/event-chat/commit/69d429853fc7155ada88b79837007b4723ab892c))
+
 ## [0.3.20](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.19...antd-item@v0.3.20) (2026-03-29)
 
 
