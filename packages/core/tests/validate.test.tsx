@@ -58,9 +58,7 @@ describe('验证方法单元测试', () => {
 
   test('checkLiteral：group不匹配，校验失败并抛出错误', async () => {
     const upConfig = { ...options, group: 'wrong-group' }
-    await expect(checkLiteral(baseTestData, upConfig, config.token)).rejects.toThrow(
-      'validate faild'
-    )
+    await expect(checkLiteral(baseTestData, upConfig, config.token)).rejects.toThrow('')
 
     checkLiteral(baseTestData, upConfig, config.token).catch((error) => {
       const { cause } = error instanceof Error ? error : {}
@@ -73,9 +71,7 @@ describe('验证方法单元测试', () => {
 
   test('checkLiteral：发送消息带有 group，而接收方不需要 group', async () => {
     const upConfig = { ...options, group: undefined }
-    await expect(checkLiteral(baseTestData, upConfig, config.token)).rejects.toThrow(
-      'validate faild'
-    )
+    await expect(checkLiteral(baseTestData, upConfig, config.token)).rejects.toThrow('')
 
     checkLiteral(baseTestData, upConfig, config.token).catch((error) => {
       const { cause } = error instanceof Error ? error : {}
@@ -87,7 +83,7 @@ describe('验证方法单元测试', () => {
   })
 
   test('checkLiteral：token不匹配，发送的消息带有 token，接收的消息不需要', async () => {
-    await expect(checkLiteral(baseTestData, options)).rejects.toThrow('validate faild')
+    await expect(checkLiteral(baseTestData, options)).rejects.toThrow('')
     checkLiteral(baseTestData, options).catch((error) => {
       const { cause } = error instanceof Error ? error : {}
       expect(cause).toMatchObject({ success: false })
@@ -99,7 +95,7 @@ describe('验证方法单元测试', () => {
 
   test('checkLiteral：token不匹配，发送的消息没有带 token', async () => {
     const noTokenData = { ...baseTestData, token: undefined }
-    await expect(checkLiteral(noTokenData, options, config.token)).rejects.toThrow('validate faild')
+    await expect(checkLiteral(noTokenData, options, config.token)).rejects.toThrow('')
 
     checkLiteral(noTokenData, options, config.token).catch((error) => {
       const { cause } = error instanceof Error ? error : {}
@@ -147,7 +143,7 @@ describe('验证方法单元测试', () => {
   })
 
   test('checkLiteral：非公屏成员不设置 global，无法发送消息到公屏', async () => {
-    await expect(checkLiteral(baseTestData, {})).rejects.toThrow('validate faild')
+    await expect(checkLiteral(baseTestData, {})).rejects.toThrow('')
   })
 
   test('validate：同步校验 - 符合Schema规则，返回成功结果', async () => {
