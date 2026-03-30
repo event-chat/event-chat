@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.18](https://github.com/event-chat/event-chat/compare/core@v0.2.17...core@v0.2.18) (2026-03-30)
+
+
+### Bug Fixes
+
+* add item type test ([309ceae](https://github.com/event-chat/event-chat/commit/309ceae087e1dd8ff5b95619a319e09d829adc9a))
+* add item type test ([69d4298](https://github.com/event-chat/event-chat/commit/69d429853fc7155ada88b79837007b4723ab892c))
+
 ## [0.2.17](https://github.com/event-chat/event-chat/compare/core@v0.2.16...core@v0.2.17) (2026-03-27)
 
 
