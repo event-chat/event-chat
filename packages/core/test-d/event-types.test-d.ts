@@ -22,7 +22,7 @@ const withSchemaOptions: EventChatOptions<'user.created', UserSchema, 'user-item
     expectType<{ id: string; name: string }>(record.detail)
   },
   debug: (result) => {
-    expectType<ResultType | undefined>(result)
+    expectType<ResultType>(result)
   },
 }
 
