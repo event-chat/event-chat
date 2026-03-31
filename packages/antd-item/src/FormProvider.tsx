@@ -28,11 +28,16 @@ const FormItemProviderInner: FC<PropsWithChildren<FormItemProviderProps>> = ({
   )
 }
 
-interface FormItemProviderProps extends Pick<FormInputInstance, 'emit'> {
-  parent?: NamepathType
-}
-
 const FormProvider = memo(FormProviderInner)
 const FormItemProvider = memo(FormItemProviderInner)
 
+if (process.env.NODE_ENV !== 'production') {
+  FormProvider.displayName = 'FormProvider'
+  FormItemProvider.displayName = 'FormItemProvider'
+}
+
 export { FormItemProvider, FormProvider }
+
+interface FormItemProviderProps extends Pick<FormInputInstance, 'emit'> {
+  parent?: NamepathType
+}
