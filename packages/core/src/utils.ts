@@ -108,6 +108,7 @@ export interface EventChatOptions<
   type?: Type
   callback?: (target: DetailType<Name, Schema, Group, Type, Token>) => void
   debug?: (result: ResultType) => void
+  // filter 一定会在 callback 前进行 validate，所以这里给了 unknown
   filter?: (detail: Omit<EventDetailType<unknown>, 'detail'>) => boolean | PromiseLike<boolean>
 }
 
