@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.19](https://github.com/event-chat/event-chat/compare/core@v0.2.18...core@v0.2.19) (2026-03-31)
+
+
+### Bug Fixes
+
+* add antd-item type test ([f473145](https://github.com/event-chat/event-chat/commit/f473145cc8619a771738ac420abecf564d83f40c))
+* add antd-item type test ([7e2bd1d](https://github.com/event-chat/event-chat/commit/7e2bd1ddddd54762719e8489eeebeb134a8c048b))
+
 ## [0.2.18](https://github.com/event-chat/event-chat/compare/core@v0.2.17...core@v0.2.18) (2026-03-30)
 
 
