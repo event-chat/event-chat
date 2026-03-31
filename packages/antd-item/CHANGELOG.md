@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.23](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.22...antd-item@v0.3.23) (2026-03-31)
+
+
+### Bug Fixes
+
+* success antd item tsd test ([4e88c6a](https://github.com/event-chat/event-chat/commit/4e88c6af9e46924c0b9cd3a87b12a33e1547a6f1))
+* success antd item tsd test ([683b2c1](https://github.com/event-chat/event-chat/commit/683b2c1763a958c003fcab4270835c1e206e63fa))
+
 ## [0.3.22](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.21...antd-item@v0.3.22) (2026-03-31)
 
 
