@@ -1,6 +1,6 @@
 {
   "name": "@event-chat/antd-item",
-  "version": "0.3.23",
+  "version": "0.3.24",
   "type": "module",
   "main": "./dist/index.js",
   "exports": {
