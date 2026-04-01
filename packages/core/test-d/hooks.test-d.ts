@@ -72,8 +72,6 @@ expectType<string>(base.token)
 expectType<EmitPropsType>(base.emit)
 expectType<void>(base.emit(testDetail))
 
-base.emit
-
 // =============================
 // 3. NamePath
 // =============================
