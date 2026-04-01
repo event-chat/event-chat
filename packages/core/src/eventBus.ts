@@ -24,7 +24,8 @@ class EventBus {
   has(eventName: string, callback?: (args: EventDetailType) => void) {
     return (
       (!this.events[eventName] ? false : undefined) ??
-      (callback ? this.events[eventName]?.includes(callback) : true)
+      (callback ? this.events[eventName]?.includes(callback) : true) ??
+      false
     )
   }
 
