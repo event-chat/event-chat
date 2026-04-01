@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.21](https://github.com/event-chat/event-chat/compare/core@v0.2.20...core@v0.2.21) (2026-04-01)
+
+
+### Bug Fixes
+
+* remove emit code ([ec392cc](https://github.com/event-chat/event-chat/commit/ec392cc6b876919d671ab5b32e62c71592b0b100))
+* success core d.ts test ([941091e](https://github.com/event-chat/event-chat/commit/941091e56ccb7d3745b556e17a365d13fcf89f8e))
+* success core d.ts test ([21c378d](https://github.com/event-chat/event-chat/commit/21c378d2396f97b64ca39549e603e06f66aeda5c))
+
 ## [0.2.20](https://github.com/event-chat/event-chat/compare/core@v0.2.19...core@v0.2.20) (2026-04-01)
 
 
