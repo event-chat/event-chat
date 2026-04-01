@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.24](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.23...antd-item@v0.3.24) (2026-04-01)
+
+
+### Bug Fixes
+
+* success core d.ts test ([941091e](https://github.com/event-chat/event-chat/commit/941091e56ccb7d3745b556e17a365d13fcf89f8e))
+* success core d.ts test ([21c378d](https://github.com/event-chat/event-chat/commit/21c378d2396f97b64ca39549e603e06f66aeda5c))
+
 ## [0.3.23](https://github.com/event-chat/event-chat/compare/antd-item@v0.3.22...antd-item@v0.3.23) (2026-03-31)
 
 
