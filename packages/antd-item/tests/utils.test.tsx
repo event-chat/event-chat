@@ -128,7 +128,7 @@ describe('useForm', () => {
   })
   test('提供一个已经扩展的 form，将沿用此对象', async () => {
     const { group, name } = providerDetail
-    const newGruop = 'new-group'
+    const newGroup = 'new-group'
     const newName = 'new-name'
     const subItem = 'sub-item'
 
@@ -137,12 +137,12 @@ describe('useForm', () => {
       const [formInit] = Form.useForm()
       const [formInstance] = utils.useForm(
         { group, name },
-        Object.assign(formInit, { group: newGruop, name: newName })
+        Object.assign(formInit, { group: newGroup, name: newName })
       )
 
       useEventChat(subItem, {
         callback: callbackMock,
-        group: newGruop,
+        group: newGroup,
       })
 
       return Object.freeze({ formInit, formInstance })
@@ -154,7 +154,7 @@ describe('useForm', () => {
     })
 
     expect(formIns).toBe(targetInit)
-    expect(formIns.group).toEqual(newGruop)
+    expect(formIns.group).toEqual(newGroup)
     expect(formIns.name).toEqual(newName)
 
     await waitFor(() => {
@@ -163,7 +163,7 @@ describe('useForm', () => {
       expect(callbackMock).toBeCalledWith(
         expect.objectContaining({
           detail: detailInfo,
-          group: newGruop,
+          group: newGroup,
           name: subItem, // 接收方原始名称
           origin: newName, // 只有 name 表示发送方
           originName: subItem, // 仍旧是接收方原始名称

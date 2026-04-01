@@ -3,7 +3,7 @@ import { expectAssignable, expectType } from 'tsd'
 import z from 'zod'
 import { EventDetailType } from '../dist'
 import { useEventChat, useMemoFn } from '../dist/hooks'
-import { DetailType, EventChatOptions, ResultType } from '../dist/utils'
+import { DetailType, EventChatOptions, ExcludeKey, NamepathType, ResultType } from '../dist/utils'
 
 const eventDetail: EventDetailType<string, 'test'> = {
   detail: 'input text',
@@ -69,7 +69,10 @@ expectType<Promise<number>>(memeoAsyncFn.current('user'))
 // =============================
 const base = useEventChat('user')
 expectType<string>(base.token)
+expectType<EmitPropsType>(base.emit)
 expectType<void>(base.emit(testDetail))
+
+base.emit
 
 // =============================
 // 3. NamePath
@@ -84,6 +87,18 @@ expectType<void>(item.emit(testDetail))
 const publish = useEventChat('test', eventOptions)
 expectType<string>(publish.token)
 expectType<void>(publish.emit(testDetail))
+expectType<void>(
+  publish.emit<
+    {
+      name: string
+    },
+    'test'
+  >(testDetail)
+)
 
 type DetailExampleType = DetailType<'test', typeof schema, 'group', 'type', true>
+type EmitPropsType = <Detail, CustomName extends NamepathType>(
+  detail: Omit<EventDetailType<Detail, CustomName>, ExcludeKey>
+) => void
+
 type EventChatExampleType = EventChatOptions<'test', typeof schema, 'group', 'type', true>
