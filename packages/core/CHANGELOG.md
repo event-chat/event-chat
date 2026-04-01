@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.20](https://github.com/event-chat/event-chat/compare/core@v0.2.19...core@v0.2.20) (2026-04-01)
+
+
+### Bug Fixes
+
+* update eventBus method has return boolean ([335e7a0](https://github.com/event-chat/event-chat/commit/335e7a079b35dc1498eb1cc1f658b42de7074dbd))
+* update eventBus method has return boolean ([39f846b](https://github.com/event-chat/event-chat/commit/39f846bdf88c5967081cd63410627c767d67725f))
+
 ## [0.2.19](https://github.com/event-chat/event-chat/compare/core@v0.2.18...core@v0.2.19) (2026-03-31)
 
 
