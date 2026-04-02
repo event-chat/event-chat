@@ -1,7 +1,8 @@
 import { describe, expect, rstest, test } from '@rstest/core'
 import { act, renderHook, waitFor } from '@testing-library/react'
 import z from 'zod'
-import { useEventChat } from '../src'
+import { useEventChat } from '../src/hooks'
+import { getEventName } from '../src/utils'
 
 const schema = z.object({
   age: z.number().min(0),
@@ -115,8 +116,16 @@ describe('useEventChat 通信', () => {
     expect(mockGroupCallback).toHaveBeenCalledTimes(1)
     expect(mockGlobalCallback).toHaveBeenCalledTimes(0)
 
-    // 追加一个群成员
-    renderHook(() => useEventChat('sub-mox', { callback: mockGroupCallback, group: 'form-item' }))
+    // 追加一个群成员不接收公屏的消息
+    renderHook(() =>
+      useEventChat('sub-mox', {
+        group: 'form-item',
+        callback: (record) => {
+          if (!record.global) mockGroupCallback(record)
+        },
+      })
+    )
+
     await act(() => {
       result.current.emit(record)
     })
@@ -129,8 +138,9 @@ describe('useEventChat 通信', () => {
       result.current.emit({ ...record, global: true })
     })
 
-    expect(mockGroupCallback).toHaveBeenCalledTimes(5)
+    expect(mockGroupCallback).toHaveBeenCalledTimes(4)
     expect(mockGlobalCallback).toHaveBeenCalledTimes(1)
+    expect(mockGlobalCallback).toBeCalledWith(expect.objectContaining({ ...record, global: true }))
   })
 
   test('用 token 发送私信', async () => {
@@ -155,6 +165,9 @@ describe('useEventChat 通信', () => {
     })
 
     expect(mockCallback).toHaveBeenCalledTimes(1)
+    expect(mockCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ ...record, token: subResult.current.token })
+    )
   })
 
   test('options 变化时回调函数应该更新', async () => {
@@ -185,14 +198,15 @@ describe('useEventChat 通信', () => {
   })
 
   test('回调函数接收的参数类型: 数据事件名', async () => {
+    const group = 'test-group'
     const name = ['sub-mox', 'list', 0, 'name'] as const
     const origin = ['pub-mox', 0, 'test'] as const
-    const group = 'test-group'
+    const type = 'type'
 
     const mockCallback = rstest.fn()
     renderHook(() => useEventChat(name, { callback: mockCallback, group }))
 
-    const { result } = renderHook(() => useEventChat(origin, { group }))
+    const { result } = renderHook(() => useEventChat(origin, { group, type }))
     const record = {
       detail: { message: 'test' },
       name,
@@ -205,23 +219,28 @@ describe('useEventChat 通信', () => {
     expect(mockCallback).toHaveBeenCalledWith(
       expect.objectContaining({
         ...record,
+        originName: name, // 采用 detail.name
+        rule: getEventName(name),
         group,
-        name,
         origin,
+        type,
       })
     )
   })
 
   test('回调函数接收的参数类型: 字符事件名', async () => {
     const group = 'test-group'
+    const name = 'sub-mox'
+    const origin = 'pub-mox'
+    const type = 'type'
+
     const mockCallback = rstest.fn()
+    renderHook(() => useEventChat(name, { callback: mockCallback, group }))
 
-    renderHook(() => useEventChat('sub-mox', { callback: mockCallback, group }))
-
-    const { result } = renderHook(() => useEventChat('pub-mox', { group }))
+    const { result } = renderHook(() => useEventChat(origin, { group, type }))
     const record = {
       detail: { message: 'test' },
-      name: 'sub-mox',
+      name,
     }
 
     await act(() => {
@@ -231,9 +250,11 @@ describe('useEventChat 通信', () => {
     expect(mockCallback).toHaveBeenCalledWith(
       expect.objectContaining({
         ...record,
-        name: 'sub-mox',
-        origin: 'pub-mox',
+        originName: name, // 采用 detail.name
+        rule: getEventName(name),
         group,
+        origin,
+        type,
       })
     )
   })
