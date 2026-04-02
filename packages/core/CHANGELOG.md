@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.22](https://github.com/event-chat/event-chat/compare/core@v0.2.21...core@v0.2.22) (2026-04-02)
+
+
+### Bug Fixes
+
+* update hooks ([49bbf51](https://github.com/event-chat/event-chat/commit/49bbf519cb7be1d8c35afd0c5cc57242f8466469))
+* update hooks ([e05b8fd](https://github.com/event-chat/event-chat/commit/e05b8fded2aa3c7ae31995df97bfddd2045004a1))
+
 ## [0.2.21](https://github.com/event-chat/event-chat/compare/core@v0.2.20...core@v0.2.21) (2026-04-01)
 
 
