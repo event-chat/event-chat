@@ -3,7 +3,7 @@ import { ConfigProvider, Divider, Rate, Space } from 'antd'
 import { type FC, type ReactNode, useCallback, useState } from 'react'
 import z from 'zod'
 import Button from '@/components/Button'
-import { type EerrorItem, ErrorResultList } from '@/components/ErrorResultList'
+import { type DebugItem, type EerrorItem, ErrorResultList } from '@/components/ErrorResultList'
 import StatusCard, { type StatusCardProps } from '@/components/StatusCard'
 import Toast from '@/components/toast'
 import { toastOpen } from '@/utils/event'
@@ -92,14 +92,22 @@ const RateInput: FC<RateInputProps> = ({ value, onChange }) => (
 )
 
 const FormRate: FC = () => {
-  const [debug, setDebug] = useState<EerrorItem[]>([])
+  const [debug, setDebug] = useState<DebugItem[]>([])
   const [form] = FormEvent.useForm({ group: 'form-rate' })
 
   const debugHandle = useCallback(
     (name: string, log?: EerrorItem) => {
       if (log?.status === 'invalid') {
+        const { data } = log
+        const { time } = data
         setDebug((current) =>
-          current.concat([{ ...log, data: `[${name}]: ${safetyPrint(log.data) ?? ''}` }])
+          current.concat([
+            {
+              ...log,
+              data: `[${name}]: ${safetyPrint(data.detail) ?? ''}`,
+              time,
+            },
+          ])
         )
 
         form.emit({

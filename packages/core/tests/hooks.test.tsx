@@ -1,10 +1,9 @@
 import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core'
 import { act, renderHook } from '@testing-library/react'
-import z from 'zod'
 import eventBus from '../src/eventBus'
 import { useEventChat } from '../src/hooks'
 import { EventName, getEventName, mountEvent } from '../src/utils'
-import { eventName, message, pubName, testEventData } from './fixtures/fields'
+import { eventName, pubName, testEventData } from './fixtures/fields'
 
 // 模拟 document.body.dispatchEvent
 const mockDispatchEvent = rstest.fn()

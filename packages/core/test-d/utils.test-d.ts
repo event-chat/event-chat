@@ -71,6 +71,8 @@ const name2: NamepathType = 1
 const name3: NamepathType = ['a', 1]
 const name4: NamepathType = ['a', 1] as const
 
+const resultData = { id: 'id', name: 'emit-name', origin: 'origin-name', time: new Date() }
+
 // EventName & defaultLang
 expectType<'custom-event-chat'>(EventName)
 expectAssignable<Readonly<NonNullable<EventChatExampleType['lang']>>>(defaultLang)
@@ -86,10 +88,17 @@ expectType<string>(testDetail.token)
 expectType<'type'>(testDetail.type)
 
 // ResultType
-expectAssignable<ResultType>({ data: '', status: 'emit', time: new Date() })
-expectAssignable<ResultType>({ data: '', status: 'init', time: new Date() })
-expectAssignable<ResultType>({ data: '', status: 'lost', time: new Date() })
-expectAssignable<ResultType>({ data: '', status: 'invalid', success: false, time: new Date() })
+expectAssignable<ResultType>({ data: resultData, status: 'emit' })
+expectAssignable<ResultType>({
+  data: { ...resultData, origin: 'emit-name' },
+  status: 'init',
+})
+expectAssignable<ResultType>({ data: resultData, lost: new Error('test-lost'), status: 'lost' })
+expectAssignable<ResultType>({
+  data: resultData,
+  status: 'invalid',
+  success: false,
+})
 
 // EventChatOptions
 expectType<EventChatExampleType>(eventOptions)

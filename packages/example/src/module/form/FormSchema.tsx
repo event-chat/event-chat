@@ -2,10 +2,11 @@ import FormEvent from '@event-chat/antd-item'
 import { Form, Input, InputNumber } from 'antd'
 import { type FC, useState } from 'react'
 import z from 'zod'
-import { type EerrorItem, ErrorResultList } from '@/components/ErrorResultList'
+import { type DebugItem, ErrorResultList } from '@/components/ErrorResultList'
+import { safetyPrint } from '@/utils/fields'
 
 const FormSchema: FC = () => {
-  const [debug, setDebug] = useState<EerrorItem[]>([])
+  const [debug, setDebug] = useState<DebugItem[]>([])
   const [form] = FormEvent.useForm({ group: 'form-schema' })
   return (
     <div className="max-w-150">
@@ -29,7 +30,18 @@ const FormSchema: FC = () => {
           name={['target', 'number']}
           schema={z.number().nullish()}
           debug={(log) => {
-            if (log.status === 'invalid') setDebug((current) => current.concat([log]))
+            const { data, status } = log
+            const { time } = data
+            if (status === 'invalid')
+              setDebug((current) =>
+                current.concat([
+                  {
+                    ...log,
+                    data: safetyPrint(data.detail) ?? '',
+                    time,
+                  },
+                ])
+              )
           }}
         >
           <InputNumber disabled />

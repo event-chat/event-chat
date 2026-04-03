@@ -55,7 +55,7 @@ export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
                 <p className="mb-1 text-sm font-medium text-red-600">错误原因：</p>
                 <div className="rounded-md bg-red-50 p-2 text-xs text-red-700">
                   <ul className="list-inside list-disc space-y-1">
-                    <li>{error.error?.message}</li>
+                    <li>{error.error?.issues.slice(-1)[0].message}</li>
                   </ul>
                 </div>
               </div>
@@ -67,12 +67,12 @@ export const ErrorResultList: FC<ErrorResultListProps> = ({ errors }) => {
   )
 }
 
-// 复用你定义的类型
+export type DebugItem = Omit<EerrorItem, 'data'> & { data: string; time: Date }
 export type EerrorItem = NonNullable<Parameters<NonNullable<EventChatOptions<string>['debug']>>[0]>
 
 // 错误列表组件
 interface ErrorResultListProps {
-  errors: EerrorItem[] // 错误列表数据
+  errors: DebugItem[] // 错误列表数据
 }
 
 // 组件使用示例

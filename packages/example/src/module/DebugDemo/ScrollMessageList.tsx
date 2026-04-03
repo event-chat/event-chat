@@ -7,9 +7,8 @@ import { safetyPrint } from '@/utils/fields'
 import { scrollEventName } from './utils'
 
 const schema = z.object({
-  data: z.unknown(),
+  data: z.looseObject({ time: z.date() }),
   status: z.string(),
-  time: z.date(),
   error: z.string().optional(),
 })
 
@@ -28,12 +27,12 @@ const styles = tv({
 const { content, errorMsg, itemGroup, messages, scroll, title, type } = styles()
 
 const MessageItem: FC<MessageItemProps> = ({ item }) => {
-  const { data, error, status, time } = item
+  const { data, error, status } = item
   return (
     <div className={itemGroup()}>
       <div className={title()}>
         <span className={type()}>[{status}]</span>
-        <span>{time.toLocaleString()}</span>
+        <span>{data.time.toLocaleString()}</span>
       </div>
       <div className={content()}>
         <div>{safetyPrint(data)}</div>
@@ -72,7 +71,7 @@ const ScrollMessageList: FC = () => {
     <div className={scroll()}>
       <div className={messages()} ref={messageRef}>
         {list.map((item, index) => {
-          const keyname = `${item.time.getTime()}:${index}`
+          const keyname = `${item.data.time.getTime()}:${index}`
           return <MessageItem item={item} key={keyname} />
         })}
       </div>

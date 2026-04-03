@@ -152,9 +152,9 @@ export type NamepathType =
   | Readonly<Array<string | number>>
 
 export type ResultType<Schema = unknown> = Partial<Omit<z.ZodSafeParseError<Schema>, 'data'>> & {
-  data: unknown
+  data: PickPatial<EventDetailType, 'originName' | 'rule'>
   status: 'emit' | 'init' | 'invalid' | 'lost'
-  time: Date
+  lost?: unknown
 }
 
 // 工具类型：判断在调用中，泛型 T 是否“实际上被提供了参数”
@@ -171,3 +171,5 @@ export type WasProvided<T, Default = undefined> =
 interface CustomDetailEvent extends Event {
   detail?: EventDetailType
 }
+
+type PickPatial<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
