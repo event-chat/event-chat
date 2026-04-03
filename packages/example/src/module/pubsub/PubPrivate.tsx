@@ -54,9 +54,11 @@ const PubPrivate: FC = () => {
     debug: (result) => {
       if (result.status !== 'invalid') return
       const { issues = [] } = result?.error ?? {}
-      const { data } = result ?? {}
-      const id: unknown = typeof data === 'object' && data ? Reflect.get(data, 'id') : undefined
+      const {
+        data: { detail: data },
+      } = result ?? {}
 
+      const id: unknown = typeof data === 'object' && data ? Reflect.get(data, 'id') : undefined
       if (issues.length > 0) {
         emit({
           detail: {

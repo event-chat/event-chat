@@ -47,15 +47,20 @@ export function useEventChat<
   const tokenRc = useMemoFn(token)
 
   const errorHandle = useCallback(
-    (error: unknown, data: unknown, time: Date) => {
+    (error: unknown, data: EventDetailType) => {
       const { debug } = options.current ?? {}
       if (error instanceof Error && debug) {
         const cause = isResultType(error.cause) ? error.cause : undefined
-        debug?.({ ...cause, status: 'invalid', data, time })
+        debug?.({ ...cause, status: 'invalid', data })
       }
     },
     [options]
   )
+
+  const getResult = useCallback(() => {
+    const { group, type, debug } = options.current ?? {}
+    return [{ origin: nameRc.current, time: new Date(), group, id, type }, debug] as const
+  }, [id, nameRc, options])
 
   const callbackHandle = useCallback(
     (data: EventDetailType) => {
@@ -63,7 +68,7 @@ export function useEventChat<
       const opitem = options.current
 
       if (!opitem) return
-      const throwError = (error: unknown) => errorHandle(error, data.detail, data.time)
+      const throwError = (error: unknown) => errorHandle(error, data)
 
       if (opitem.schema !== undefined) {
         validate(upRecord, { ...opitem, schema: opitem.schema }, tokenRc.current)
@@ -82,28 +87,19 @@ export function useEventChat<
     <Detail, CustomName extends NamepathType>(
       detail: Omit<EventDetailType<Detail, CustomName>, ExcludeKey>
     ) => {
-      const { group, type, debug } = options.current ?? {}
-      const time = new Date()
+      const [data, debug] = getResult()
+      const current = { ...detail, ...data, originName: detail.name, rule: '' }
       try {
-        const rule = combinePath(detail.name, nameRc.current)
-        const event = createEvent({
-          ...detail,
-          origin: nameRc.current,
-          originName: detail.name,
-          group,
-          id,
-          rule,
-          time,
-          type,
-        })
+        current.rule = combinePath(detail.name, data.origin)
+        const event = createEvent(current)
 
-        debug?.({ data: event.detail, status: 'emit', time })
+        debug?.({ data: event.detail, status: 'emit' })
         document.body.dispatchEvent(event)
       } catch (error) {
-        debug?.({ data: { name: nameRc.current, detail, error }, status: 'lost', time })
+        debug?.({ data: current, lost: error, status: 'lost' })
       }
     },
-    [id, nameRc, options]
+    [getResult]
   )
 
   useEffect(() => {
@@ -114,8 +110,9 @@ export function useEventChat<
   }, [])
 
   useEffect(() => {
-    options.current?.debug?.({ data: { name: nameRc.current }, status: 'init', time: new Date() })
-  }, [nameRc, options])
+    const [data, debug] = getResult()
+    debug?.({ data: { ...data, name: origin }, status: 'init' })
+  }, [getResult])
 
   useEffect(() => {
     eventBus.on(eventName, callbackHandle)

@@ -93,7 +93,7 @@ describe('useEventChat 通信', () => {
       expect(mockCallback).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,
-          data: record.detail,
+          data: expect.objectContaining(record),
         })
       )
     })

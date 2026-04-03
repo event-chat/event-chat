@@ -118,9 +118,8 @@ describe('FormInput', () => {
     })
 
     expect(debugMock).toBeCalledTimes(2)
-    expect(debugMock).toBeCalledWith(
-      expect.objectContaining({ data: errorDetail, status: 'invalid' })
-    )
+    expect(debugMock).toBeCalledWith(expect.objectContaining({ status: 'invalid' }))
+    expect(debugMock.mock.calls.slice(-1)[0][0]).toMatchObject({ data: { detail: errorDetail } })
   })
   test('测试 3：提供 parent 会自动组合上下文，发起通信', async () => {
     const { group, name } = providerDetail
