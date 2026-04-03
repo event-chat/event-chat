@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.23](https://github.com/event-chat/event-chat/compare/core@v0.2.22...core@v0.2.23) (2026-04-03)
+
+
+### Bug Fixes
+
+* update debug record ([7db47d4](https://github.com/event-chat/event-chat/commit/7db47d40838e51b767ffab811925e26f09799c86))
+* update debug record ([afc82f5](https://github.com/event-chat/event-chat/commit/afc82f5c270c809cce7b8548af3d3d642f26be2a))
+
 ## [0.2.22](https://github.com/event-chat/event-chat/compare/core@v0.2.21...core@v0.2.22) (2026-04-02)
 
 
