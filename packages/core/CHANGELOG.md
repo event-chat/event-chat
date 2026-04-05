@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.24](https://github.com/event-chat/event-chat/compare/core@v0.2.23...core@v0.2.24) (2026-04-05)
+
+
+### Bug Fixes
+
+* update receive type ([b5d6426](https://github.com/event-chat/event-chat/commit/b5d6426d8e347792c7dd8cfd31729cb7776d817b))
+* update receive type ([5fca45e](https://github.com/event-chat/event-chat/commit/5fca45ecca34ce36e71c2fab513facc68afacf15))
+
 ## [0.2.23](https://github.com/event-chat/event-chat/compare/core@v0.2.22...core@v0.2.23) (2026-04-03)
 
 
