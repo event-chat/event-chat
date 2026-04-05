@@ -30,6 +30,17 @@ export const defaultLang = Object.freeze({
 })
 
 export const EventName = 'custom-event-chat'
+export const combinePath = (name: NamepathType, origin: NamepathType) => {
+  const namepath = getEventName(name, (text) => text)
+  const orgpath = getEventName(origin)
+
+  if (namepath.startsWith('.') || namepath.startsWith('[')) {
+    return Path.parse(namepath, orgpath).toString()
+  }
+
+  return namepath
+}
+
 export const createEvent = <Detail, Name extends NamepathType = string>(
   detail: EventDetailType<Detail, Name>
 ) =>
@@ -44,17 +55,6 @@ export const createToken = (key: string): string =>
 
 export const getConditionKey = (name: string, id: string, type?: string) =>
   [name, id, type].filter(Boolean).join('-')
-
-export const combinePath = (name: NamepathType, origin: NamepathType) => {
-  const namepath = getEventName(name, (text) => text)
-  const orgpath = getEventName(origin)
-
-  if (namepath.startsWith('.') || namepath.startsWith('[')) {
-    return Path.parse(namepath, orgpath).toString()
-  }
-
-  return namepath
-}
 
 export const getEventName = (name: NamepathType, filter?: typeof escapeSpecialSymbols) => {
   const cachePath = cacheEventName(name)
