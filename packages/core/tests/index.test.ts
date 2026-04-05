@@ -3,6 +3,8 @@ import z from 'zod'
 import { useEventChat } from '../src/hooks'
 import * as IndexExports from '../src/index'
 import { createToken } from '../src/utils'
+import { checkDetail } from '../src/validate'
+import { customLang } from './fixtures/fields'
 
 const userSchema = z.object({
   id: z.string(),
@@ -19,6 +21,11 @@ describe('index 出口文件导出验证', () => {
   test('正确导出 useEventChat', () => {
     expect(IndexExports.useEventChat).toBe(useEventChat)
     expect(IndexExports.useEventChat).toBeInstanceOf(Function)
+  })
+
+  test('正确导出 checkDetail', () => {
+    expect(IndexExports.checkDetail).toBe(checkDetail)
+    expect(IndexExports.checkDetail).toBeInstanceOf(Function)
   })
 
   test('正确导出 createToken', () => {
@@ -39,11 +46,18 @@ describe('index 出口文件导出验证', () => {
       'user.created',
       UserSchema,
       'user-items',
-      'created'
+      'created',
+      boolean
     > = {
+      async: false,
       group: 'user-items',
+      lang: customLang,
       schema: userSchema,
+      token: true,
       type: 'created',
+      callback: (record) => record,
+      debug: (log) => log,
+      filter: (record) => Boolean(record),
     }
 
     const withoutSchemaOptions: IndexExports.EventChatOptions<
@@ -73,8 +87,22 @@ describe('index 出口文件导出验证', () => {
       token: 'abc-123',
     }
 
+    const ExcludeList: IndexExports.ExcludeKey[] = [
+      'group',
+      'id',
+      'origin',
+      'originName',
+      'rule',
+      'time',
+      'type',
+    ]
+
+    const dependencies: IndexExports.NamepathType[] = ['name', 1, ['sub', 0, 'name']]
+
     expect(withoSchemaOptions).toBeDefined()
     expect(withoutSchemaOptions).toBeDefined()
     expect(eventDetail).toBeDefined()
+    expect(ExcludeList).toBeDefined()
+    expect(dependencies).toBeDefined()
   })
 })

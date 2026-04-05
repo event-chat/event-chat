@@ -204,9 +204,9 @@ describe('useEventChat 通信', () => {
     const type = 'type'
 
     const mockCallback = rstest.fn()
-    renderHook(() => useEventChat(name, { callback: mockCallback, group }))
+    renderHook(() => useEventChat(name, { callback: mockCallback, group, type }))
 
-    const { result } = renderHook(() => useEventChat(origin, { group, type }))
+    const { result } = renderHook(() => useEventChat(origin, { group }))
     const record = {
       detail: { message: 'test' },
       name,
@@ -223,7 +223,6 @@ describe('useEventChat 通信', () => {
         rule: getEventName(name),
         group,
         origin,
-        type,
       })
     )
   })
@@ -235,9 +234,9 @@ describe('useEventChat 通信', () => {
     const type = 'type'
 
     const mockCallback = rstest.fn()
-    renderHook(() => useEventChat(name, { callback: mockCallback, group }))
+    renderHook(() => useEventChat(name, { callback: mockCallback, group, type }))
 
-    const { result } = renderHook(() => useEventChat(origin, { group, type }))
+    const { result } = renderHook(() => useEventChat(origin, { group }))
     const record = {
       detail: { message: 'test' },
       name,

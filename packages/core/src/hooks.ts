@@ -58,14 +58,14 @@ export function useEventChat<
   )
 
   const getResult = useCallback(() => {
-    const { group, type, debug } = options.current ?? {}
-    return [{ origin: nameRc.current, time: new Date(), group, id, type }, debug] as const
+    const { group, debug } = options.current ?? {}
+    return [{ origin: nameRc.current, time: new Date(), group, id }, debug] as const
   }, [id, nameRc, options])
 
   const callbackHandle = useCallback(
     (data: EventDetailType) => {
-      const upRecord = { ...data, name: nameRc.current }
       const opitem = options.current
+      const upRecord = { ...data, name: nameRc.current, type: opitem?.type }
 
       if (!opitem) return
       const throwError = (error: unknown) => errorHandle(error, data)
