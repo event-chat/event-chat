@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.25](https://github.com/event-chat/event-chat/compare/core@v0.2.24...core@v0.2.25) (2026-04-06)
+
+
+### Bug Fixes
+
+* success core test ([04cf894](https://github.com/event-chat/event-chat/commit/04cf8942602dbc726f37585448f24a15be0ab98c))
+* success core test ([04466ae](https://github.com/event-chat/event-chat/commit/04466aea8752807479f4f6fd04f07225356ca137))
+
 ## [0.2.24](https://github.com/event-chat/event-chat/compare/core@v0.2.23...core@v0.2.24) (2026-04-05)
 
 
