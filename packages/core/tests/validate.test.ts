@@ -1,64 +1,56 @@
 import { describe, expect, test } from '@rstest/core'
-import { z } from 'zod'
-import { EventDetailType } from '../src'
+import z from 'zod'
 import { defaultLang } from '../src/utils'
 import { checkDetail, checkLiteral, validate } from '../src/validate'
 import { customLang } from './fixtures/fields'
-
-const message = 'hello validation'
-const name = 'test-event' as const
-const config = {
-  group: 'test-group',
-  token: 'test-token-456',
-}
-
-const baseTestData: EventDetailType<{ message: string }> = {
-  ...config,
-  detail: { message },
-  id: 'test-id-123',
-  origin: 'test-origin',
-  originName: 'test-origin',
-  rule: name,
-  time: new Date(),
-  type: 'test-type',
+import {
+  baseTestData,
+  config,
+  message,
   name,
-}
+  options,
+  printFirstError,
+  testErrorTips,
+} from './fixtures/validate'
 
-const testSchema = z.object({
-  message: z.string().min(3, '消息长度不能少于3个字符'),
-})
+describe('validate: 验证方法单元测试', () => {
+  test('checkDetail：同步校验 - 符合Schema规则，返回成功结果', () => {
+    checkDetail(baseTestData.detail, options).then((result) => {
+      expect(result).toEqual({ data: baseTestData.detail, success: true })
+    })
+  })
 
-const options = {
-  ...config,
-  schema: testSchema,
-  token: true,
-}
+  test('checkDetail：同步校验 - 不符合Schema规则，抛出错误并携带cause', async () => {
+    const invalidDetail = { message: 'hi' }
+    const checked = checkDetail(invalidDetail, options)
+    const { rejects } = await expect(checked)
 
-const getPath = (data: unknown, path: string): unknown => {
-  const namePath = path.split('.')
-  const propert = namePath.shift()
+    await rejects.toThrow(testErrorTips)
+    await rejects.toHaveProperty('cause')
+    checked.catch((error) => {
+      const toBe = printFirstError(error)
+      toBe('error.issues.0.message', testErrorTips)
+    })
+  })
 
-  if (data instanceof Object && data && propert) {
-    const target = Reflect.get(data, propert)
-    return namePath.length === 0 ? target : getPath(target, namePath.join('.'))
-  }
-  return undefined
-}
+  test('checkDetail：异步校验 - 符合Schema规则，返回成功结果', () => {
+    checkDetail(baseTestData.detail, {
+      ...options,
+      async: true,
+      schema: options.schema.refine(async () => true),
+    }).then((result) => {
+      expect(result).toEqual({ data: baseTestData.detail, success: true })
+    })
+  })
 
-const printFirstError = (error: unknown) => {
-  const { cause } = error instanceof Error ? error : {}
-  expect(cause).toMatchObject({ success: false })
+  test('checkDetail：没有提供 schema 爆出异常', async () => {
+    const checked = checkDetail(baseTestData.detail, {})
+    const { rejects } = await expect(checked)
+    await rejects.toThrow('schema required')
+  })
 
-  return (path: string, tips: string) => {
-    const issue = getPath(cause, path)
-    expect(issue).toBe(tips)
-  }
-}
-
-describe('验证方法单元测试', () => {
   test('checkLiteral：group和token均匹配，校验成功', async () => {
     const result = await checkLiteral(baseTestData, options, config.token)
-
     expect(result.detail).toEqual({ message })
     expect(result).toHaveProperty('group', baseTestData.group)
     expect(result).toHaveProperty('id', baseTestData.id)
@@ -209,28 +201,68 @@ describe('验证方法单元测试', () => {
     })
   })
 
-  test('checkDetail：同步校验 - 符合Schema规则，返回成功结果', () => {
-    checkDetail(baseTestData.detail, options).then((result) => {
-      expect(result).toEqual({ data: baseTestData.detail, success: true })
+  // 这里需要调用方法中的验证规则，不能通过单纯的 mock 模拟测试
+  // 通过触发异常来看调用的执行方法
+  test('validate: checkLiteral 检测不通过的情况下，不会调用 checkDetail', () => {
+    validate({ ...baseTestData, global: true }, { filter: () => false }, 'fake-token').catch(
+      (error: unknown) => {
+        const toBe = printFirstError(error)
+        toBe('error.issues.0.message', defaultLang.customError)
+      }
+    )
+
+    validate(baseTestData, {}, 'fake-token').catch((error: unknown) => {
+      const toBe = printFirstError(error)
+      toBe('error.issues.0.message', defaultLang.groupEmpty)
     })
+
+    validate(baseTestData, { group: 'fake-group' }, 'fake-token').catch((error: unknown) => {
+      const toBe = printFirstError(error)
+      toBe('error.issues.0.message', defaultLang.groupProvider)
+    })
+
+    validate(baseTestData, { group: baseTestData.group }, 'fake-token').catch((error: unknown) => {
+      const toBe = printFirstError(error)
+      toBe('error.issues.0.message', defaultLang.tokenEmpty)
+    })
+
+    validate(baseTestData, { group: baseTestData.group, token: true }, 'fake-token').catch(
+      (error: unknown) => {
+        const toBe = printFirstError(error)
+        toBe('error.issues.0.message', defaultLang.tokenProvider)
+      }
+    )
   })
 
-  test('validate：同步校验 - 不符合Schema规则，抛出错误并携带cause', async () => {
-    const invalidDetail = { message: 'hi' }
-    const checked = validate({ ...baseTestData, detail: invalidDetail }, options, config.token)
-    const { rejects } = await expect(checked)
-
-    await rejects.toThrow('消息长度不能少于3个字符')
-    await rejects.toHaveProperty('cause')
-    checked.catch((error) => {
-      expect(getPath(error, 'cause.success')).toBe(false)
-      expect(getPath(error, 'cause.error.issues.0.message')).toBe('消息长度不能少于3个字符')
-    })
+  test('validate: checkLiteral 检测通过下，调用 checkDetail 检测 schema', () => {
+    validate({ ...baseTestData, detail: { message: 'hi' } }, options, config.token).catch(
+      (error: unknown) => {
+        const toBe = printFirstError(error)
+        toBe('error.issues.0.message', testErrorTips)
+      }
+    )
   })
 
-  test('validate：异步校验 - 符合Schema规则，返回成功结果', () => {
-    validate(baseTestData, { ...options, async: true }, config.token).then((result) => {
-      expect(result).toEqual(baseTestData)
+  // 发送方提供验证的数据将在 hooks 完成修改，即使用接受方的 name 和 type
+  // 所以最终只校验 group、token、filter、schema，通过后会将提供的 detail 作为 callback 的回调数据返回
+  test('validate: 校验通过的情况下，返回对应数据', () => {
+    validate(baseTestData, options, config.token).then((info) => {
+      expect(info).toMatchObject(baseTestData)
+    })
+
+    // 因为提供的 schema 指定了类型，发送的数据也会严格按照 schema 返回
+    const detail = { ...baseTestData.detail, name: 'levi' }
+    validate({ ...baseTestData, detail }, options, config.token).then((info) => {
+      expect(info).toMatchObject(baseTestData)
+    })
+
+    // 调整 schema 为松散模式
+    validate(
+      { ...baseTestData, detail },
+      { ...options, schema: z.looseObject(options.schema.shape) },
+      config.token
+    ).then((info) => {
+      expect(info).toMatchObject({ ...baseTestData, detail })
     })
   })
 })

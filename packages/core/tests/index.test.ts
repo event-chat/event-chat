@@ -17,7 +17,7 @@ type CustomDetail = {
   timestamp: number
 }
 
-describe('index 出口文件导出验证', () => {
+describe('index: 出口文件导出验证', () => {
   test('正确导出 useEventChat', () => {
     expect(IndexExports.useEventChat).toBe(useEventChat)
     expect(IndexExports.useEventChat).toBeInstanceOf(Function)

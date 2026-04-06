@@ -23,7 +23,7 @@ beforeEach(() => {
   eventBus.clear()
 })
 
-describe('EventBus 核心功能测试', () => {
+describe('eventBus: EventBus 核心功能测试', () => {
   test('on 注册事件后，emit 能出发对应的回调函数', () =>
     new Promise((done, reject) => {
       const testCallback = (data: EventDetailType) => {
