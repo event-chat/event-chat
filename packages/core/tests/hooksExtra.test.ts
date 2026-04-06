@@ -6,7 +6,7 @@ import { ResultType } from '../src/utils'
 import { customLang, eventName, pubName, testEventData } from './fixtures/fields'
 
 // 由于 hook 做了全局 mock，将一部分单测方到这里
-describe('useEventChat 补充测试', () => {
+describe('hooks: useEventChat 补充测试', () => {
   test('处理异步 schema', async () => {
     const { result } = renderHook(() => useEventChat(pubName, { group: testEventData.group }))
     const refineMock = rstest.fn(() => Promise.resolve(true))

@@ -144,7 +144,7 @@ const renderSubitems = async <T extends NamepathType>(name: T) => {
   })
 }
 
-describe('useEventChat 通信路径', () => {
+describe('emit: useEventChat 通信路径', () => {
   test('使用不同的路径发起通信: a[0].1', () => {
     renderSubitems('a[0].1')
   })

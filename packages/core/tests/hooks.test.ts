@@ -26,7 +26,7 @@ afterEach(() => {
   rstest.restoreAllMocks()
 })
 
-describe('useEventChat 基础功能', () => {
+describe('hooks: useEventChat 基础功能', () => {
   test('返回有效的 token 字符串和 emit 函数', () => {
     const { result } = renderHook(() => useEventChat(eventName))
     const { token, emit } = result.current

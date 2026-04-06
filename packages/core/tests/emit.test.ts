@@ -10,7 +10,7 @@ const schema = z.object({
   name: z.string(),
 })
 
-describe('useEventChat 通信', () => {
+describe('emit: useEventChat 通信', () => {
   test('回调处理应该触发回调函数 - 无 schema', async () => {
     const mockCallback = rstest.fn()
     renderHook(() => useEventChat('sub-mox', { callback: mockCallback }))
