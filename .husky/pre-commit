@@ -1,1 +1,13 @@
+#!/bin/sh
+
+# 开启严格模式：任意命令失败则立即退出脚本
+set -e
+
+echo "🔍 执行子包测试用例..."
+pnpm --filter @event-chat/core test:all
+pnpm --filter @event-chat/antd-item test:all
+
+echo "🔍 检查暂存区文件（lint-staged）..."
 pnpm exec lint-staged
+
+echo "✅ 所有校验通过，可提交代码"

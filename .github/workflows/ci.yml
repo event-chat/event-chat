@@ -80,7 +80,13 @@ jobs:
         # 方式2：仅校验指定子包（如@event-chat/core）
         # run: pnpm --filter @event-chat/core lint
 
-      # 9. 上传构建产物（适配monorepo子包的dist路径）
+      # 9. 运行单测
+      - name: Run test
+        run: |
+          pnpm --filter @event-chat/core test:all
+          pnpm --filter @event-chat/antd-item test:all
+
+      # 10. 上传构建产物（适配monorepo子包的dist路径）
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         if: success()
