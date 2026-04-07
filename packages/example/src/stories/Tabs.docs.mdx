@@ -1,12 +1,16 @@
-import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
-import Tabs from './Tabs';
-import TabsStories, { Default } from './Tabs.stories';
-import './assets/story-styles.css';
-import ListObserver from './components/ListObserver';
-import TableList from './components/TableList';
-import Tag from './components/Tag';
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks'
+import Tabs from './Tabs'
+import TabsStories, { Default } from './Tabs.stories'
+import './assets/story-styles.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import ListObserver from './components/ListObserver'
+import TableList from './components/TableList'
+import Tag from './components/Tag'
 
 <Meta component={Tabs} of={TabsStories} />
+
+<Header />
 
 # 示例：`Tabs` 标签页
 
@@ -28,7 +32,7 @@ import Tag from './components/Tag';
         window.open(
           'https://github.com/cgfeel/event-chat/blob/main/packages/example/src/components/Tabs.tsx',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -63,3 +67,5 @@ import Tag from './components/Tag';
     },
   ]}
 />
+
+<Footer />

@@ -1,373 +1,196 @@
 import { Meta } from '@storybook/addon-docs/blocks'
-
-import EventChatWhite from './assets/EventChatWhite.png'
-import Accessibility from './assets/accessibility.png'
-import AddonLibrary from './assets/addon-library.png'
-import Assets from './assets/assets.png'
-import Context from './assets/context.png'
-import Discord from './assets/discord.svg'
-import Docs from './assets/docs.png'
-import FigmaPlugin from './assets/figma-plugin.png'
-import Github from './assets/github.svg'
-import Share from './assets/share.png'
-import Styling from './assets/styling.png'
-import Testing from './assets/testing.png'
-import Theming from './assets/theming.png'
-import Tutorials from './assets/tutorials.svg'
-import Youtube from './assets/youtube.svg'
+import Footer from './components/Footer'
 import Header from './components/Header'
 
-export const RightArrow = () => (
-  <svg
-    viewBox="0 0 14 14"
-    width="8px"
-    height="14px"
-    style={{
-      marginLeft: '4px',
-      display: 'inline-block',
-      shapeRendering: 'inherit',
-      verticalAlign: 'middle',
-      fill: 'currentColor',
-      'path fill': 'currentColor',
-    }}
-  >
-    <path d="m11.1 7.35-5.5 5.5a.5.5 0 0 1-.7-.7L10.04 7 4.9 1.85a.5.5 0 1 1 .7-.7l5.5 5.5c.2.2.2.5 0 .7Z" />
-  </svg>
-)
-
-<Meta title="Configure your project" />
+<Meta title="Get Started" />
 
 <Header />
 
-<div className="sb-container">
-  <div className='sb-section-title'>
-    # Configure your project
+# `event chat` 像聊天一样跨组建通信
 
-    Because Storybook works separately from your app, you'll need to configure it for your specific stack and setup. Below, explore guides for configuring Storybook with popular frameworks and tools. If you get stuck, learn how you can ask for help from our community.
-
-  </div>
-  <div className="sb-section">
-    <div className="sb-section-item">
-      <img
-        src={Styling}
-        alt="A wall of logos representing different styling technologies"
-      />
-      <h4 className="sb-section-item-heading">Add styling and CSS</h4>
-      <p className="sb-section-item-paragraph">Like with web applications, there are many ways to include CSS within Storybook. Learn more about setting up styling within Storybook.</p>
-      <a
-        href="https://storybook.js.org/docs/configure/styling-and-css/?renderer=react&ref=configure"
-        target="_blank"
-      >Learn more<RightArrow /></a>
-    </div>
-    <div className="sb-section-item">
-      <img
-        src={Context}
-        alt="An abstraction representing the composition of data for a component"
-      />
-      <h4 className="sb-section-item-heading">Provide context and mocking</h4>
-      <p className="sb-section-item-paragraph">Often when a story doesn't render, it's because your component is expecting a specific environment or context (like a theme provider) to be available.</p>
-      <a
-        href="https://storybook.js.org/docs/writing-stories/decorators/?renderer=react&ref=configure#context-for-mocking"
-        target="_blank"
-      >Learn more<RightArrow /></a>
-    </div>
-    <div className="sb-section-item">
-      <img src={Assets} alt="A representation of typography and image assets" />
-      <div>
-        <h4 className="sb-section-item-heading">Load assets and resources</h4>
-        <p className="sb-section-item-paragraph">To link static files (like fonts) to your projects and stories, use the
-        `staticDirs` configuration option to specify folders to load when
-        starting Storybook.</p>
-        <a
-          href="https://storybook.js.org/docs/configure/images-and-assets/?renderer=react&ref=configure"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-    </div>
-  </div>
-</div>
-<div className="sb-container">
-  <div className='sb-section-title'>
-    # Do more with Storybook
-
-    Now that you know the basics, let's explore other parts of Storybook that will improve your experience. This list is just to get you started. You can customise Storybook in many ways to fit your needs.
-
-  </div>
-
-  <div className="sb-section">
-    <div className="sb-features-grid">
-      <div className="sb-grid-item">
-        <img src={Docs} alt="A screenshot showing the autodocs tag being set, pointing a docs page being generated" />
-        <h4 className="sb-section-item-heading">Autodocs</h4>
-        <p className="sb-section-item-paragraph">Auto-generate living,
-          interactive reference documentation from your components and stories.</p>
-        <a
-          href="https://storybook.js.org/docs/writing-docs/autodocs/?renderer=react&ref=configure"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-      <div className="sb-grid-item">
-        <img src={Share} alt="A browser window showing a Storybook being published to a chromatic.com URL" />
-        <h4 className="sb-section-item-heading">Publish to Chromatic</h4>
-        <p className="sb-section-item-paragraph">Publish your Storybook to review and collaborate with your entire team.</p>
-        <a
-          href="https://storybook.js.org/docs/sharing/publish-storybook/?renderer=react&ref=configure#publish-storybook-with-chromatic"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-      <div className="sb-grid-item">
-        <img src={FigmaPlugin} alt="Windows showing the Storybook plugin in Figma" />
-        <h4 className="sb-section-item-heading">Figma Plugin</h4>
-        <p className="sb-section-item-paragraph">Embed your stories into Figma to cross-reference the design and live
-          implementation in one place.</p>
-        <a
-          href="https://storybook.js.org/docs/sharing/design-integrations/?renderer=react&ref=configure#embed-storybook-in-figma-with-the-plugin"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-      <div className="sb-grid-item">
-        <img src={Testing} alt="Screenshot of tests passing and failing" />
-        <h4 className="sb-section-item-heading">Testing</h4>
-        <p className="sb-section-item-paragraph">Use stories to test a component in all its variations, no matter how
-          complex.</p>
-        <a
-          href="https://storybook.js.org/docs/writing-tests/?renderer=react&ref=configure"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-      <div className="sb-grid-item">
-        <img src={Accessibility} alt="Screenshot of accessibility tests passing and failing" />
-        <h4 className="sb-section-item-heading">Accessibility</h4>
-        <p className="sb-section-item-paragraph">Automatically test your components for a11y issues as you develop.</p>
-        <a
-          href="https://storybook.js.org/docs/writing-tests/accessibility-testing/?renderer=react&ref=configure"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-      <div className="sb-grid-item">
-        <img src={Theming} alt="Screenshot of Storybook in light and dark mode" />
-        <h4 className="sb-section-item-heading">Theming</h4>
-        <p className="sb-section-item-paragraph">Theme Storybook's UI to personalize it to your project.</p>
-        <a
-          href="https://storybook.js.org/docs/configure/theming/?renderer=react&ref=configure"
-          target="_blank"
-        >Learn more<RightArrow /></a>
-      </div>
-    </div>
-  </div>
-</div>
-<div className='sb-addon'>
-  <div className='sb-addon-text'>
-    <h4>Addons</h4>
-    <p className="sb-section-item-paragraph">Integrate your tools with Storybook to connect workflows.</p>
-    <a
-        href="https://storybook.js.org/addons/?ref=configure"
-        target="_blank"
-      >Discover all addons<RightArrow /></a>
-  </div>
-  <div className='sb-addon-img'>
-    <img src={AddonLibrary} alt="Integrate your tools with Storybook to connect workflows." />
-  </div>
+<div className="tag-info">
+  ![License](https://img.shields.io/github/license/event-chat/event-chat) ![NPM
+  Version](https://img.shields.io/npm/v/%40event-chat%2Fcore?label=%40event-char%2Fcore) ![NPM
+  Version](https://img.shields.io/npm/v/%40event-chat%2Fantd-item?label=%40event-chat%2Fantd-item)
+  ![GitHub Actions](https://github.com/event-chat/event-chat/actions/workflows/ci.yml/badge.svg)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-3178c6)
+  ![React](https://img.shields.io/badge/React-18+-3178c6)
+  ![Zod](https://img.shields.io/badge/zod-3+-3178c6)
 </div>
 
-<div className="sb-section sb-socials">
-    <div className="sb-section-item">
-      <img src={Github} alt="Github logo" className="sb-explore-image"/>
-      Join our contributors building the future of UI development.
+在组件中提供通信的事件名即可相互通信，消息会仅在收发两点响应。无论组件是夸父子关系或无层级关系，都能够实现跨层级通信，而不用担心因触发更新引起整个组件树重渲染。
 
-      <a
-        href="https://github.com/storybookjs/storybook"
-        target="_blank"
-      >Star on GitHub<RightArrow /></a>
-    </div>
-    <div className="sb-section-item">
-      <img src={Discord} alt="Discord logo" className="sb-explore-image"/>
-      <div>
-        Get support and chat with frontend developers.
+目前提供 2 个独立的包，分别为：`@event-chat/core` 和 `@event-chat/antd-item`，前者提供核心通信功能，后者提供了基于 `antd` 的 UI 组件库。你可以根据需要选择安装和使用其中一个或两个包。
 
-        <a
-          href="https://discord.gg/storybook"
-          target="_blank"
-        >Join Discord server<RightArrow /></a>
-      </div>
-    </div>
-    <div className="sb-section-item">
-      <img src={Youtube} alt="Youtube logo" className="sb-explore-image"/>
-      <div>
-        Watch tutorials, feature previews and interviews.
+## 特性
 
-        <a
-          href="https://www.youtube.com/@chromaticui"
-          target="_blank"
-        >Watch on YouTube<RightArrow /></a>
-      </div>
-    </div>
-    <div className="sb-section-item">
-      <img src={Tutorials} alt="A book" className="sb-explore-image"/>
-      <p>Follow guided walkthroughs on for key workflows.</p>
+[`@event-chat/core`]:
 
-      <a
-          href="https://storybook.js.org/tutorials/?ref=configure"
-          target="_blank"
-        >Discover tutorials<RightArrow /></a>
-    </div>
+- 跨组件层级通信的核心包，提供了通信、调试、广播、群组、私信、异步消息的能力
+- 基于 `zod` 的 `Schema` 支持消息类型定义和校验
+- 基于 `@formily/path` 支持事件名路径配置，包括：通配符、相对路径、反向路径等
+- 轻量级设计，整个包仅为几 kb，简单易用
 
-</div>
+[`@event-chat/antd-item`]:
+
+- 基于 `antd` 的 UI 组件库，结合 `@event-chat/core` 对 `Form` 表单系列组件的扩展
+- 是 `zod` 对 `antd` 完美支持的实践
+- 通过路径系统实现了 `antd` 对 `formily` 相互通信的实践
+- 扩展现有的 `Form` 组件增强了依赖更新，增加了相对路径匹配的能力
+
+## 计划支持
+
+`React` 正式引入 `Signals` 特性之前会提供支持
+
+## 快速上手
+
+安装依赖
+
+```bash
+# npm
+npm install @event-chat/core
+
+# yarn
+yarn add @event-chat/core
+
+# pnpm
+pnpm add @event-chat/core
+```
+
+实现一个简单的相互通信
+
+```tsx
+const PubMox: FC = () => {
+  const { emit } = useEventChat('pub-mox', {
+    callback: (detail) => console.log('a----pub-mox', detail),
+  })
+
+  return (
+    <button type="button" onClick={() => emit({ name: 'sub-mox' })}>
+      click it
+    </button>
+  )
+}
+
+const SubMox: FC = () => {
+  const { emit } = useEventChat('sub-mox', {
+    callback: (detail) => console.log('a----sub-mox', detail),
+  })
+
+  return (
+    <button type="button" onClick={() => emit({ name: 'pub-mox' })}>
+      click it
+    </button>
+  )
+}
+```
+
+其他特性参考当前文档其他篇章
+
+## 单元测试
+
+```bash
+Run pnpm --filter @event-chat/core test:all
+  pnpm --filter @event-chat/core test:all
+  pnpm --filter @event-chat/antd-item test:all
+  shell: /usr/bin/bash -e {0}
+
+> @event-chat/core@0.2.25 test:all /home/runner/work/event-chat/event-chat/packages/core
+> tsd && rstest --coverage
+
+  Rstest v0.7.2
+
+ Coverage enabled with istanbul
+
+ ✓ tests/eventBus.test.ts (10)
+ ✓ tests/emit.test.ts (9)
+ ✓ tests/emitPath.test.ts (4)
+ ✓ tests/index.test.ts (5)
+ ✓ tests/hooks.test.ts (7)
+ ✓ tests/hooksExtra.test.ts (3)
+ ✓ tests/validate.test.ts (17)
+ ✓ tests/utils.test.ts (12)
+ ✓ tests/namePath.test.ts (6)
+
+ Test Files 9 passed
+      Tests 73 passed
+   Duration 7.01s (build 2.94s, tests 4.07s)
+
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------|---------|----------|---------|---------|-------------------
+All files       |   96.23 |    86.45 |   97.91 |   96.87 |
+ src            |      96 |    87.35 |   97.77 |   97.05 |
+  eventBus.ts   |   95.65 |    84.61 |     100 |     100 | 26-33
+  hooks.ts      |      96 |    81.25 |     100 |   97.91 | 99
+  index.ts      |       0 |        0 |       0 |       0 |
+  utils.ts      |      96 |    86.48 |     100 |   95.45 | 17,82
+  validate.ts   |   96.29 |    95.23 |      90 |   95.65 | 64
+ tests/fixtures |   97.22 |    77.77 |     100 |   95.83 |
+  validate.ts   |   96.15 |    77.77 |     100 |   94.73 | 13
+----------------|---------|----------|---------|---------|-------------------
+
+> @event-chat/antd-item@0.3.25 test:all /home/runner/work/event-chat/event-chat/packages/antd-item
+> tsd && rstest --coverage
+
+  Rstest v0.7.2
+
+ Coverage enabled with istanbul
+
+ ✓ tests/FormInput.test.tsx (4)
+ ✓ tests/FormContainer.test.tsx (4)
+ ✓ tests/FormEvent.test.tsx (3)
+  ✓ FormEvent > 测试 1：组件能正常渲染子组件 (346ms)
+ ✓ tests/FormProvider.test.tsx (3)
+ ✓ tests/FormList.test.tsx (5)
+  ✓ FormList > 测试 1：组件能正常渲染列表中的子组件 (382ms)
+ ✓ tests/FormItem.test.tsx (8)
+ ✓ tests/utils.test.tsx (17)
+
+ Test Files 7 passed
+      Tests 44 passed
+   Duration 11.9s (build 3.13s, tests 8.80s)
+
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   96.77 |    76.28 |   90.41 |   96.35 |
+ src               |   99.13 |    80.82 |   90.47 |   99.04 |
+  ...Container.tsx |     100 |     62.5 |      80 |     100 | 5,29
+  FormEvent.tsx    |     100 |    88.88 |      80 |     100 | 54
+  FormInput.tsx    |     100 |    81.81 |     100 |     100 | 19-41
+  FormItem.tsx     |   85.71 |      100 |   66.66 |   85.71 | 46
+  FormList.tsx     |     100 |     62.5 |     100 |     100 | 10-44
+  FormProvider.tsx |     100 |       50 |     100 |     100 | 34
+  utils.ts         |     100 |    94.73 |   92.85 |     100 | 40
+ tests/components  |   90.76 |     62.5 |   89.65 |      90 |
+  Consumer.tsx     |   85.71 |      100 |     100 |   83.33 | 15
+  CustomInput.tsx  |     100 |       50 |     100 |     100 | 12
+  FormListDemo.tsx |     100 |    71.42 |     100 |     100 | 19-65
+  RateInput.tsx    |   66.66 |       50 |      50 |   66.66 | 10-13,38-43
+-------------------|---------|----------|---------|---------|-------------------
+```
+
+## 适用范围
+
+适用于所有事件通信：
+
+- 浏览器事件：鼠标事件、键盘事件、表单事件、窗口 & 文档事件、资源加载事件、移动端触摸事件、剪切板事件、拖拽事件、动画&过渡事件、自定义事件、网络 & 其他事件
+- 通信事件：`iframe` 跨浏览器通信、`Broadcast` 广播、`web Worker` 多线程通信、`Service Worker` 后台通信、`Web Socket` 实时通信等
+- React 虚拟事件：与浏览器事件对应的合成事件、自定义 `props` 回调事件
+
+不适用于：
+
+- 跨组件维护公共的数据和状态，这种情适用任意状态机代替更合适，例如：`React Context`、`Zustand`、`Redux` 等
+
+设计的初衷在于提供一个即用即走，简单的通信库。
+
+<Footer />
 
 <style>
   {`
-  .sb-container {
-    margin-bottom: 48px;
-  }
-
-  .sb-section {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-  }
-
-  img {
-    object-fit: cover;
-  }
-
-  .sb-section-title {
-    margin-bottom: 32px;
-  }
-
-  .sb-section a:not(h1 a, h2 a, h3 a) {
-    font-size: 14px;
-  }
-
-  .sb-section-item, .sb-grid-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .sb-section-item-heading {
-    padding-top: 20px !important;
-    padding-bottom: 5px !important;
-    margin: 0 !important;
-  }
-  .sb-section-item-paragraph {
-    margin: 0;
-    padding-bottom: 10px;
-  }
-
-  .sb-chevron {
-    margin-left: 5px;
-  }
-
-  .sb-features-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 32px 20px;
-  }
-
-  .sb-socials {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .sb-socials p {
-    margin-bottom: 10px;
-  }
-
-  .sb-explore-image {
-    max-height: 32px;
-    align-self: flex-start;
-  }
-
-  .sb-addon {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    background-color: #EEF3F8;
-    border-radius: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    background: #EEF3F8;
-    height: 180px;
-    margin-bottom: 48px;
-    overflow: hidden;
-  }
-
-  .sb-addon-text {
-    padding-left: 48px;
-    max-width: 240px;
-  }
-
-  .sb-addon-text h4 {
-    padding-top: 0px;
-  }
-
-  .sb-addon-img {
-    position: absolute;
-    left: 345px;
-    top: 0;
-    height: 100%;
-    width: 200%;
-    overflow: hidden;
-  }
-
-  .sb-addon-img img {
-    width: 650px;
-    transform: rotate(-15deg);
-    margin-left: 40px;
-    margin-top: -72px;
-    box-shadow: 0 0 1px rgba(255, 255, 255, 0);
-    backface-visibility: hidden;
-  }
-
-  @media screen and (max-width: 800px) {
-    .sb-addon-img {
-      left: 300px;
-    }
-  }
-
-  @media screen and (max-width: 600px) {
-    .sb-section {
-      flex-direction: column;
-    }
-
-    .sb-features-grid {
-      grid-template-columns: repeat(1, 1fr);
-    }
-
-    .sb-socials {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .sb-addon {
-      height: 280px;
-      align-items: flex-start;
-      padding-top: 32px;
-      overflow: hidden;
-    }
-
-    .sb-addon-text {
-      padding-left: 24px;
-    }
-
-    .sb-addon-img {
-      right: 0;
-      left: 0;
-      top: 130px;
-      bottom: 0;
-      overflow: hidden;
-      height: auto;
-      width: 124%;
-    }
-
-    .sb-addon-img img {
-      width: 1200px;
-      transform: rotate(-12deg);
-      margin-left: 0;
-      margin-top: 48px;
-      margin-bottom: -40px;
-      margin-left: -24px;
-    }
+  .tag-info img {
+    display: inline-block;
   }
   `}
 </style>

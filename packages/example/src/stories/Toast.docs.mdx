@@ -1,12 +1,16 @@
-import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
-import Toast from './Toast';
-import ToastStories, { DurationZero, Error, Info, Success, Warning } from './Toast.stories';
-import './assets/story-styles.css';
-import ListObserver from './components/ListObserver';
-import TableList from './components/TableList';
-import Tag from './components/Tag';
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks'
+import Toast from './Toast'
+import ToastStories, { DurationZero, Error, Info, Success, Warning } from './Toast.stories'
+import './assets/story-styles.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import ListObserver from './components/ListObserver'
+import TableList from './components/TableList'
+import Tag from './components/Tag'
 
 <Meta component={Toast} of={ToastStories} />
+
+<Header />
 
 # 示例：`Toast` 悬浮提示
 
@@ -28,7 +32,7 @@ import Tag from './components/Tag';
         window.open(
           'https://github.com/cgfeel/event-chat/tree/main/packages/example/src/components/toast',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -103,7 +107,7 @@ import Tag from './components/Tag';
         window.open(
           'https://github.com/cgfeel/event-chat/tree/main/packages/example/src/components/toast',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -120,7 +124,7 @@ import Tag from './components/Tag';
         window.open(
           'https://github.com/cgfeel/event-chat/tree/main/packages/example/src/components/toast',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -137,7 +141,7 @@ import Tag from './components/Tag';
         window.open(
           'https://github.com/cgfeel/event-chat/tree/main/packages/example/src/components/toast',
           '_blank'
-        );
+        )
       },
     },
   ]}
@@ -154,9 +158,11 @@ import Tag from './components/Tag';
         window.open(
           'https://github.com/cgfeel/event-chat/tree/main/packages/example/src/components/toast',
           '_blank'
-        );
+        )
       },
     },
   ]}
   of={DurationZero}
 />
+
+<Footer />

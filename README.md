@@ -2,202 +2,177 @@
 
 <img height="144" width="464" alt="EventChatBgWhite" src="https://github.com/user-attachments/assets/db33f365-5abb-4041-a95c-fe3fe0acfa16" />
 
-- 提供一个自己的名字，和回调方法，`hooks` 会返回一个 `emit`
-- 用 `emit` 可以向指定名称发送特定消息，任意组件也可以提供事件名用于接收消息
-- 无论是否是父子层级都能相互通信，不会引发不必要的 `rerender`
+![License](https://img.shields.io/github/license/event-chat/event-chat) ![NPM
+  Version](https://img.shields.io/npm/v/%40event-chat%2Fcore?label=%40event-char%2Fcore) ![NPM
+  Version](https://img.shields.io/npm/v/%40event-chat%2Fantd-item?label=%40event-chat%2Fantd-item)
+![GitHub Actions](https://github.com/event-chat/event-chat/actions/workflows/ci.yml/badge.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-3178c6)
+![React](https://img.shields.io/badge/React-18+-3178c6)
+![Zod](https://img.shields.io/badge/zod-3+-3178c6)
 
-如下所示：
+在组件中提供通信的事件名即可相互通信，消息会仅在收发两点响应。无论组件是夸父子关系或无层级关系，都能够实现跨层级通信，而不用担心因触发更新引起整个组件树重渲染。
 
-```typescript
+目前提供 2 个独立的包，分别为：`@event-chat/core` 和 `@event-chat/antd-item`，前者提供核心通信功能，后者提供了基于 `antd` 的 UI 组件库。你可以根据需要选择安装和使用其中一个或两个包。
+
+## 特性
+
+[`@event-chat/core`]:
+
+- 跨组件层级通信的核心包，提供了通信、调试、广播、群组、私信、异步消息的能力
+- 基于 `zod` 的 `Schema` 支持消息类型定义和校验
+- 基于 `@formily/path` 支持事件名路径配置，包括：通配符、相对路径、反向路径等
+- 轻量级设计，整个包仅为几 kb，简单易用
+
+[`@event-chat/antd-item`]:
+
+- 基于 `antd` 的 UI 组件库，结合 `@event-chat/core` 对 `Form` 表单系列组件的扩展
+- 是 `zod` 对 `antd` 完美支持的实践
+- 通过路径系统实现了 `antd` 对 `formily` 相互通信的实践
+- 扩展现有的 `Form` 组件增强了依赖更新，增加了相对路径匹配的能力
+
+## 计划支持
+
+`React` 正式引入 `Signals` 特性之前会提供支持
+
+## 快速上手
+
+安装依赖
+
+```bash
+# npm
+npm install @event-chat/core
+
+# yarn
+yarn add @event-chat/core
+
+# pnpm
+pnpm add @event-chat/core
+```
+
+实现一个简单的相互通信
+
+```tsx
 const PubMox: FC = () => {
-  const { emit } = useEventChat("pub-mox", {
-    callback: (detail) => console.log("a----pub-mox", detail),
-  });
+  const { emit } = useEventChat('pub-mox', {
+    callback: (detail) => console.log('a----pub-mox', detail),
+  })
 
   return (
-    <button type="button" onClick={() => emit({ name: "sub-mox" })}>
+    <button type="button" onClick={() => emit({ name: 'sub-mox' })}>
       click it
     </button>
-  );
-};
-```
+  )
+}
 
-```typescript
 const SubMox: FC = () => {
-  const { emit } = useEventChat("sub-mox", {
-    callback: (detail) => console.log("a----sub-mox", detail),
-  });
+  const { emit } = useEventChat('sub-mox', {
+    callback: (detail) => console.log('a----sub-mox', detail),
+  })
 
   return (
-    <button type="button" onClick={() => emit({ name: "pub-mox" })}>
+    <button type="button" onClick={() => emit({ name: 'pub-mox' })}>
       click it
     </button>
-  );
-};
+  )
+}
 ```
 
-## 单元测试全覆盖
+其他特性参考文档：https://event-chat.github.io/event-chat/
 
-```shell
-$ pnpm --filter @event-chat/core run test:all
+## 单元测试
 
-> @event-chat/core@0.1.0 test:all /Volumes/develope/app/test/react-dev-exp/event-chat/packages/core
+```bash
+Run pnpm --filter @event-chat/core test:all
+  pnpm --filter @event-chat/core test:all
+  pnpm --filter @event-chat/antd-item test:all
+  shell: /usr/bin/bash -e {0}
+
+> @event-chat/core@0.2.25 test:all /home/runner/work/event-chat/event-chat/packages/core
 > tsd && rstest --coverage
 
   Rstest v0.7.2
 
  Coverage enabled with istanbul
 
- ✓ tests/eventBus.test.tsx (10)
- ✓ tests/index.test.tsx (4)
- ✓ tests/utils.test.tsx (10)
- ✓ tests/validate.test.tsx (9)
- ✓ tests/hooks.test.tsx (7)
- ✓ tests/emit.test.tsx (7)
+ ✓ tests/eventBus.test.ts (10)
+ ✓ tests/emit.test.ts (9)
+ ✓ tests/emitPath.test.ts (4)
+ ✓ tests/index.test.ts (5)
+ ✓ tests/hooks.test.ts (7)
+ ✓ tests/hooksExtra.test.ts (3)
+ ✓ tests/validate.test.ts (17)
+ ✓ tests/utils.test.ts (12)
+ ✓ tests/namePath.test.ts (6)
 
- Test Files 6 passed
-      Tests 47 passed
-   Duration 3.42s (build 682ms, tests 2.74s)
+ Test Files 9 passed
+      Tests 73 passed
+   Duration 7.01s (build 2.94s, tests 4.07s)
+
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------|---------|----------|---------|---------|-------------------
+All files       |   96.23 |    86.45 |   97.91 |   96.87 |
+ src            |      96 |    87.35 |   97.77 |   97.05 |
+  eventBus.ts   |   95.65 |    84.61 |     100 |     100 | 26-33
+  hooks.ts      |      96 |    81.25 |     100 |   97.91 | 99
+  index.ts      |       0 |        0 |       0 |       0 |
+  utils.ts      |      96 |    86.48 |     100 |   95.45 | 17,82
+  validate.ts   |   96.29 |    95.23 |      90 |   95.65 | 64
+ tests/fixtures |   97.22 |    77.77 |     100 |   95.83 |
+  validate.ts   |   96.15 |    77.77 |     100 |   94.73 | 13
+----------------|---------|----------|---------|---------|-------------------
+
+> @event-chat/antd-item@0.3.25 test:all /home/runner/work/event-chat/event-chat/packages/antd-item
+> tsd && rstest --coverage
+
+  Rstest v0.7.2
+
+ Coverage enabled with istanbul
+
+ ✓ tests/FormInput.test.tsx (4)
+ ✓ tests/FormContainer.test.tsx (4)
+ ✓ tests/FormEvent.test.tsx (3)
+  ✓ FormEvent > 测试 1：组件能正常渲染子组件 (346ms)
+ ✓ tests/FormProvider.test.tsx (3)
+ ✓ tests/FormList.test.tsx (5)
+  ✓ FormList > 测试 1：组件能正常渲染列表中的子组件 (382ms)
+ ✓ tests/FormItem.test.tsx (8)
+ ✓ tests/utils.test.tsx (17)
+
+ Test Files 7 passed
+      Tests 44 passed
+   Duration 11.9s (build 3.13s, tests 8.80s)
+
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   96.77 |    76.28 |   90.41 |   96.35 |
+ src               |   99.13 |    80.82 |   90.47 |   99.04 |
+  ...Container.tsx |     100 |     62.5 |      80 |     100 | 5,29
+  FormEvent.tsx    |     100 |    88.88 |      80 |     100 | 54
+  FormInput.tsx    |     100 |    81.81 |     100 |     100 | 19-41
+  FormItem.tsx     |   85.71 |      100 |   66.66 |   85.71 | 46
+  FormList.tsx     |     100 |     62.5 |     100 |     100 | 10-44
+  FormProvider.tsx |     100 |       50 |     100 |     100 | 34
+  utils.ts         |     100 |    94.73 |   92.85 |     100 | 40
+ tests/components  |   90.76 |     62.5 |   89.65 |      90 |
+  Consumer.tsx     |   85.71 |      100 |     100 |   83.33 | 15
+  CustomInput.tsx  |     100 |       50 |     100 |     100 | 12
+  FormListDemo.tsx |     100 |    71.42 |     100 |     100 | 19-65
+  RateInput.tsx    |   66.66 |       50 |      50 |   66.66 | 10-13,38-43
+-------------------|---------|----------|---------|---------|-------------------
 ```
 
-## 特性
+## 适用范围
 
-### 只接收指定类型的消息
+适用于所有事件通信：
 
-这里通过 `Zod` 来实现，提供一个 `schema` 后只有类型匹配的消息才会被接收。如下：
+- 浏览器事件：鼠标事件、键盘事件、表单事件、窗口 & 文档事件、资源加载事件、移动端触摸事件、剪切板事件、拖拽事件、动画&过渡事件、自定义事件、网络 & 其他事件
+- 通信事件：`iframe` 跨浏览器通信、`Broadcast` 广播、`web Worker` 多线程通信、`Service Worker` 后台通信、`Web Socket` 实时通信等
+- React 虚拟事件：与浏览器事件对应的合成事件、自定义 `props` 回调事件
 
-```typescript
-const { emit } = useEventChat('pub-mox', {
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    ingredients: z.array(z.string()),
-  }),
-  callback: (record) => console.log('a----pub-mox', record),
-});
-```
+不适用于：
 
-上方 `callback` 中拿到的参数类型如下：
+- 跨组件维护公共的数据和状态，这种情适用任意状态机代替更合适，例如：`React Context`、`Zustand`、`Redux` 等
 
-```typescript
-(parameter) record: DetailType<"pub-mox", z.ZodObject<{
-  title: z.ZodString;
-  description: z.ZodOptional<z.ZodString>;
-  ingredients: z.ZodArray<z.ZodString>;
-}, z.core.$strip>>
-
-type DetailType<Name extends string = string, Schema extends ZodType = ZodType> = {
-  __origin: string;
-  name: Name;
-  detail?: z.infer<Schema>;
-};
-```
-
-> 消息尽管发，但 `callback` 接收到的一定是开始就约定好的结构和类型
-
-`emit` 接受的参数类型如下：
-
-- `detail`：要发送的消息内容，接收方如果有条件限制，消息的类型结构需要按照约定来
-- `global`：群组会话发送公屏消息
-- `name`：接收事件会话的名称
-- `token`：私信令牌
-
-### 异步消息
-
-对于 `Zod` 是允许异步校验的，这里通过 `async` 来实现，例如：
-
-```typescript
-const { emit } = useEventChat('pub-mox', {
-  async: true,
-  schema: z.string().refine(async (id) => {
-    // verify that ID exists in database
-    return true;
-  }),
-  callback: (record) => console.log('a----pub-mox', record),
-});
-```
-
-### 群组消息
-
-设置 `group` 后将只接受来自成员组的组内消息，例如：
-
-```typescript
-useEventChat('pub-mox', {
-  group: 'form-detail-edit',
-  callback: (record) => console.log('a----pub-mox', record),
-});
-
-const { emit: groupEmit } = useEventChat('sub-mox', {
-  group: 'form-detail-edit',
-});
-
-const { emit: outEmit } = useEventChat('out-mox');
-
-groupEmit({ name: 'pub-mox' }); // ✅ 能够顺利发送
-outEmit({ name: 'pub-mox' }); // ❎ 发送的消息收组内不到
-```
-
-对于组内的成员，如果需要在 “公屏” 喊话，调用 `emit` 时可以提供一个 `global`，比如上面的 `groupEmit` 可以这样：
-
-```typescript
-groupEmit({ global: true, name: 'pub-mox' });
-```
-
-那么非组内的 `pub-mox` 都可以接收到消息了。对于非组内成员，只能通过 `group` 设置成为组内成员才能相互通信，设计就是如此
-
-### 私信
-
-- 提供参数 `token: true` 后，将只接受 `emit` 时通过指定 `token` 发送的消息。
-- 每次创建会话时 `token` 会连同 `emit` 一起返回
-- 将拿到的 `token` 提供给消费方（例如：`props`、`context`...）
-
-```typescript
-const { token } = useEventChat('pub-mox', {
-  token: true,
-  callback: (record) => console.log('a----pub-mox', record),
-});
-
-const { emit } = useEventChat('sub-mox');
-emit({ name: 'pub-mox', token });
-```
-
-### 调试
-
-和 `callback` 一样，提供一个 `debug` 回调函数，将收集所有通过 `emit` 发送的，同名且未能触发事件的消息，例如：
-
-```typescript
-useEventChat('pub-mox', {
-  group: 'form-detail-edit',
-  callback: (record) => console.log('a----pub-mox', record),
-  debug: (item, result) => console.log('a----pub-log', item, result),
-});
-```
-
-参数 `item` 为发送的消息，类型 `unknown`，参数 `result` 的类型为：`ResultType | undefined`，来自 `safeParse` 得到的结果：
-
-```typescript
-type ResultType = z.ZodSafeParseResult<unknown>;
-```
-
-## 写在最后
-
-### 实现原理
-
-- 借助 `body` 做事件转发，通过 `eventBus` 执行监听和回调
-
-### 设计初衷
-
-- 跨组建通信，不受层级影响，通信不触发整个组件树 `rerender`
-- 状态机也可以做到，但本着即用即走的思维，不会去为了通信去维护一个 `store`
-
-### 启发
-
-- 原本公司项目，想起 `jQuery` 时代事件委托流行过很久，自行研究 `pub-sub` 订阅模式，解决父子组件通信
-- 这个模式借助了 `React` 合成事件冒泡，但有个缺点：只能子传父且需要借助额外的 `div` 捕获事件
-- 后来想起 `React` 的合成事件都挂载在 `root` 上，于是我借助了 `body`（如三体借助太阳广播事件）
-- 再后来想到，不能什么消息都接收，于是制定了：消息类型、异步、群组和私信
-
-### `event-chat` 适用范围
-
-- 适用，所有需要通过事件进行通信的情况，例如：点击、`observer`、`Promise` 响应（按情况）
-- 不适用，初始数据保存和传递，通过条件判断已销毁或未挂载的组件
+设计的初衷在于提供一个即用即走，简单的通信库。
