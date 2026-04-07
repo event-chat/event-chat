@@ -4,7 +4,7 @@ import type { FC } from 'react'
 const Footer: FC = () => (
   <div className="flex flex-col gap-2 pt-10">
     <Divider />
-    <div>
+    <div className="text-right">
       <a
         className="inline-flex items-center"
         href="https://github.com/event-chat/event-chat"
