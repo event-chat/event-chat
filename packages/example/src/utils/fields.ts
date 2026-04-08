@@ -50,6 +50,8 @@ export type PickVariants<T, K extends keyof GetVariants<T>> = [K] extends [never
 
 export type PickVariantItem<T, K extends keyof GetVariants<T>> = NonNullable<GetVariants<T>[K]>
 
+export type ValueOf<T> = T[keyof T]
+
 type GetVariants<T> = T extends (...args: [infer P, ...unknown[]]) => unknown
   ? NonNullable<P>
   : never
