@@ -3,7 +3,12 @@ import { Outlet } from 'react-router'
 import NavigationManager from './NavigationManager'
 import { createRouteComponentBindLoading } from './helper/factory'
 
-const createRouteComponent = createRouteComponentBindLoading(<LoadingOutlined />)
+const createRouteComponent = createRouteComponentBindLoading(
+  <div className="animate-fade-in-up flex w-full items-center justify-center gap-4">
+    <LoadingOutlined />
+    loading...
+  </div>
+)
 
 const routes = [
   {
@@ -19,9 +24,9 @@ const routes = [
         path: '/antd-form',
       },
       {
-        element: createRouteComponent(() => import('../pages/Namepath')),
-        handle: { title: 'NamePath 示例' },
-        path: '/name-path',
+        element: createRouteComponent(() => import('../pages/Components')),
+        handle: { title: 'Components 示例' },
+        path: '/components',
       },
       {
         element: createRouteComponent(() => import('../pages/DebugLog')),
@@ -34,9 +39,14 @@ const routes = [
         path: '/formily',
       },
       {
-        element: createRouteComponent(() => import('../pages/Components')),
-        handle: { title: 'Components 示例' },
-        path: '/components',
+        element: createRouteComponent(() => import('../pages/Namepath')),
+        handle: { title: 'NamePath 示例' },
+        path: '/name-path',
+      },
+      {
+        element: createRouteComponent(() => import('../pages/RPCDemo')),
+        handle: { title: 'RPC 示例' },
+        path: '/rpc',
       },
     ],
     element: (
@@ -51,6 +61,11 @@ const routes = [
     element: createRouteComponent(() => import('../pages/IframeExample')),
     handle: { title: 'Iframe 示例' },
     path: '/iframe',
+  },
+  {
+    element: createRouteComponent(() => import('../pages/NotFound')),
+    handle: { title: '404 Not Found' },
+    path: '*',
   },
 ]
 

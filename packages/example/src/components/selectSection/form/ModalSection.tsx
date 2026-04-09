@@ -3,6 +3,7 @@ import { type FormProps, Modal, type ModalProps } from 'antd'
 import { type PropsWithChildren, forwardRef, useImperativeHandle, useState } from 'react'
 import Button from '@/components/Button'
 import type { SectionItem } from '../hooks/useFakeService'
+import { itemName } from './utils'
 
 const ModalSection = forwardRef<ModalSectionInstance, PropsWithChildren<ModalSectionProps>>(
   ({ children, group, name, ...props }, ref) => {
@@ -17,7 +18,9 @@ const ModalSection = forwardRef<ModalSectionInstance, PropsWithChildren<ModalSec
       () => ({
         open: (value) => {
           setOpen(true)
-          form.setFieldValue('section', value)
+          Promise.resolve()
+            .then(() => form.setFieldValue(itemName, value))
+            .catch(() => {})
         },
       }),
       [form]

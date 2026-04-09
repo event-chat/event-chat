@@ -18,12 +18,13 @@ const NavigationManager: FC<PropsWithChildren> = ({ children }) => {
             navigate(detail.toString())?.catch(() => {})
           }}
         >
-          <TabItem name="/">eventChat</TabItem>
-          <TabItem name="antd-form">antdForm</TabItem>
-          <TabItem name="name-path">namePath</TabItem>
-          <TabItem name="debug-log">debug & error</TabItem>
-          <TabItem name="formily">formily</TabItem>
-          <TabItem name="components">components</TabItem>
+          <TabItem name="/">EventChat</TabItem>
+          <TabItem name="/antd-form">AntdForm</TabItem>
+          <TabItem name="/name-path">NamePath</TabItem>
+          <TabItem name="/rpc">RPC</TabItem>
+          <TabItem name="/debug-log">Debug & Error</TabItem>
+          <TabItem name="/formily">Formily</TabItem>
+          <TabItem name="/components">Components</TabItem>
         </Tabs>
       </div>
       <ConfigProvider
