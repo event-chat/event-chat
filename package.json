@@ -14,7 +14,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "pnpm --filter @event-chat/core build && pnpm --filter @event-chat/antd-item build && pnpm --filter @event-chat/example build",
+    "build": "pnpm --filter @event-chat/core build && pnpm --filter @event-chat/antd-item build && pnpm --filter @event-chat/rpc build && pnpm --filter @event-chat/example build",
     "antd-item:dev": "pnpm --filter \"@event-chat/antd-item\" build --watch",
     "core:dev": "pnpm --filter \"@event-chat/core\" build --watch",
     "example:dev": "pnpm --filter \"@event-chat/example\" dev",
@@ -25,6 +25,7 @@
     "pre:commit": "pnpm -r lint && pnpm run tsc --noEmit",
     "pre:build": "pnpm run tsc",
     "pre:pare": "husky install",
+    "rpc:dev": "pnpm --filter \"@event-chat/rpc\" build --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc --noEmit"
   },

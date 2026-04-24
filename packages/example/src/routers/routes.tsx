@@ -58,11 +58,6 @@ const routes = [
     path: '/',
   },
   {
-    element: createRouteComponent(() => import('../pages/IframeExample')),
-    handle: { title: 'Iframe 示例' },
-    path: '/iframe',
-  },
-  {
     element: createRouteComponent(() => import('../pages/NotFound')),
     handle: { title: '404 Not Found' },
     path: '*',

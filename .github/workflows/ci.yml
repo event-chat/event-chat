@@ -107,6 +107,9 @@ jobs:
       core--release_created: ${{ steps.release.outputs['packages/core--release_created'] }}
       core--tag_name: ${{ steps.release.outputs['packages/core--tag_name'] }}
       core--version: ${{ steps.release.outputs['packages/core--version'] }}
+      rpc--release_created: ${{ steps.release.outputs['packages/rpc--release_created'] }}
+      rpc--tag_name: ${{ steps.release.outputs['packages/rpc--tag_name'] }}
+      rpc--version: ${{ steps.release.outputs['packages/rpc--version'] }}
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
       - uses: googleapis/release-please-action@v4
@@ -165,6 +168,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm --filter @event-chat/core publish --access public --no-git-checks
 
+      # 仅发布rpc（如果该包有更新）
+      - name: Publish rpc to npm
+        if: ${{ needs.release-please.outputs['rpc--release_created'] == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm --filter @event-chat/rpc publish --access public --no-git-checks
+
   # 调整：发布到 GitHub Packages（仅发布有更新的子包）
   publish-to-github-packages:
     needs: [release-please, validate-and-build]
@@ -205,6 +215,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: pnpm --filter @event-chat/core publish --access public --no-git-checks
+
+      # 仅发布rpc（如果该包有更新）
+      - name: Publish rpc to GitHub Packages
+        if: ${{ needs.release-please.outputs['rpc--release_created'] == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: pnpm --filter @event-chat/rpc publish --access public --no-git-checks
 
   # 新增：Storybook部署到GitHub Pages作业
   deploy-storybook:
