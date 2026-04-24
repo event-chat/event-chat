@@ -169,6 +169,18 @@
   @apply pt-0.5 text-center text-xl;
 }
 
+html[data-entry='iframe'],
+[data-entry='iframe'] body,
+[data-entry='iframe'] #root {
+  @apply h-full;
+}
+
+html[data-entry='chat'],
+[data-entry='chat'] body,
+[data-entry='chat'] #root {
+  @apply h-full;
+}
+
 body {
   margin: 0;
   color: #fff;

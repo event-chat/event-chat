@@ -31,6 +31,7 @@
     "@ant-design/icons": "~5.6.1",
     "@event-chat/antd-item": "workspace:*",
     "@event-chat/core": "workspace:*",
+    "@event-chat/rpc": "workspace:*",
     "@formily/antd-v5": "^1.2.4",
     "@formily/core": "^2.3.7",
     "@formily/react": "^2.3.7",

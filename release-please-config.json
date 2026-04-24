@@ -12,6 +12,10 @@
     "packages/core": {
       "path": "packages/core",
       "release-type": "node"
+    },
+    "packages/rpc": {
+      "path": "packages/rpc",
+      "release-type": "node"
     }
   }
 }

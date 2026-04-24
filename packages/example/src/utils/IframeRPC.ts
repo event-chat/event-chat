@@ -1,5 +1,8 @@
 import { type ValueOf, isKey } from './fields'
 
+const isHandler = (target: unknown): target is ValueOf<HandlersRecord> =>
+  typeof target === 'function'
+
 const defaultOptions = {
   allowedOrigins: [],
   heartbeatInterval: 3000,
@@ -44,8 +47,8 @@ class IframeRPC {
     }
   }
 
-  on(type: PropertyKey, handler: ValueOf<HandlersRecord>) {
-    this._handlers[type] = handler
+  on<T>(type: PropertyKey, handler: T) {
+    if (isHandler(handler)) this._handlers[type] = handler
   }
 
   onBrodcast(listener: BrodcastItem) {
@@ -126,7 +129,7 @@ class IframeRPC {
     if (requestId && pending) {
       const { resolve, reject } = pending
       this._pending.delete(requestId)
-      if (error) {
+      if (error !== undefined) {
         reject(new Error(error))
       } else {
         resolve(payload)
@@ -173,7 +176,7 @@ export { IframeRPC }
 
 type BrodcastItem = (value: unknown, origin: string) => void
 
-type HandlersRecord = Record<PropertyKey, (value?: unknown) => void>
+type HandlersRecord = Record<PropertyKey, (...value: unknown[]) => unknown>
 
 type MessageItem = {
   payload: unknown

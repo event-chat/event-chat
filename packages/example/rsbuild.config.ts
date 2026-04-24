@@ -15,14 +15,15 @@ export default defineConfig({
     }),
   ],
   html: {
-    tags: [
+    tags: (tags, { entryName }) => tags.concat([
       {
         tag: 'html',
         attrs: {
           lang: 'zh-CN',
+          'data-entry': entryName,
         }
-      }
-    ]
+      },
+    ]),
   },
   // 库模式配置（React 库开发）
   output: {
@@ -40,6 +41,8 @@ export default defineConfig({
   },
   source: {
     entry: {
+      chat: './src/ChatEntry.tsx',
+      iframe: './src/IframeEntry.tsx',
       index: './src/index.tsx', // 你的库主入口文件
     },
   }
