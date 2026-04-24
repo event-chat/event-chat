@@ -217,7 +217,7 @@ jobs:
         run: pnpm --filter @event-chat/core publish --access public --no-git-checks
 
       # 仅发布rpc（如果该包有更新）
-      - name: Publish core to GitHub Packages
+      - name: Publish rpc to GitHub Packages
         if: ${{ needs.release-please.outputs['rpc--release_created'] == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
