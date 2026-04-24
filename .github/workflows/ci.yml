@@ -169,7 +169,7 @@ jobs:
         run: pnpm --filter @event-chat/core publish --access public --no-git-checks
 
       # 仅发布rpc（如果该包有更新）
-      - name: Publish core to npm
+      - name: Publish rpc to npm
         if: ${{ needs.release-please.outputs['rpc--release_created'] == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
