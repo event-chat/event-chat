@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/event-chat/event-chat/compare/rpc@v0.1.1...rpc@v0.1.2) (2026-04-26)
+
+
+### Bug Fixes
+
+* separate rpc core ([1250a35](https://github.com/event-chat/event-chat/commit/1250a35e10c9ccd693c69d1deef5656773cc3730))
+* separate rpc core ([9e5d66a](https://github.com/event-chat/event-chat/commit/9e5d66aacd379106dda18365dcc1c6cd01778a75))
+
 ## [0.1.1](https://github.com/event-chat/event-chat/compare/rpc@v0.1.0...rpc@v0.1.1) (2026-04-24)
 
 
