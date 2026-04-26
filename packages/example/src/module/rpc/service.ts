@@ -1,11 +1,13 @@
 import type { useEventChat } from '@event-chat/core'
-import { TARGET_TYPE_STRINGS, createCtx, createService } from '@event-chat/rpc'
-import type { RPCInstanceContextIns } from 'node_modules/@event-chat/rpc/dist/fields'
+import {
+  type RPCInstanceContextIns,
+  TARGET_TYPE_STRINGS,
+  createCtx,
+  createService,
+} from '@event-chat/rpc'
 import { ChartName, type SendMessage } from '@/components/chatLine'
 import { receiptStore } from '@/components/chatLine/receiptStore'
 import { receiptSchema } from './uitls'
-
-// import { recipientsStore } from './recipientStore'
 
 const baseChatServer = (
   item: SendMessage,
@@ -60,7 +62,7 @@ const brodcastServer = (ctx: Partial<CtxType>) => ({
     const end = path.slice(-2)[0] === ctx.name ? path.slice(-1)[0] : undefined
     if (end !== undefined && path.filter((name) => name === end).length >= 2) return
 
-    // 继续转发广播，但是要排除之前已发过的对象
+    // 继续转发广播
     ctx.brodcastScope?.(
       { payload: { ...data, path: path.concat([ctx.name]) } },
       { include: [TARGET_TYPE_STRINGS.Window] }

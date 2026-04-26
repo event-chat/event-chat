@@ -1,0 +1,12 @@
+import { ActionRecord } from '../RPCDecorator'
+import RPCDecorator from '../core/RPCDecorator'
+import SharedWorkerTransport from '../transports/SharedWorkerTransport'
+import { EntryOptions } from '../transports/fields'
+
+export function createSharedWorkerRPC<EVENT extends ActionRecord, CONSUME extends ActionRecord>(
+  target: SharedWorker,
+  config?: EntryOptions<EVENT, CONSUME>
+) {
+  const { context, options } = config ?? {}
+  return RPCDecorator(new SharedWorkerTransport(target, options), context)
+}

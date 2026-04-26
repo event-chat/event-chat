@@ -1,7 +1,7 @@
 import { createContext } from 'react'
-import RPCAction, { RequestOptions } from './RPCAction'
-import RPCFactory from './RPCFactory'
-import { ValueOf } from './utils'
+import RPCAction, { RequestOptions } from '../core/RPCAction'
+import { Transport } from '../transports/fields'
+import { ValueOf } from '../utils'
 
 export const RPCInstanceContext = createContext<RPCInstanceContextIns>({})
 export const TARGET_TYPE_STRINGS = Object.freeze({
@@ -25,21 +25,7 @@ export interface RPCInstanceContextIns {
   mount?: (item: RPCItem, name?: string) => void
 }
 
-export interface Transport {
-  destory: () => void
-  getType: () => string
-  is: (source: MessageEventSource | null) => boolean
-  onmessage: (listener: (ev: MessageEvent) => unknown) => void
-  onremove: (listener: (ev: MessageEvent) => unknown) => void
-  postMessage: (message: unknown, options?: IframeSerializeOptions) => void
-  upset: (options: FactoryOptions) => void
-}
-
-export type IframeSerializeOptions = StructuredSerializeOptions & {
-  targetOrigin?: string
-}
-
-export type RPCItem = Pick<RPCAction, 'broadcast'> & Pick<RPCFactory, 'getType'>
+export type RPCItem = Pick<RPCAction, 'broadcast'> & Pick<Transport, 'getType'>
 
 export type ScopeProps = {
   exclude?: Array<ValueOf<typeof TARGET_TYPE_STRINGS>>

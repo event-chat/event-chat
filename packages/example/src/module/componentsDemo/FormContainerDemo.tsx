@@ -1,6 +1,5 @@
 import FormEvent from '@event-chat/antd-item'
 import { Form, Input } from 'antd'
-import FormContainer from 'node_modules/@event-chat/antd-item/dist/FormContainer'
 import { type FC } from 'react'
 
 const FormContainerDemo: FC = () => {
@@ -8,9 +7,9 @@ const FormContainerDemo: FC = () => {
   return (
     <FormEvent form={form}>
       <FormEvent.Item name="test-item">
-        <FormContainer>
+        <FormEvent.Container>
           <Input data-testid="test-input" />
-        </FormContainer>
+        </FormEvent.Container>
       </FormEvent.Item>
       <Form.Item shouldUpdate>
         {() => <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>}
