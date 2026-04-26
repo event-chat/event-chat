@@ -43,7 +43,7 @@ const style = tv({
     msg: 'flex gap-2 text-gray-400 select-auto',
     msgtext: '',
     name: 'select-none',
-    receiptTag: 'ml-2 text-xs text-gray-600',
+    receiptTag: 'ml-2 text-xs text-gray-600 select-none',
     sendBtn: 'h-9 w-9 cursor-pointer rounded-full bg-gray-900 text-white',
     scroll: 'flex-1 overflow-auto px-4',
     scrollInner: '',
