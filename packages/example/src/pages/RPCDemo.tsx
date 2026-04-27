@@ -1,6 +1,6 @@
 import Iframe from '@/module/rpc/Iframe'
 import WorkerDemo from '@/module/rpc/WorkerDemo'
-import { RPCProvider } from '@event-chat/rpc'
+import { RPCProvider } from '@event-chat/rpc/react'
 import { Tag } from 'antd'
 import type { FC } from 'react'
 import Card from '@/components/Card'

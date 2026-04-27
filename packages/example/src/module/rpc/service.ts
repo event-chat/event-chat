@@ -4,7 +4,7 @@ import {
   TARGET_TYPE_STRINGS,
   createCtx,
   createService,
-} from '@event-chat/rpc'
+} from '@event-chat/rpc/react'
 import { ChartName, type SendMessage } from '@/components/chatLine'
 import { receiptStore } from '@/components/chatLine/receiptStore'
 import { receiptSchema } from './uitls'

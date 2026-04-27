@@ -1,5 +1,6 @@
 import { useEventChat } from '@event-chat/core'
-import { useRPC } from '@event-chat/rpc'
+import { useRPC } from '@event-chat/rpc/react'
+import { createWindowRPC } from '@event-chat/rpc/window'
 import { type FC, useContext, useEffect, useRef } from 'react'
 import { recipientsStore } from './recipientStore'
 import { childChatCtx, childIframeCtx } from './service'
@@ -25,6 +26,7 @@ const SubChat: FC = () => {
     brodcast: childIframeCtx.brodcasts,
     consume: childIframeCtx.actions,
     event: childChatCtx.actions,
+    drive: createWindowRPC,
     init: () => iframeRef.current,
   })
 

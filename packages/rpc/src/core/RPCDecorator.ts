@@ -1,12 +1,11 @@
 import { Transport } from '../fields'
 import RPCAction, { ActionFunType, BrodcastItem, RPCOptionsType, RequestOptions } from './RPCAction'
 
-// import RPCFactory, { FactoryOptions, TargetType } from './RPCFactory'
-
 const factoryKey = ['getType', 'upset'] as const
+const disabledKey = ['on', 'onBrodcast']
 
 function isAction(action: RPCAction, key: string): key is keyof RPCAction {
-  return key in action
+  return !disabledKey.includes(key) && key in action
 }
 
 function isFactory(action: Transport | null, key: string): key is keyof Transport {
@@ -37,19 +36,16 @@ function RPCDecorator<EVENT extends ActionRecord, CONSUME extends ActionRecord>(
     {
       get(_, key) {
         const keyname = key.toString()
-        if (!action || keyname === 'on' || (!(keyname in action) && !isFactory(factory, keyname)))
-          throw new Error('outof decorator')
-
         switch (key) {
           case 'destroy':
             return () => {
-              action.destroy()
+              action?.destroy()
               factory?.destory()
             }
           case 'request':
             return request
           default:
-            if (isAction(action, keyname)) {
+            if (action && isAction(action, keyname)) {
               const value = action[keyname]
               return typeof value === 'function' ? value.bind(action) : value
             }
@@ -57,14 +53,11 @@ function RPCDecorator<EVENT extends ActionRecord, CONSUME extends ActionRecord>(
               const value = factory[keyname]
               return typeof value === 'function' ? value.bind(factory) : value
             }
-            throw new Error('outof decorator')
         }
       },
       has(_, key) {
         const keyname = key.toString()
-        return (
-          action !== null && keyname !== 'on' && (keyname in action || isFactory(factory, keyname))
-        )
+        return (action !== null && isAction(action, keyname)) || isFactory(factory, keyname)
       },
       set() {
         throw new Error('decorator is readonly')

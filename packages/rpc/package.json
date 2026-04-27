@@ -7,6 +7,50 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./auto": {
+      "types": "./dist/entry/auto.d.ts",
+      "import": "./dist/entry/auto.js"
+    },
+    "./window": {
+      "types": "./dist/entry/window.d.ts",
+      "import": "./dist/entry/window.js"
+    },
+    "./worker": {
+      "types": "./dist/entry/worker.d.ts",
+      "import": "./dist/entry/worker.js"
+    },
+    "./webSocket": {
+      "types": "./dist/entry/webSocket.d.ts",
+      "import": "./dist/entry/webSocket.js"
+    },
+    "./broadcastChannel": {
+      "types": "./dist/entry/broadcastChannel.d.ts",
+      "import": "./dist/entry/broadcastChannel.js"
+    },
+    "./sharedWorker": {
+      "types": "./dist/entry/sharedWorker.d.ts",
+      "import": "./dist/entry/sharedWorker.js"
+    },
+    "./sharedWorkerGlobalScope": {
+      "types": "./dist/entry/sharedWorkerGlobalScope.d.ts",
+      "import": "./dist/entry/sharedWorkerGlobalScope.js"
+    },
+    "./dedicatedWorkerGlobalScope": {
+      "types": "./dist/entry/dedicatedWorkerGlobalScope.d.ts",
+      "import": "./dist/entry/dedicatedWorkerGlobalScope.js"
+    },
+    "./serviceWorkerGlobalScope": {
+      "types": "./dist/entry/serviceWorkerGlobalScope.d.ts",
+      "import": "./dist/entry/serviceWorkerGlobalScope.js"
+    },
+    "./serviceWorkerRegistration": {
+      "types": "./dist/entry/serviceWorkerRegistration.d.ts",
+      "import": "./dist/entry/serviceWorkerRegistration.js"
     }
   },
   "types": "./dist/index.d.ts",

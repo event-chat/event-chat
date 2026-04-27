@@ -2,60 +2,64 @@ import { registerTransport } from '../core/registry'
 
 registerTransport({
   name: 'broadcastChannel',
-  match: (t): t is BroadcastChannel =>
-    typeof BroadcastChannel !== 'undefined' && t instanceof BroadcastChannel,
+  in: () => typeof BroadcastChannel !== 'undefined',
+  match: (t): t is BroadcastChannel => t instanceof BroadcastChannel,
   load: () => import('../transports/BroadcastChannelTransport'),
 })
 
 registerTransport({
   name: 'dedicatedWorkerGlobalScope',
-  match: (t): t is DedicatedWorkerGlobalScope =>
-    typeof DedicatedWorkerGlobalScope !== 'undefined' && t instanceof DedicatedWorkerGlobalScope,
+  in: () => typeof DedicatedWorkerGlobalScope !== 'undefined',
+  match: (t): t is DedicatedWorkerGlobalScope => t instanceof DedicatedWorkerGlobalScope,
   load: () => import('../transports/DedicatedWorkerGlobalScopeTransport'),
 })
 
 registerTransport({
   name: 'serviceWorkerGlobalScope',
-  match: (t): t is ServiceWorkerGlobalScope =>
-    typeof ServiceWorkerGlobalScope !== 'undefined' && t instanceof ServiceWorkerGlobalScope,
+  in: () => typeof ServiceWorkerGlobalScope !== 'undefined',
+  match: (t): t is ServiceWorkerGlobalScope => t instanceof ServiceWorkerGlobalScope,
   load: () => import('../transports/ServiceWorkerGlobalScopeTransport'),
 })
 
 registerTransport({
   name: 'serviceWorkerRegistration',
-  match: (t): t is ServiceWorkerRegistration =>
-    typeof ServiceWorkerRegistration !== 'undefined' && t instanceof ServiceWorkerRegistration,
+  in: () => typeof ServiceWorkerRegistration !== 'undefined',
+  match: (t): t is ServiceWorkerRegistration => t instanceof ServiceWorkerRegistration,
   load: () => import('../transports/ServiceWorkerRegistrationTransport'),
 })
 
 registerTransport({
   name: 'sharedWorker',
-  match: (t): t is SharedWorker => typeof SharedWorker !== 'undefined' && t instanceof SharedWorker,
+  in: () => typeof SharedWorker !== 'undefined',
+  match: (t): t is SharedWorker => t instanceof SharedWorker,
   load: () => import('../transports/SharedWorkerTransport'),
 })
 
 registerTransport({
   name: 'SharedWorkerGlobalScope',
-  match: (t): t is SharedWorkerGlobalScope =>
-    typeof SharedWorkerGlobalScope !== 'undefined' && t instanceof SharedWorkerGlobalScope,
+  in: () => typeof SharedWorkerGlobalScope !== 'undefined',
+  match: (t): t is SharedWorkerGlobalScope => t instanceof SharedWorkerGlobalScope,
   load: () => import('../transports/SharedWorkerGlobalScopeTransport'),
 })
 
 registerTransport({
   name: 'webSocket',
-  match: (t): t is WebSocket => typeof WebSocket !== 'undefined' && t instanceof WebSocket,
+  in: () => typeof WebSocket !== 'undefined',
+  match: (t): t is WebSocket => t instanceof WebSocket,
   load: () => import('../transports/WebSocketTransport'),
 })
 
 registerTransport({
   name: 'window',
-  match: (t): t is Window => typeof window !== 'undefined' && String(t) === '[object Window]',
+  in: () => typeof window !== 'undefined',
+  match: (t): t is Window => String(t) === '[object Window]',
   load: () => import('../transports/WindowTransport'),
 })
 
 registerTransport({
   name: 'worker',
-  match: (t): t is Worker => typeof Worker !== 'undefined' && t instanceof Worker,
+  in: () => typeof Worker !== 'undefined',
+  match: (t): t is Worker => t instanceof Worker,
   load: () => import('../transports/WorkerTransport'),
 })
 

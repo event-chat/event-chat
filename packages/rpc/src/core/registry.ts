@@ -24,7 +24,7 @@ export function createRPC<EVENT extends ActionRecord, CONSUME extends ActionReco
 }
 
 export function registerTransport<T extends TargetType>(resolver: TransportResolver<T>) {
-  registry.push(resolver)
+  if (resolver.in()) registry.push(resolver)
 }
 
 export function resolveTransport(target: unknown, options?: FactoryOptions) {
@@ -40,6 +40,7 @@ export function resolveTransport(target: unknown, options?: FactoryOptions) {
 
 export type TransportResolver<T extends TargetType = TargetType> = {
   name: string
+  in: () => boolean
   match: (target: unknown) => target is T
   load: () => Promise<{ default: new (target: T, options?: FactoryOptions) => Transport }>
 }
