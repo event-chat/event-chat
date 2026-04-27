@@ -1,8 +1,6 @@
 import { IframeSerializeOptions, Transport } from '../fields'
 import { isKey } from '../utils'
 
-// import RPCFactory, { IframeSerializeOptions } from '../RPCFactory'
-
 const RPC_SIGN = 'RPCActionSign'
 
 const defaultOptions = {
@@ -13,12 +11,13 @@ const defaultOptions = {
   retryTimes: 2,
 } satisfies RPCOptionsType
 
-const getOrigin = (url: string) => new URL(url, window.location.origin).origin
+const getOrigin = (url: string) =>
+  typeof self?.location?.origin === 'string' ? new URL(url, self.location.origin).origin : ''
 
 class RPCAction {
   private _brodcastListeners: BrodcastItem[] = []
   private _handlers: HandlersRecord = {}
-  private _heartbeatTimer: number | null = null
+  private _heartbeatTimer: NodeJS.Timeout | null = null
   private _isConnected = false
   private _lastHeartbeat = Date.now()
   private _options: RPCOptionsType = {}
@@ -32,9 +31,9 @@ class RPCAction {
     this._options = {
       ...defaultOptions,
       ...options,
-      allowedOrigins: options?.allowedOrigins?.map((item) =>
-        item === '*' ? item : getOrigin(item)
-      ),
+      allowedOrigins: options?.allowedOrigins
+        ?.map((item) => (item === '*' ? item : getOrigin(item)))
+        .filter(Boolean),
     }
 
     this._target.onmessage(this._boundMessageHandler)
@@ -87,7 +86,7 @@ class RPCAction {
       }
 
       const requestId = this._createRequestId()
-      const timer = window.setTimeout(() => {
+      const timer = setTimeout(() => {
         this._pending.delete(requestId)
         if (retry < retryTimes) {
           // 只要不抛出错误就正常
@@ -213,6 +212,7 @@ class RPCAction {
     }
   }
 
+  // server worker 要额外优化
   private _startHeartbeat() {
     const {
       channel,
@@ -233,7 +233,7 @@ class RPCAction {
     intervalLoops()
 
     clearInterval(this._heartbeatTimer ?? undefined)
-    this._heartbeatTimer = window.setInterval(intervalLoops, heartbeatInterval)
+    this._heartbeatTimer = setInterval(intervalLoops, heartbeatInterval)
   }
 }
 
@@ -274,4 +274,6 @@ type MessageItem = Pick<RPCOptionsType, 'channel'> & {
   type?: PropertyKey
 }
 
-type PendingItem = Record<'resolve' | 'reject', (value?: unknown) => void> & { timer: number }
+type PendingItem = Record<'resolve' | 'reject', (value?: unknown) => void> & {
+  timer: NodeJS.Timeout
+}
