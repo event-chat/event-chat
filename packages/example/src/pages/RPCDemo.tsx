@@ -1,6 +1,6 @@
 import Iframe from '@/module/rpc/Iframe'
+import RecipientsProvider from '@/module/rpc/RecipientsProvider'
 import WorkerDemo from '@/module/rpc/WorkerDemo'
-import { RPCProvider } from '@event-chat/rpc/react'
 import { Tag } from 'antd'
 import type { FC } from 'react'
 import Card from '@/components/Card'
@@ -8,7 +8,7 @@ import Card from '@/components/Card'
 const RPCDemo: FC = () => {
   return (
     <div className="flex flex-col gap-16">
-      <RPCProvider>
+      <RecipientsProvider>
         <Card
           title={
             <>
@@ -27,7 +27,7 @@ const RPCDemo: FC = () => {
         >
           <WorkerDemo />
         </Card>
-      </RPCProvider>
+      </RecipientsProvider>
     </div>
   )
 }

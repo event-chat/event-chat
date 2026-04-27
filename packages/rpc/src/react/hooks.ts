@@ -4,11 +4,12 @@ import { EntryOptions, FactoryOptions } from '../transports/fields'
 import { RPCInstanceContext } from './fields'
 
 const disableKey = ['destroy'] as const
+const defaultBrod = () => {}
 
 const useRPC = <EVENT extends ActionRecord, CONSUME extends ActionRecord, TARGET>(
   ops: RPCHooksOptions<EVENT, CONSUME> | RPCDriveOptions<EVENT, CONSUME, TARGET>
 ) => {
-  const { mount, brodcastScope = () => {} } = useContext(RPCInstanceContext)
+  const { brodcastScope, mount } = useContext(RPCInstanceContext)
   const [connected, setConnected] = useState(false)
 
   const decoratorRef = useRef<RPCResult<EVENT, CONSUME> | null>(null)
@@ -115,9 +116,9 @@ const useRPC = <EVENT extends ActionRecord, CONSUME extends ActionRecord, TARGET
 
   return Object.freeze({
     rpc: rpcIns,
+    brodcastScope: brodcastScope ?? defaultBrod,
     mount: mounHandle,
     connected,
-    brodcastScope,
   })
 }
 

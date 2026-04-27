@@ -1,13 +1,13 @@
+import { baseChatServer, childIframeCtx, mainCtx } from '@/services/iframeService'
 import { useEventChat } from '@event-chat/core'
 import { createRPC } from '@event-chat/rpc/auto'
 import { TARGET_TYPE_STRINGS, useRPC } from '@event-chat/rpc/react'
 import { createWindowRPC } from '@event-chat/rpc/window'
-import { type FC, useRef, useState, useSyncExternalStore } from 'react'
+import { type FC, useRef, useState } from 'react'
 import { ChatLine, ChatScroll } from '@/components/chatLine'
 import CardSelect from '@/components/chatLine/CardSelect'
 import { receiptStore } from '@/components/chatLine/receiptStore'
-import { recipientsStore } from './recipientStore'
-import { baseChatServer, childIframeCtx, mainCtx } from './service'
+import { useRecipients } from './createRecipientsStore'
 
 const group = 'root'
 
@@ -15,7 +15,7 @@ const Iframe: FC = () => {
   const iframeRef1 = useRef<HTMLIFrameElement>(null)
   const iframeRef2 = useRef<HTMLIFrameElement>(null)
 
-  const recipients = useSyncExternalStore(recipientsStore.subscribe, recipientsStore.getSnapshot)
+  const [store, recipients] = useRecipients()
   const [card, setCard] = useState(0)
 
   const { emit } = useEventChat('root-bar', { group })
@@ -27,10 +27,10 @@ const Iframe: FC = () => {
     config: {
       allowedOrigins: ['http://localhost:3000', '*'],
       onConnect: () => {
-        recipientsStore.addRecipient(rpc1)
+        store.addRecipient(rpc1)
       },
       onDisconnect: () => {
-        recipientsStore.delRecipient(rpc1)
+        store.delRecipient(rpc1)
       },
     },
     brodcast: mainCtx.brodcasts,
@@ -45,10 +45,10 @@ const Iframe: FC = () => {
     config: {
       allowedOrigins: ['http://localhost:3000', '*'],
       onConnect: () => {
-        recipientsStore.addRecipient(rpc2)
+        store.addRecipient(rpc2)
       },
       onDisconnect: () => {
-        recipientsStore.delRecipient(rpc2)
+        store.delRecipient(rpc2)
       },
     },
     brodcast: mainCtx.brodcasts,
@@ -79,9 +79,7 @@ const Iframe: FC = () => {
                 { include: [TARGET_TYPE_STRINGS.Window] }
               )
             } else {
-              const target = item.recipient
-                ? (recipientsStore.getRecipient(item.recipient) ?? rpc1)
-                : rpc1
+              const target = item.recipient ? (store.getRecipient(item.recipient) ?? rpc1) : rpc1
 
               target
                 .request('sendChat', { payload: item })

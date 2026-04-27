@@ -1,17 +1,17 @@
-import { baseChatServer, childIframeCtx, mainCtx } from '@/module/rpc/service'
+import { baseChatServer, childIframeCtx, mainCtx } from '@/services/iframeService'
 import { useEventChat } from '@event-chat/core'
 import { TARGET_TYPE_STRINGS, useRPC } from '@event-chat/rpc/react'
 import { createWindowRPC } from '@event-chat/rpc/window'
-import { type FC, useEffect, useState, useSyncExternalStore } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import { ChatLine, ChatScroll } from '@/components/chatLine'
 import CardSelect from '@/components/chatLine/CardSelect'
 import { receiptStore } from '@/components/chatLine/receiptStore'
 import { isKey } from '@/utils/fields'
-import { recipientsStore } from './recipientStore'
+import { useRecipients } from './createRecipientsStore'
 import { chatItem, iframeName } from './uitls'
 
 const SubIframe: FC<SubIframeProps> = ({ group = iframeName }) => {
-  const recipients = useSyncExternalStore(recipientsStore.subscribe, recipientsStore.getSnapshot)
+  const [store, recipients] = useRecipients()
   const [groupName, setGroupName] = useState(group)
   const [card, setCard] = useState(0)
 
@@ -20,10 +20,10 @@ const SubIframe: FC<SubIframeProps> = ({ group = iframeName }) => {
     config: {
       allowedOrigins: ['http://localhost:3000', '*'],
       onConnect: () => {
-        recipientsStore.addRecipient(rpc)
+        store.addRecipient(rpc)
       },
       onDisconnect: () => {
-        recipientsStore.delRecipient(rpc)
+        store.delRecipient(rpc)
       },
     },
     brodcast: childIframeCtx.brodcasts,
@@ -67,9 +67,7 @@ const SubIframe: FC<SubIframeProps> = ({ group = iframeName }) => {
               { include: [TARGET_TYPE_STRINGS.Window] }
             )
           } else {
-            const target = item.recipient
-              ? (recipientsStore.getRecipient(item.recipient) ?? rpc)
-              : rpc
+            const target = item.recipient ? (store.getRecipient(item.recipient) ?? rpc) : rpc
 
             target
               .request('sendChat', { payload: item })

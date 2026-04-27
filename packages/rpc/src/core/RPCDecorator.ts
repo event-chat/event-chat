@@ -78,7 +78,6 @@ export interface DecoratorContext<EVENT extends ActionRecord, CONSUME extends Ac
   config?: RPCOptionsType
   consume?: CONSUME
   event?: EVENT
-  // options?: FactoryOptions
 }
 
 export type ActionRecord = Record<string, ActionFunType>

@@ -1,6 +1,6 @@
+import RecipientsProvider from '@/module/rpc/RecipientsProvider'
 import SubIframe, { type SubIframeProps } from '@/module/rpc/SubIframe'
 import { GroupProvider, iframeName } from '@/module/rpc/uitls'
-import { RPCProvider } from '@event-chat/rpc/react'
 import { ConfigProvider, theme } from 'antd'
 import { type FC, type PropsWithChildren } from 'react'
 import { tv } from 'tailwind-variants'
@@ -22,7 +22,7 @@ const IframeExample: FC<PropsWithChildren<SubIframeProps>> = ({ children, group 
         algorithm: theme.darkAlgorithm,
       }}
     >
-      <RPCProvider>
+      <RecipientsProvider>
         {children ? (
           <GroupProvider.Provider value={{ group }}>
             <div className={base}>
@@ -37,7 +37,7 @@ const IframeExample: FC<PropsWithChildren<SubIframeProps>> = ({ children, group 
             <SubIframe group={group} />
           </div>
         )}
-      </RPCProvider>
+      </RecipientsProvider>
     </ConfigProvider>
   )
 }

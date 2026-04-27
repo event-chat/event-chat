@@ -1,26 +1,28 @@
+import { childChatCtx, childIframeCtx } from '@/services/iframeService'
 import { useEventChat } from '@event-chat/core'
 import { useRPC } from '@event-chat/rpc/react'
 import { createWindowRPC } from '@event-chat/rpc/window'
 import { type FC, useContext, useEffect, useRef } from 'react'
-import { recipientsStore } from './recipientStore'
-import { childChatCtx, childIframeCtx } from './service'
+import { StoreContext } from './createRecipientsStore'
 import { GroupProvider, chatItem } from './uitls'
 
 const eventName = 'sub-chat'
 
 const SubChat: FC = () => {
+  const store = useContext(StoreContext)
   const { group } = useContext(GroupProvider)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
 
+  const iframeRef = useRef<HTMLIFrameElement>(null)
   const { emit } = useEventChat(eventName, { group })
+
   const { connected, rpc, brodcastScope } = useRPC({
     config: {
       allowedOrigins: ['http://localhost:3000', '*'],
       onConnect: () => {
-        recipientsStore.addRecipient(rpc)
+        store.addRecipient(rpc)
       },
       onDisconnect: () => {
-        recipientsStore.delRecipient(rpc)
+        store.delRecipient(rpc)
       },
     },
     brodcast: childIframeCtx.brodcasts,

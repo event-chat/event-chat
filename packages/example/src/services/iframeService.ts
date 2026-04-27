@@ -5,9 +5,14 @@ import {
   createCtx,
   createService,
 } from '@event-chat/rpc/react'
-import { ChartName, type SendMessage } from '@/components/chatLine'
+import z from 'zod'
+import { ChartName, type SendMessage, messageSchema } from '@/components/chatLine'
 import { receiptStore } from '@/components/chatLine/receiptStore'
-import { receiptSchema } from './uitls'
+
+const receiptSchema = z.object({
+  ...messageSchema.shape,
+  path: z.array(z.string()),
+})
 
 const baseChatServer = (
   item: SendMessage,
