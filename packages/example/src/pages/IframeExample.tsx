@@ -1,6 +1,6 @@
 import SubIframe, { type SubIframeProps } from '@/module/rpc/SubIframe'
 import { GroupProvider, iframeName } from '@/module/rpc/uitls'
-import { RPCProvider } from '@event-chat/rpc'
+import { RPCProvider } from '@event-chat/rpc/react'
 import { ConfigProvider, theme } from 'antd'
 import { type FC, type PropsWithChildren } from 'react'
 import { tv } from 'tailwind-variants'

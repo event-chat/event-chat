@@ -1,6 +1,7 @@
 import { baseChatServer, childIframeCtx, mainCtx } from '@/module/rpc/service'
 import { useEventChat } from '@event-chat/core'
-import { TARGET_TYPE_STRINGS, useRPC } from '@event-chat/rpc'
+import { TARGET_TYPE_STRINGS, useRPC } from '@event-chat/rpc/react'
+import { createWindowRPC } from '@event-chat/rpc/window'
 import { type FC, useEffect, useState, useSyncExternalStore } from 'react'
 import { ChatLine, ChatScroll } from '@/components/chatLine'
 import CardSelect from '@/components/chatLine/CardSelect'
@@ -28,6 +29,7 @@ const SubIframe: FC<SubIframeProps> = ({ group = iframeName }) => {
     brodcast: childIframeCtx.brodcasts,
     consume: mainCtx.actions,
     event: childIframeCtx.actions,
+    drive: createWindowRPC,
     init: () => window.parent,
   })
 

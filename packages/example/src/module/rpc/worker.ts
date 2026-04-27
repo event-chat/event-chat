@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
-import { RPCDecorator } from '@event-chat/rpc'
+// import { RPCDecorator } from '@event-chat/rpc'
 
-RPCDecorator(self)
+// RPCDecorator(self)
 
 self.onmessage = () => {
   // self

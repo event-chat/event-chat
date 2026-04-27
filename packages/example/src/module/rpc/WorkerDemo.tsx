@@ -6,7 +6,12 @@ const worker = new Worker(new URL('./worker.ts', import.meta.url), {
 
 const WorkerDemo: FC = () => {
   useEffect(() => {
-    console.log(worker)
+    const fn = () => {}
+    worker.addEventListener('message', fn)
+    return () => {
+      worker.removeEventListener('message', fn)
+    }
+    // console.log(worker)
   }, [])
   return <div>WorkerDemo</div>
 }

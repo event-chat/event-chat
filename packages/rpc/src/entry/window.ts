@@ -4,9 +4,11 @@ import WindowTransport from '../transports/WindowTransport'
 import { EntryOptions } from '../transports/fields'
 
 export function createWindowRPC<EVENT extends ActionRecord, CONSUME extends ActionRecord>(
-  target: Window,
+  target: Window | HTMLIFrameElement,
   config?: EntryOptions<EVENT, CONSUME>
 ) {
   const { context, options } = config ?? {}
-  return RPCDecorator(new WindowTransport(target, options), context)
+  const instance = target instanceof HTMLIFrameElement ? target.contentWindow : target
+
+  return RPCDecorator(instance ? new WindowTransport(instance, options) : null, context)
 }

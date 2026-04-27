@@ -1,4 +1,4 @@
-import { useRPC } from '@event-chat/rpc'
+import { useRPC } from '@event-chat/rpc/react'
 import type { baseServer } from './service'
 
 type RecipientsStore = {
@@ -86,7 +86,7 @@ export const recipientsStore: RecipientsStore = {
   },
 }
 
-export type RPCType = ReturnType<typeof useRPC<ActionType, ActionType>>['rpc']
+export type RPCType = ReturnType<typeof useRPC<ActionType, ActionType, unknown>>['rpc']
 
 type ActionType = ReturnType<typeof baseServer>
 type RecipientsRecord = {

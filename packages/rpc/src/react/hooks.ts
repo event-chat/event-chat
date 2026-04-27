@@ -67,28 +67,32 @@ const useRPC = <EVENT extends ActionRecord, CONSUME extends ActionRecord, TARGET
     const { config, options, drive, init, name = '', ...opConfig } = opsRef.current
 
     // 如果是 iframe 不用等待 onload，RPC 会有心跳检测
-    // 这里采用外层限制，内部宽松，因为除了 TARGET，另一个类型接受 unknown
+    // 这里采用外层限制，内部宽松，因为除了 TARGET，createRPC 接受 unknown
     processRef.current = processRef.current
       .then(() => init())
-      .then((tar) =>
-        drive(tar as TARGET, {
-          context: {
-            ...opConfig,
-            config: {
-              ...config,
-              onConnect() {
-                config?.onConnect?.()
-                setConnected(true)
-              },
-              onDisconnect() {
-                config?.onDisconnect?.()
-                setConnected(false)
-              },
+      .then((tar) => (tar instanceof HTMLIFrameElement ? tar.contentWindow : tar))
+      .then((tar) => {
+        const context = {
+          ...opConfig,
+          config: {
+            ...config,
+            onConnect() {
+              config?.onConnect?.()
+              setConnected(true)
+            },
+            onDisconnect() {
+              config?.onDisconnect?.()
+              setConnected(false)
             },
           },
-          options,
-        })
-      )
+        }
+        return tar
+          ? drive(tar as TARGET, {
+              context,
+              options,
+            })
+          : RPCDecorator(null, context)
+      })
       .then((result) => {
         decoratorRef.current = result
         mount?.(result, name)
@@ -127,7 +131,7 @@ interface RPCBaseOptions {
 interface RPCDriveOptions<EVENT extends ActionRecord, CONSUME extends ActionRecord, TARGET>
   extends RPCBaseOptions, DecoratorContext<EVENT, CONSUME> {
   drive: (target: TARGET, config?: EntryOptions<EVENT, CONSUME>) => RPCResult<EVENT, CONSUME>
-  init: () => TARGET | Promise<TARGET>
+  init: () => TARGET | null | Promise<TARGET | null>
 }
 
 interface RPCHooksOptions<EVENT extends ActionRecord, CONSUME extends ActionRecord>

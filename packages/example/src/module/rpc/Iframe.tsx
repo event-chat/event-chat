@@ -1,5 +1,7 @@
 import { useEventChat } from '@event-chat/core'
-import { TARGET_TYPE_STRINGS, useRPC } from '@event-chat/rpc'
+import { createRPC } from '@event-chat/rpc/auto'
+import { TARGET_TYPE_STRINGS, useRPC } from '@event-chat/rpc/react'
+import { createWindowRPC } from '@event-chat/rpc/window'
 import { type FC, useRef, useState, useSyncExternalStore } from 'react'
 import { ChatLine, ChatScroll } from '@/components/chatLine'
 import CardSelect from '@/components/chatLine/CardSelect'
@@ -35,6 +37,7 @@ const Iframe: FC = () => {
     consume: childIframeCtx.actions,
     event: mainCtx.actions,
     name: group,
+    drive: createWindowRPC,
     init: () => iframeRef1.current,
   })
 
@@ -52,6 +55,7 @@ const Iframe: FC = () => {
     consume: childIframeCtx.actions,
     event: mainCtx.actions,
     name: group,
+    drive: createRPC,
     init: () => iframeRef2.current,
   })
 
