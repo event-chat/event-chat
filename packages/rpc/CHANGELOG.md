@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.5](https://github.com/event-chat/event-chat/compare/rpc@v0.1.4...rpc@v0.1.5) (2026-04-28)
+
+
+### Bug Fixes
+
+* update worker isAction ([cd49f69](https://github.com/event-chat/event-chat/commit/cd49f6992928d046aed88f483fdbb68cbbb96688))
+* update worker isAction ([dfa590b](https://github.com/event-chat/event-chat/commit/dfa590b96998f8da40ee99b8b5a7ecde4d9179cd))
+
 ## [0.1.4](https://github.com/event-chat/event-chat/compare/rpc@v0.1.3...rpc@v0.1.4) (2026-04-27)
 
 
