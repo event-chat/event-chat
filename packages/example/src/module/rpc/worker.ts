@@ -1,16 +1,15 @@
 /// <reference lib="webworker" />
+import { mainCtx, workerChatCtx } from '@/services/workerService'
 import { createDedicatedWorkerGlobalScopeRPC } from '@event-chat/rpc/dedicatedWorkerGlobalScope'
-
-// import { RPCDecorator } from '@event-chat/rpc'
 
 const target = self as DedicatedWorkerGlobalScope
 
-const workerRpc = createDedicatedWorkerGlobalScopeRPC(target)
-
-workerRpc.upset({})
-
-// console.log('a----workerRpc', workerRpc)
-
-self.onmessage = () => {
-  // self
-}
+workerChatCtx.provider({ name: 'worker:name', page: 'woker' })
+createDedicatedWorkerGlobalScopeRPC(target, {
+  context: {
+    brodcast: workerChatCtx.brodcasts,
+    config: { channel: 'worker' },
+    consume: mainCtx.actions,
+    event: workerChatCtx.actions,
+  },
+})

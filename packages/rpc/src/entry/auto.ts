@@ -1,3 +1,4 @@
+import { WINDOW_NAME } from '../core/RPCAction'
 import { registerTransport } from '../core/registry'
 
 registerTransport({
@@ -52,7 +53,7 @@ registerTransport({
 registerTransport({
   name: 'window',
   in: () => typeof window !== 'undefined',
-  match: (t): t is Window => String(t) === '[object Window]',
+  match: (t): t is Window => String(t) === WINDOW_NAME,
   load: () => import('../transports/WindowTransport'),
 })
 

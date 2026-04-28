@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import RPCAction, { RequestOptions } from '../core/RPCAction'
+import RPCAction, { RequestOptions, WINDOW_NAME } from '../core/RPCAction'
 import { Transport } from '../transports/fields'
 import { ValueOf } from '../utils'
 
@@ -7,7 +7,7 @@ export const RPCInstanceContext = createContext<RPCInstanceContextIns>({})
 export const TARGET_TYPE_STRINGS = Object.freeze({
   BroadcastChannel: '[object BroadcastChannel]',
   WebSocket: '[object WebSocket]',
-  Window: '[object Window]',
+  Window: WINDOW_NAME,
   ServiceWorkerRegistration: '[object ServiceWorkerRegistration]',
   ServiceWorkerGlobalScope: '[object ServiceWorkerGlobalScope]',
   SharedWorker: '[object SharedWorker]',
