@@ -10,8 +10,9 @@ abstract class BaseTransport<T extends TargetType = TargetType> implements Trans
     return `${Object.prototype.toString.call(this._target)}`
   }
 
+  // 只有 window 存在 source
   is(source: MessageEventSource | null) {
-    return this._target === source
+    return source === null || this._target === source
   }
 
   upset(options: FactoryOptions) {

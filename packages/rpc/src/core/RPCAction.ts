@@ -2,6 +2,7 @@ import { IframeSerializeOptions, Transport } from '../fields'
 import { isKey } from '../utils'
 
 const RPC_SIGN = 'RPCActionSign'
+const WINDOW_NAME = '[object Window]'
 
 const defaultOptions = {
   allowedOrigins: [],
@@ -150,7 +151,7 @@ class RPCAction {
     if (__RPC__ !== RPC_SIGN) return
     if (this._options?.channel !== channel) return
     if (!this._target.is(source)) return
-    if (this._target.getType() === window.toString() && !this._isOriginAllowed(origin)) return
+    if (this._target.getType() === WINDOW_NAME && !this._isOriginAllowed(origin)) return
 
     // 心跳
     if (heartbeat) {
@@ -236,6 +237,8 @@ class RPCAction {
     this._heartbeatTimer = setInterval(intervalLoops, heartbeatInterval)
   }
 }
+
+export { WINDOW_NAME }
 
 export default RPCAction
 

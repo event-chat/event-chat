@@ -18,6 +18,8 @@ const RPCDemo: FC = () => {
         >
           <Iframe />
         </Card>
+      </RecipientsProvider>
+      <RecipientsProvider>
         <Card
           title={
             <>

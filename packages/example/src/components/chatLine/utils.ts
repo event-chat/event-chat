@@ -1,4 +1,24 @@
+import { tv } from 'tailwind-variants'
 import z from 'zod'
+
+export const baseStyle = tv({
+  slots: {
+    bar: 'flex h-16 bg-gray-700',
+    inputBox: 'flex flex-1 items-center',
+    inputLine:
+      'w-full p-0 pl-4 focus:outline-none disabled:cursor-not-allowed disabled:placeholder-gray-600',
+    scroll: 'flex-1 overflow-auto px-4',
+    selectUser: 'flex items-center justify-center',
+    wrap: 'relative flex h-full flex-col',
+  },
+  variants: {
+    unRecipient: {
+      true: {
+        inputBox: 'pl-4',
+      },
+    },
+  },
+})
 
 export const itemSchema = z.object({
   date: z.date(),
