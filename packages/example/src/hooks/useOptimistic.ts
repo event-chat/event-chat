@@ -6,66 +6,51 @@ const useOptimistic = <STATE, ACTION>(
   reduce?: (state: STATE, action: ACTION) => STATE
 ) => {
   const [optimisticState, setOptimistiState] = useState(baseState)
-  const actionRef = useRef<Array<() => Promise<void>>>([])
-  const queueRef = useRef<Promise<void> | null>(null)
+  const actionRef = useRef<Array<Promise<void>>>([])
   const reduceRef = useMemoFn(reduce)
 
   const addOptimisticReduce = useCallback(
     (action: ACTION) => {
       if (reduceRef.current) return
-      if (actionRef.current.length > 0) {
-        startTransition(() => {
-          setOptimistiState((current) => reduceRef.current?.(current, action) ?? current)
-        })
+      if (actionRef.current.length === 0) {
+        console.warn('useOptimistic: Must be called in runTransition')
         return
       }
-      console.warn('useOptimistic: Must be called in runTransition')
+      startTransition(() => {
+        setOptimistiState((current) => reduceRef.current?.(current, action) ?? current)
+      })
     },
     [reduceRef]
   )
 
   const addOptimisticState: typeof setOptimistiState = useCallback((action) => {
-    if (actionRef.current.length > 0) {
-      startTransition(() => {
-        setOptimistiState(action)
-      })
-      return
+    if (actionRef.current.length === 0) {
+      console.warn('useOptimistic: Must be called in runTransition')
     }
-    console.warn('useOptimistic: Must be called in runTransition')
-  }, [])
-
-  const doAction = useCallback(() => {
-    queueRef.current ??= actionRef.current.reduce(
-      (current, item) => current.then(item),
-      Promise.resolve()
-    )
+    startTransition(() => {
+      setOptimistiState(action)
+    })
   }, [])
 
   const runTransition = useCallback(
     (callback: () => void | Promise<void>) => {
-      const queue = () =>
-        Promise.resolve(callback())
-          .then(() => {
-            const index = actionRef.current.findIndex((item) => Object.is(item, queue))
-            if (index !== -1) {
-              actionRef.current.splice(index, 1)
-            }
-          })
-          .catch(() => {
-            actionRef.current = []
-          })
-          .finally(() => {
-            if (actionRef.current.length === 0) {
-              // 针对结束后 baseState 无论发生变化，都要重置 optimisticState
-              setOptimistiState(baseState)
-              queueRef.current = null
-            }
-          })
+      const queue = Promise.resolve(callback())
+        .then(() => {
+          actionRef.current = actionRef.current.filter((item) => !Object.is(item, queue))
+        })
+        .catch(() => {
+          actionRef.current = []
+        })
+        .finally(() => {
+          if (actionRef.current.length === 0) {
+            // 针对结束后 baseState 无论发生变化，都要重置 optimisticState
+            setOptimistiState(baseState)
+          }
+        })
 
       actionRef.current.push(queue)
-      doAction()
     },
-    [baseState, doAction]
+    [baseState]
   )
 
   useEffect(() => {
@@ -81,3 +66,23 @@ const useOptimistic = <STATE, ACTION>(
 }
 
 export default useOptimistic
+
+// 采用和 react19 一样的操作方式，官方默认提供的 useOptimistic 也并严谨
+// 例如下面代码，在微任务完成前，即便在 startTransition 外部调用 setOptimisticIsLiked 会被认为合法
+// 因为 React 将 hooks 作为一个整体，只在发起微任务时统一执行
+//
+// startTransition(async () => {
+//   console.log('⏳ setting optimistic state: ' + newValue);
+
+//   //   setOptimisticIsLiked(newValue);
+//   const updatedValue = await toggleLike(newValue);
+
+//   startTransition(() => {
+//     console.log('⏳ setting real state: ' + updatedValue);
+//     setIsLiked(updatedValue);
+//   });
+// });
+// setOptimisticIsLiked(newValue);
+// setOptimisticIsLiked(newValue);
+// setOptimisticIsLiked(newValue);
+// setOptimisticIsLiked(newValue);

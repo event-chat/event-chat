@@ -1,7 +1,7 @@
 import ButtonThemed from '@/module/componentsDemo/ButtonThemed'
 import CheckThemed from '@/module/componentsDemo/CheckThemed'
 import FormContainerDemo from '@/module/componentsDemo/FormContainerDemo'
-import EditNameApp from '@/module/optimisticDemo/EditNameApp'
+import { EditNameApp, IncrementApp, LikeButtonApp } from '@/module/optimisticDemo'
 import TableSticky from '@/module/table/TableSticky'
 import TableVirtualSticky from '@/module/table/TableVirtualSticky'
 import { Tag } from 'antd'
@@ -75,8 +75,16 @@ const Components: FC = () => {
           </>
         }
       >
-        <div className="py-4">
-          <EditNameApp />
+        <div className="flex flex-col gap-8">
+          <div>
+            <EditNameApp />
+          </div>
+          <div>
+            <IncrementApp />
+          </div>
+          <div>
+            <LikeButtonApp />
+          </div>
         </div>
       </Card>
     </div>
