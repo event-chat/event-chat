@@ -1,6 +1,7 @@
 import ButtonThemed from '@/module/componentsDemo/ButtonThemed'
 import CheckThemed from '@/module/componentsDemo/CheckThemed'
 import FormContainerDemo from '@/module/componentsDemo/FormContainerDemo'
+import EditNameApp from '@/module/optimisticDemo/EditNameApp'
 import TableSticky from '@/module/table/TableSticky'
 import TableVirtualSticky from '@/module/table/TableVirtualSticky'
 import { Tag } from 'antd'
@@ -65,6 +66,17 @@ const Components: FC = () => {
       >
         <div className="py-4">
           <FormContainerDemo />
+        </div>
+      </Card>
+      <Card
+        title={
+          <>
+            <Tag>useOptimistic</Tag> 用例
+          </>
+        }
+      >
+        <div className="py-4">
+          <EditNameApp />
         </div>
       </Card>
     </div>
