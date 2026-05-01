@@ -1,7 +1,16 @@
 import ButtonThemed from '@/module/componentsDemo/ButtonThemed'
 import CheckThemed from '@/module/componentsDemo/CheckThemed'
 import FormContainerDemo from '@/module/componentsDemo/FormContainerDemo'
-import { EditNameApp, IncrementApp, LikeButtonApp } from '@/module/optimisticDemo'
+import {
+  EditNameApp,
+  ErrorRecovery,
+  FollowApp,
+  IncrementAction,
+  IncrementApp,
+  LikeButtonApp,
+  ShopCartApp,
+  TodoListApp,
+} from '@/module/optimisticDemo'
 import TableSticky from '@/module/table/TableSticky'
 import TableVirtualSticky from '@/module/table/TableVirtualSticky'
 import { Tag } from 'antd'
@@ -83,7 +92,22 @@ const Components: FC = () => {
             <IncrementApp />
           </div>
           <div>
+            <IncrementAction />
+          </div>
+          <div>
             <LikeButtonApp />
+          </div>
+          <div>
+            <FollowApp />
+          </div>
+          <div>
+            <TodoListApp />
+          </div>
+          <div>
+            <ShopCartApp />
+          </div>
+          <div>
+            <ErrorRecovery />
           </div>
         </div>
       </Card>

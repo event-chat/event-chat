@@ -63,7 +63,7 @@ const LinkLog: FC = () => {
   }, [logs])
 
   return (
-    <div className="max-h-80 overflow-auto" ref={wrapRef}>
+    <div className="mt-4 max-h-40 overflow-auto bg-gray-700" ref={wrapRef}>
       <div className="mx-auto w-full max-w-4xl space-y-4 px-4 py-2">
         <ul>
           {logs.map((item, i) => {

@@ -1,23 +1,41 @@
-import { startTransition, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  type Dispatch,
+  type SetStateAction,
+  startTransition,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import useMemoFn from './useMemoFn'
 
-const useOptimistic = <STATE, ACTION>(
+function useOptimistic<STATE>(
+  baseState: STATE
+): [STATE, Dispatch<SetStateAction<STATE>>, (callback: TransitionCallback) => void]
+
+function useOptimistic<STATE, ACTION>(
+  baseState: STATE,
+  reduce: (state: STATE, action: ACTION) => STATE
+): [STATE, (action: ACTION) => void, (callback: TransitionCallback) => void]
+
+function useOptimistic<STATE, ACTION>(
   baseState: STATE,
   reduce?: (state: STATE, action: ACTION) => STATE
-) => {
+) {
   const [optimisticState, setOptimistiState] = useState(baseState)
   const actionRef = useRef<Array<Promise<void>>>([])
   const reduceRef = useMemoFn(reduce)
 
   const addOptimisticReduce = useCallback(
     (action: ACTION) => {
-      if (reduceRef.current) return
       if (actionRef.current.length === 0) {
         console.warn('useOptimistic: Must be called in runTransition')
         return
       }
       startTransition(() => {
-        setOptimistiState((current) => reduceRef.current?.(current, action) ?? current)
+        setOptimistiState((current) =>
+          reduceRef.current ? reduceRef.current(current, action) : current
+        )
       })
     },
     [reduceRef]
@@ -32,8 +50,8 @@ const useOptimistic = <STATE, ACTION>(
     })
   }, [])
 
-  const runTransition = useCallback(
-    (callback: () => void | Promise<void>) => {
+  const createQueue = useCallback(
+    (callback: TransitionCallback) => {
       const queue = Promise.resolve(callback())
         .then(() => {
           actionRef.current = actionRef.current.filter((item) => !Object.is(item, queue))
@@ -53,6 +71,15 @@ const useOptimistic = <STATE, ACTION>(
     [baseState]
   )
 
+  const runTransition = useCallback(
+    (callback: TransitionCallback) => {
+      // 在发起队列前先插入一个空队列，以便 addOptimistic 能够识别发起队列
+      if (actionRef.current.length === 0) createQueue(() => {})
+      createQueue(callback)
+    },
+    [createQueue]
+  )
+
   useEffect(() => {
     // 针对没有队列的情况下 baseState 发生变化的情况，直接更新 optimisticState，用于下次乐观更新的基准状态
     if (actionRef.current.length === 0) setOptimistiState(baseState)
@@ -67,7 +94,9 @@ const useOptimistic = <STATE, ACTION>(
 
 export default useOptimistic
 
-// 采用和 react19 一样的操作方式，官方默认提供的 useOptimistic 也并严谨
+type TransitionCallback = () => void | Promise<void>
+
+// 采用和 react19 一样的操作方式，官方默认提供的 useOptimistic 也并不严谨
 // 例如下面代码，在微任务完成前，即便在 startTransition 外部调用 setOptimisticIsLiked 会被认为合法
 // 因为 React 将 hooks 作为一个整体，只在发起微任务时统一执行
 //

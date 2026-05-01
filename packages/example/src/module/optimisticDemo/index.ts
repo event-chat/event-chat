@@ -1,3 +1,8 @@
 export { default as EditNameApp } from './EditNameApp'
+export { default as ErrorRecovery } from './ErrorRecovery'
+export { default as FollowApp } from './FollowApp'
+export { default as IncrementAction } from './IncrementAction'
 export { default as IncrementApp } from './IncrementApp'
 export { default as LikeButtonApp } from './LikeButtonApp'
+export { default as ShopCartApp } from './ShopCartApp'
+export { default as TodoListApp } from './TodoListApp'
