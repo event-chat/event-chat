@@ -26,29 +26,33 @@ function useOptimistic<STATE, ACTION>(
   const actionRef = useRef<Array<Promise<void>>>([])
   const reduceRef = useMemoFn(reduce)
 
+  const baseAction = useCallback((callback: () => void) => {
+    if (actionRef.current.length === 0) {
+      console.warn('useOptimistic: Must be called in runTransition')
+      return
+    }
+    startTransition(callback)
+  }, [])
+
   const addOptimisticReduce = useCallback(
     (action: ACTION) => {
-      if (actionRef.current.length === 0) {
-        console.warn('useOptimistic: Must be called in runTransition')
-        return
-      }
-      startTransition(() => {
+      baseAction(() => {
         setOptimistiState((current) =>
           reduceRef.current ? reduceRef.current(current, action) : current
         )
       })
     },
-    [reduceRef]
+    [reduceRef, baseAction]
   )
 
-  const addOptimisticState: typeof setOptimistiState = useCallback((action) => {
-    if (actionRef.current.length === 0) {
-      console.warn('useOptimistic: Must be called in runTransition')
-    }
-    startTransition(() => {
-      setOptimistiState(action)
-    })
-  }, [])
+  const addOptimisticState: typeof setOptimistiState = useCallback(
+    (action) => {
+      baseAction(() => {
+        setOptimistiState(action)
+      })
+    },
+    [baseAction]
+  )
 
   const createQueue = useCallback(
     (callback: TransitionCallback) => {
