@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.26](https://github.com/event-chat/event-chat/compare/core@v0.2.25...core@v0.2.26) (2026-05-03)
+
+
+### Bug Fixes
+
+* update core useMemoFn ([1a03cf6](https://github.com/event-chat/event-chat/commit/1a03cf67f1b8a4a2ab41614300f949f4a40d2a03))
+* update core useMemoFn ([62305fe](https://github.com/event-chat/event-chat/commit/62305fe333a25d150bfb6670029dd2cea25f88f1))
+
 ## [0.2.25](https://github.com/event-chat/event-chat/compare/core@v0.2.24...core@v0.2.25) (2026-04-06)
 
 
