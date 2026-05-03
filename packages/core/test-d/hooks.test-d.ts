@@ -54,14 +54,14 @@ const eventOptions: EventChatExampleType = {
 const fn = (value: number) => value + 1
 const memoFn = useMemoFn(fn)
 
-expectType<MutableRefObject<typeof fn>>(memoFn)
+expectType<Readonly<{ current: typeof fn }>>(memoFn)
 expectType<number>(memoFn.current(1))
 
 // 异步
 const asyncFn = async (name: string) => name.length
 const memeoAsyncFn = useMemoFn(asyncFn)
 
-expectType<MutableRefObject<(name: string) => Promise<number>>>(memeoAsyncFn)
+expectType<Readonly<{ current: (name: string) => Promise<number> }>>(memeoAsyncFn)
 expectType<Promise<number>>(memeoAsyncFn.current('user'))
 
 // =============================

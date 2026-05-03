@@ -1,12 +1,16 @@
 import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core'
 import { act, renderHook } from '@testing-library/react'
 import eventBus from '../src/eventBus'
-import { useEventChat } from '../src/hooks'
+import { useEventChat, useMemoFn } from '../src/hooks'
 import { EventName, getEventName, mountEvent } from '../src/utils'
 import { eventName, pubName, testEventData } from './fixtures/fields'
 
 // 模拟 document.body.dispatchEvent
 const mockDispatchEvent = rstest.fn()
+
+// 模拟测试函数
+const mockFn1 = rstest.fn(() => 'fn1')
+const mockFn2 = rstest.fn(() => 'fn2')
 
 beforeEach(() => {
   rstest.clearAllMocks()
@@ -132,5 +136,45 @@ describe('hooks: useEventChat 基础功能', () => {
     expect(addEventListenerMock).toHaveBeenCalledTimes(1)
 
     addEventListenerMock.mockRestore()
+  })
+})
+
+describe('hooks: useMemoFn', () => {
+  test('通过 current 应该返回初始值', () => {
+    const { result } = renderHook(() => useMemoFn(mockFn1))
+    const { current } = result.current
+
+    expect(current).toBe(mockFn1)
+    expect(current()).toBe('fn1')
+  })
+
+  test('应该永远指向最新的值', () => {
+    const { result, rerender } = renderHook((props) => useMemoFn(props.fn), {
+      initialProps: { fn: mockFn1 },
+    })
+
+    // 第一次指向
+    expect(result.current.current).toBe(mockFn1)
+
+    // 重新渲染
+    rerender({ fn: mockFn2 })
+    expect(result.current.current).toBe(mockFn2)
+    expect(result.current.current()).toBe('fn2')
+  })
+
+  test('返回的容器对象引用永远稳定（核心特性）', () => {
+    const { result, rerender } = renderHook((props) => useMemoFn(props.fn), {
+      initialProps: { fn: mockFn1 },
+    })
+
+    // 保存第一次的对象引用
+    const firstRef = result.current
+
+    // 多次重渲染，切换函数
+    rerender({ fn: mockFn2 })
+    rerender({ fn: mockFn1 })
+
+    // 验证：对象引用不变
+    expect(result.current).toBe(firstRef)
   })
 })

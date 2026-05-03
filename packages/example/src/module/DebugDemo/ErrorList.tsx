@@ -1,4 +1,4 @@
-import { type EventChatOptions, useEventChat } from '@event-chat/core'
+import { type EventChatOptions, useEventChat, useMemoFn } from '@event-chat/core'
 import { Form, type FormItemProps, Input } from 'antd'
 import {
   type FC,
@@ -9,7 +9,6 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { useMemoFn } from '@/components/selectSection/utils/fields'
 import { refuseField, schema, styles } from './utils'
 
 const { message, warp } = styles()

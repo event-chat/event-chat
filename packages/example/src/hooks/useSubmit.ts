@@ -1,7 +1,7 @@
+import { useMemoFn } from '@event-chat/core'
 import { useCallback, useRef } from 'react'
-import { useMemoFn } from '../selectSection/utils/fields'
 
-export const useSubmit = <T>(handle: T, callback?: () => void) => {
+const useSubmit = <T>(handle: T, callback?: () => void) => {
   const submitRef = useRef(false)
   const callbackRef = useMemoFn(callback)
 
@@ -21,3 +21,5 @@ export const useSubmit = <T>(handle: T, callback?: () => void) => {
 
   return [submitHandle] as const
 }
+
+export default useSubmit

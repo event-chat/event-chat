@@ -77,6 +77,19 @@ export function createRecipientsStore(): RecipientsStore {
         listeners = listeners.filter((l) => l !== listener)
       }
     },
+    updateRecipientName(rpc, name) {
+      const [keyname, item] = currentRecipients.has(name)
+        ? []
+        : (Array.from(currentRecipients.entries()).find(([, i]) => Object.is(i.rpc, rpc)) ?? [])
+
+      if (keyname !== undefined && keyname !== name && item) {
+        currentRecipients.delete(keyname)
+        currentRecipients.set(name, item)
+
+        computeSnapshot()
+        emitChange()
+      }
+    },
   }
 }
 
@@ -95,6 +108,7 @@ type RecipientsStore = {
   getRecipient: (name: string) => RPCType | null
   getSnapshot: () => SnapshotItem[]
   subscribe: (listener: () => void) => () => void
+  updateRecipientName: (rpc: RPCType, name: string) => void
 }
 
 export type RPCType = ReturnType<typeof useRPC<ActionType, ActionType, unknown>>['rpc']

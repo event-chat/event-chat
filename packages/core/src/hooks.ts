@@ -19,11 +19,16 @@ import { checkLiteral, validate } from './validate'
 
 export const useMemoFn = <T>(fn: T) => {
   const methodRef = useRef<T>(fn)
-  useEffect(() => {
-    methodRef.current = fn
-  }, [fn])
+  methodRef.current = fn
 
-  return methodRef
+  return useMemo(
+    () => ({
+      get current() {
+        return methodRef.current
+      },
+    }),
+    []
+  )
 }
 
 export function useEventChat<

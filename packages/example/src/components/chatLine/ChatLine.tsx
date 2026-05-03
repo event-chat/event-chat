@@ -1,3 +1,5 @@
+import useSubmit from '@/hooks/useSubmit'
+import { ChartName } from '@/services/baseService'
 import { SendOutlined, SyncOutlined } from '@ant-design/icons'
 import FormEvent from '@event-chat/antd-item'
 import { type EventChatOptions, type NamepathType, useEventChat } from '@event-chat/core'
@@ -13,11 +15,8 @@ import {
 } from 'react'
 import { tv } from 'tailwind-variants'
 import z from 'zod'
-import { useSubmit } from './hooks'
 import { receiptStore } from './receiptStore'
-import { baseStyle, itemSchema, messageSchema } from './utils'
-
-const ChartName = 'chat-scroll'
+import { type SendMessage, baseStyle, itemSchema } from './utils'
 
 const formatter = new Intl.DateTimeFormat('en-US', {
   month: '2-digit',
@@ -31,8 +30,6 @@ const style = tv({
   extend: baseStyle,
   slots: {
     buttons: 'flex items-center justify-center p-4 pl-0',
-    corner:
-      'absolute top-0 right-0 rounded-bl-lg bg-gray-600 px-2 text-sm shadow-md select-none text-shadow-lg',
     itemInner: 'flex flex-col gap-1 py-4',
     itemUser: 'flex items-center gap-2 text-sm text-gray-500 select-none',
     itemWrap:
@@ -128,7 +125,7 @@ const ChatItems: FC<ChatItemProps> = ({ item, receipt }) => {
   )
 }
 
-const ChatScroll: FC<ChatScrollProps> = ({ group, debug }) => {
+const ChatScroll: FC<ChatScrollProps> = ({ group, debug, name: chatName = ChartName }) => {
   const [items, setItems] = useState<Array<ChatItemProps['item']>>([])
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -137,7 +134,7 @@ const ChatScroll: FC<ChatScrollProps> = ({ group, debug }) => {
     receiptStore.getSnapshot.bind(receiptStore)
   )
 
-  useEventChat(ChartName, {
+  useEventChat(chatName, {
     schema: itemSchema,
     callback: ({ detail }) => setItems((current) => current.concat(detail)),
     group,
@@ -180,10 +177,11 @@ const ChatLine: FC<PropsWithChildren<ChatLineProps>> = ({
   name: chatName,
   recipients,
   onSend,
+  group = 'chat-line',
 }) => {
-  const [form] = FormEvent.useForm<string, 'chat-line', Omit<SendMessage, 'date'>>({
-    group: 'chat-line',
+  const [form] = FormEvent.useForm<string, string, Omit<SendMessage, 'date'>>({
     name: chatName,
+    group,
   })
 
   const { bar, buttons, corner, inputBox, inputLine, scroll, selectUser, sendBtn, wrap } = style({
@@ -299,11 +297,9 @@ const ChatLine: FC<PropsWithChildren<ChatLineProps>> = ({
   )
 }
 
-export { ChatLine, ChartName, ChatScroll }
+export { ChatLine, ChatScroll }
 
 export default ChatLine
-
-export type SendMessage = z.infer<typeof messageSchema>
 
 interface ChatItemProps {
   item: z.infer<typeof itemSchema>
@@ -313,6 +309,7 @@ interface ChatItemProps {
 interface ChatLineProps extends Pick<SendMessage, 'name'> {
   card?: ReactNode
   disabled?: boolean
+  group?: string
   loading?: boolean
   recipients?: SelectProps['options']
   onSend?: (item: SendMessage) => void
@@ -320,6 +317,7 @@ interface ChatLineProps extends Pick<SendMessage, 'name'> {
 
 interface ChatScrollProps extends Pick<EventChatOptions<NamepathType>, 'debug'> {
   group?: string
+  name?: string
 }
 
 type StatusType = SendMessage['status']
