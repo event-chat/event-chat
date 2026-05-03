@@ -80,7 +80,6 @@ const Iframe: FC = () => {
               )
             } else {
               const target = item.recipient ? (store.getRecipient(item.recipient) ?? rpc1) : rpc1
-
               target
                 .request('sendChat', { payload: item })
                 .then((result) => receiptStore.increasing(result))

@@ -1,3 +1,4 @@
+import { useMemoFn } from '@event-chat/core'
 import {
   type Dispatch,
   type SetStateAction,
@@ -7,7 +8,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import useMemoFn from './useMemoFn'
 
 function useOptimistic<STATE>(
   baseState: STATE
@@ -24,6 +24,8 @@ function useOptimistic<STATE, ACTION>(
 ) {
   const [optimisticState, setOptimistiState] = useState(baseState)
   const actionRef = useRef<Array<Promise<void>>>([])
+
+  const stateRef = useMemoFn(baseState)
   const reduceRef = useMemoFn(reduce)
 
   const baseAction = useCallback((callback: () => void) => {
@@ -66,13 +68,14 @@ function useOptimistic<STATE, ACTION>(
         .finally(() => {
           if (actionRef.current.length === 0) {
             // 针对结束后 baseState 无论发生变化，都要重置 optimisticState
-            setOptimistiState(baseState)
+            // 通过 stateRef.current 减少心智负担，避免如：事件循环、依赖等问题未同步最新值
+            setOptimistiState(stateRef.current)
           }
         })
 
       actionRef.current.push(queue)
     },
-    [baseState]
+    [stateRef]
   )
 
   const runTransition = useCallback(

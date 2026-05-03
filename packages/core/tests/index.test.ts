@@ -35,7 +35,7 @@ describe('index: 出口文件导出验证', () => {
 
   test('导出成员完整，无多余或缺失', () => {
     const indexExportNames = Object.keys(IndexExports)
-    const expectedValueExports = ['useEventChat', 'createToken', 'checkDetail']
+    const expectedValueExports = ['createToken', 'checkDetail', 'useEventChat', 'useMemoFn']
 
     expect(indexExportNames).toEqual(expect.arrayContaining(expectedValueExports))
     expect(indexExportNames).toHaveLength(expectedValueExports.length)

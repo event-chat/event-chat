@@ -1,13 +1,15 @@
 import type { useEventChat } from '@event-chat/core'
 import { type RPCInstanceContextIns, TARGET_TYPE_STRINGS } from '@event-chat/rpc/react'
 import z from 'zod'
-import { ChartName, type SendMessage, messageSchema } from '@/components/chatLine'
+import { type SendMessage, messageSchema } from '@/components/chatLine'
 import { receiptStore } from '@/components/chatLine/receiptStore'
 
 const receiptSchema = z.object({
   ...messageSchema.shape,
   path: z.array(z.string()),
 })
+
+export const ChartName = 'chat-scroll'
 
 export const baseChatServer = (
   item: SendMessage,

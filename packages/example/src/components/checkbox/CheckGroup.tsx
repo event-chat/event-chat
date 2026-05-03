@@ -1,3 +1,4 @@
+import { useMemoFn } from '@event-chat/core'
 import {
   type FC,
   type PropsWithChildren,
@@ -7,7 +8,6 @@ import {
   useState,
 } from 'react'
 import Checkbox, { type SizeType } from '.'
-import { useMemoFn } from '../selectSection/utils/fields'
 import { CheckboxContext, type CheckboxContextInstance, type ValueType } from './utils'
 
 const CheckGroup: FC<PropsWithChildren<CheckGroupProps>> = ({

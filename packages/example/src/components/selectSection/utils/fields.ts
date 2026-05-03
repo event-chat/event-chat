@@ -1,5 +1,4 @@
 import type { IAction } from '@formily/reactive'
-import { useEffect, useRef } from 'react'
 import { isSectionItem } from '../hooks/useFakeService'
 
 export const filterValue = (value: unknown) =>
@@ -28,15 +27,6 @@ export const isKey = <T extends Record<PropertyKey, unknown>>(
 ): key is keyof T => key in data
 
 export const objectKeys = <T extends object, K = keyof T>(obj: T) => Object.keys(obj) as K[]
-
-export const useMemoFn = <T>(fn: T) => {
-  const methodRef = useRef<T>(fn)
-  useEffect(() => {
-    methodRef.current = fn
-  }, [fn])
-
-  return methodRef
-}
 
 interface IActionExpand extends Omit<IAction, 'bound'> {
   bound: <TArgs extends unknown[], TReturn>(
