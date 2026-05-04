@@ -56,7 +56,7 @@ class RPCAction {
     const { channel } = this._options
     this._target.postMessage(
       { __RPC__: RPC_SIGN, broadcast: true, kind: 'request', channel, payload },
-      { ...ops, targetOrigin: ops.targetOrigin ?? window.location.origin }
+      { ...ops, targetOrigin: ops.targetOrigin ?? self?.location?.origin }
     )
   }
 
@@ -112,7 +112,7 @@ class RPCAction {
 
       this._target.postMessage(
         { __RPC__: RPC_SIGN, kind: 'request', channel, payload, requestId, type },
-        { ...ops, targetOrigin: ops.targetOrigin ?? window.location.origin }
+        { ...ops, targetOrigin: ops.targetOrigin ?? self?.location?.origin }
       )
     })
   }
