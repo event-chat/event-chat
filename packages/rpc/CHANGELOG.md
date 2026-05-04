@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.6](https://github.com/event-chat/event-chat/compare/rpc@v0.1.5...rpc@v0.1.6) (2026-05-04)
+
+
+### Bug Fixes
+
+* update RPCAction window to self ([45c8cc3](https://github.com/event-chat/event-chat/commit/45c8cc38baca78a63a9acb34af3d3633683b29a5))
+* update RPCAction window to self ([969067d](https://github.com/event-chat/event-chat/commit/969067d1b614bbe868de3cd9cccb080b9180542a))
+
 ## [0.1.5](https://github.com/event-chat/event-chat/compare/rpc@v0.1.4...rpc@v0.1.5) (2026-04-28)
 
 
