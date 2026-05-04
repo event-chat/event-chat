@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.7](https://github.com/event-chat/event-chat/compare/rpc@v0.1.6...rpc@v0.1.7) (2026-05-04)
+
+
+### Bug Fixes
+
+* up test rpc ([34e7151](https://github.com/event-chat/event-chat/commit/34e715136eb4e4f53db5a717225e2e10057ce6e0))
+* up test rpc ([8d2046b](https://github.com/event-chat/event-chat/commit/8d2046bb45b6cca7a99ad233bc9ef786fe73cdd1))
+
 ## [0.1.6](https://github.com/event-chat/event-chat/compare/rpc@v0.1.5...rpc@v0.1.6) (2026-05-04)
 
 
