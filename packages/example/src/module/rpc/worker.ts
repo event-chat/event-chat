@@ -8,6 +8,7 @@ const recordRef = {
   name: crypto.randomUUID().toString(),
 }
 
+const origin = `worker:${recordRef.name}`
 const rpc = createDedicatedWorkerGlobalScopeRPC(target, {
   context: {
     brodcast: workerChatCtx.brodcasts,
@@ -18,7 +19,7 @@ const rpc = createDedicatedWorkerGlobalScopeRPC(target, {
 })
 
 workerChatCtx.provider({
-  name: `worker:${recordRef.name}`,
+  name: origin,
   page: 'worker',
   emit: ({ detail }) => {
     const { data, success } = itemSchema.safeParse(detail)
@@ -27,10 +28,10 @@ workerChatCtx.provider({
         .request('sendChat', {
           payload: {
             date: new Date(),
-            message: `Message read, feedback from worker: ${recordRef.name}`,
-            name: data.user,
+            message: `Message read, feedback from worker: ${recordRef.name}, origin name: ${origin}`,
+            name: recordRef.name,
             receipt: data.receipt,
-            recipient: data.receipt,
+            recipient: recordRef.name,
             status: 'normal',
           },
         })

@@ -36,7 +36,7 @@ const style = tv({
       'after:block after:h-px after:w-full after:bg-gray-700 after:content-[""] last:after:hidden',
     msg: 'flex gap-2 text-gray-400 select-auto',
     msgtext: '',
-    name: 'select-none',
+    name: 'whitespace-nowrap select-none',
     receiptTag: 'ml-2 text-xs text-gray-600 select-none',
     sendBtn: 'h-9 w-9 cursor-pointer rounded-full bg-gray-900 text-white',
     scrollInner: '',

@@ -1,25 +1,26 @@
 import useOptimistic from '@/hooks/useOptimistic'
-import { baseChatServer, mainCtx } from '@/services/iframeService'
-import { workerChatCtx } from '@/services/workerService'
+import { generateMainCtx, workerChatCtx } from '@/services/workerService'
 import { useEventChat } from '@event-chat/core'
 import { useRPC } from '@event-chat/rpc/react'
 import { createWorkerRPC } from '@event-chat/rpc/worker'
-import { type FC, useMemo, useRef, useState } from 'react'
-import { ChatScroll, messageSchema } from '@/components/chatLine'
+import { type FC, useCallback, useMemo, useRef, useState } from 'react'
+import { ChatScroll, type SendMessage, itemSchema, messageSchema } from '@/components/chatLine'
 import WorkerPanel from '@/components/chatLine/WorkerPanel'
+import { receiptStore } from '@/components/chatLine/receiptStore'
 import { useRecipients } from './createRecipientsStore'
 import { workerNameFilter } from './uitls'
 
 const title = 'worker'
 
-const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name }) => {
+const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name, feedback }) => {
   const [customName, setCustomName] = useState('')
   const [displayName, dispatch, runTransition] = useOptimistic(customName)
   const workName = useMemo(() => `worker:${!displayName ? name : displayName}`, [displayName, name])
 
-  const ctxRef = useRef<CtxType>({})
-  const [store] = useRecipients()
+  const mainCtx = useMemo(() => generateMainCtx(), [])
+  const ctxRef = useRef<Parameters<typeof mainCtx.provider>[0]>({})
 
+  const [store] = useRecipients()
   const { connected, rpc, brodcastScope } = useRPC({
     config: {
       channel: 'worker',
@@ -50,9 +51,13 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name }) => {
   const { emit } = useEventChat(workerNameFilter(workName), {
     schema: messageSchema,
     callback: ({ detail: item }) => {
-      baseChatServer(item, ctxRef.current)
-      rpc.request('sendChat', { payload: item }).catch(() => {})
+      feedback(item)
+      rpc
+        .request('sendChat', { payload: item })
+        .then((result) => receiptStore.increasing(result))
+        .catch(() => {})
 
+      // 分栏消息
       emit({
         detail: {
           broadcast: item.status === 'broadcast',
@@ -70,7 +75,35 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name }) => {
     group,
   })
 
-  ctxRef.current = { name: `chat-${name}`, page: 'root:worker', brodcastScope, emit }
+  // 回复
+  const emitHandle: NonNullable<(typeof ctxRef.current)['emit']> = useCallback(
+    ({ detail }) => {
+      const { data, success } = itemSchema.safeParse(detail)
+      if (success) {
+        const receipt = receiptStore.addReceipt()
+        emit?.({
+          detail: {
+            ...data,
+            own: true,
+            receipt,
+          },
+          name: `chat-${name}`,
+        })
+
+        feedback({
+          date: data.date,
+          message: data.message,
+          name: data.user,
+          status: (data.broadcast ? 'broadcast' : undefined) ?? (data.busy ? 'busy' : 'normal'),
+          receipt,
+        })
+        receiptStore.increasing(receipt)
+      }
+    },
+    [name, emit, feedback]
+  )
+
+  ctxRef.current = { name: `chat-${name}`, page: 'root:worker', brodcastScope, emit: emitHandle }
   mainCtx.provider(ctxRef.current)
 
   return (
@@ -80,7 +113,7 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name }) => {
       maxLength={6}
       max={6}
       name={workName}
-      placeholder="Please input name"
+      placeholder="Please type name to change"
       title={title}
       onChange={(event) => {
         const value = event.target.value.replace(/[^a-zA-Z0-9]/g, '').substring(0, 6)
@@ -108,6 +141,5 @@ interface WorkerItemProps {
   channel: string
   group: string
   name: string
+  feedback: (item: SendMessage) => void
 }
-
-type CtxType = Parameters<typeof mainCtx.provider>[0]
