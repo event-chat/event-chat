@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8](https://github.com/event-chat/event-chat/compare/rpc@v0.1.7...rpc@v0.1.8) (2026-05-05)
+
+
+### Bug Fixes
+
+* update iframe demo ([1986d63](https://github.com/event-chat/event-chat/commit/1986d635e0b9b3e0e2171820bfdb57a2ce681478))
+* update iframe demo ([b47d006](https://github.com/event-chat/event-chat/commit/b47d006fd1453c5ba990e2fdbfce65607578ef11))
+
 ## [0.1.7](https://github.com/event-chat/event-chat/compare/rpc@v0.1.6...rpc@v0.1.7) (2026-05-04)
 
 
