@@ -20,7 +20,8 @@ const rpc = createDedicatedWorkerGlobalScopeRPC(target, {
 
 workerChatCtx.provider({
   name: origin,
-  page: 'worker',
+  page: 'worker:dedicatedWorkerGlobalScope',
+  brodcastScope: (data) => rpc.broadcast(data),
   emit: ({ detail }) => {
     const { data, success } = itemSchema.safeParse(detail)
     if (success) {

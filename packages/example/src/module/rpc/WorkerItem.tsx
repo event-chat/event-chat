@@ -58,22 +58,23 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name, feedback }) => 
           .request('sendChat', { payload: item })
           .then((result) => receiptStore.increasing(result))
           .catch(() => {})
-      }
 
-      // 分栏消息
-      emit({
-        detail: {
-          broadcast: item.status === 'broadcast',
-          busy: item.status === 'busy',
-          date: item.date,
-          message: item.message,
-          own: item.name === displayName,
-          user: item.name,
-          // card,
-          receipt: item.receipt,
-        },
-        name: `chat-${name}`,
-      })
+        // 分栏消息
+        emit({
+          detail: {
+            broadcast: false,
+            busy: item.status === 'busy',
+            date: item.date,
+            message: item.message,
+            own: item.name === displayName,
+            user: item.name,
+            receipt: item.receipt,
+          },
+          name: `chat-${name}`,
+        })
+      } else {
+        brodcastScope({ payload: item })
+      }
     },
     group,
   })
@@ -87,12 +88,13 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name, feedback }) => 
         emit?.({
           detail: {
             ...data,
-            own: true,
+            own: false,
             receipt,
           },
           name: `chat-${name}`,
         })
 
+        receiptStore.increasing(receipt)
         feedback({
           date: data.date,
           message: data.message,
@@ -100,13 +102,40 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name, feedback }) => 
           status: (data.broadcast ? 'broadcast' : undefined) ?? (data.busy ? 'busy' : 'normal'),
           receipt,
         })
-        receiptStore.increasing(receipt)
       }
     },
     [name, emit, feedback]
   )
 
-  ctxRef.current = { name: `chat-${name}`, page: 'root:worker', brodcastScope, emit: emitHandle }
+  const brodcastScopeHandle: typeof brodcastScope = useCallback(
+    ({ payload }) => {
+      const { data: item, success } = messageSchema.safeParse(payload)
+      if (success) {
+        receiptStore.increasing(item.receipt)
+        emit({
+          detail: {
+            broadcast: true,
+            busy: false,
+            date: item.date,
+            message: item.message,
+            own: false,
+            user: item.name,
+            receipt: item.receipt,
+          },
+          name: `chat-${name}`,
+        })
+      }
+    },
+    [name, emit]
+  )
+
+  ctxRef.current = {
+    name: `chat-${name}`,
+    page: 'root:worker',
+    brodcastScope: brodcastScopeHandle,
+    emit: emitHandle,
+  }
+
   mainCtx.provider(ctxRef.current)
 
   return (

@@ -23,7 +23,7 @@ const RPCDemo: FC = () => {
         <Card
           title={
             <>
-              <Tag>iframe</Tag> 通信演示
+              <Tag>Worker</Tag> 通信演示
             </>
           }
         >

@@ -1,7 +1,8 @@
 import { Input, type InputProps } from 'antd'
 import { type FC, type PropsWithChildren, type ReactNode } from 'react'
 import { tv } from 'tailwind-variants'
-import { type SendMessage, baseStyle } from './utils'
+import type { SendMessage } from './fields'
+import { baseStyle } from './utils'
 
 const styles = tv({
   extend: baseStyle,
