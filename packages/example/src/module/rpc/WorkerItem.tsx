@@ -52,10 +52,13 @@ const WorkerItem: FC<WorkerItemProps> = ({ channel, group, name, feedback }) => 
     schema: messageSchema,
     callback: ({ detail: item }) => {
       feedback(item)
-      rpc
-        .request('sendChat', { payload: item })
-        .then((result) => receiptStore.increasing(result))
-        .catch(() => {})
+
+      if (item.status !== 'broadcast') {
+        rpc
+          .request('sendChat', { payload: item })
+          .then((result) => receiptStore.increasing(result))
+          .catch(() => {})
+      }
 
       // 分栏消息
       emit({

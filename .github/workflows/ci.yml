@@ -4,8 +4,8 @@ name: Monorepo React Library CI
 on:
   push:
     branches: [main]
-  # pull_request:
-  #   branches: [main]
+  pull_request:
+    branches: [main]
 
 # 顶层配置：部署GitHub Pages所需权限（所有作业可复用，也可在部署作业内单独配置）
 permissions:
@@ -97,7 +97,6 @@ jobs:
 
   # 更新 release
   release-please:
-    if: github.ref == 'refs/heads/main'
     needs: [validate-and-build]
     runs-on: ubuntu-latest
     outputs:

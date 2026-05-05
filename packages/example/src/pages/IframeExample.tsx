@@ -1,9 +1,11 @@
 import RecipientsProvider from '@/module/rpc/RecipientsProvider'
+import SubChat from '@/module/rpc/SubChat'
 import SubIframe, { type SubIframeProps } from '@/module/rpc/SubIframe'
-import { GroupProvider, iframeName } from '@/module/rpc/uitls'
+import { GroupProvider, chatName, iframeName } from '@/module/rpc/uitls'
 import { ConfigProvider, theme } from 'antd'
-import { type FC, type PropsWithChildren } from 'react'
+import { type FC, type PropsWithChildren, useMemo } from 'react'
 import { tv } from 'tailwind-variants'
+import { isKey } from '@/utils/fields'
 
 const styles = tv({
   base: 'h-full',
@@ -14,7 +16,10 @@ const styles = tv({
   },
 })
 
-const IframeExample: FC<PropsWithChildren<SubIframeProps>> = ({ children, group = iframeName }) => {
+const IframeExampleInner: FC<PropsWithChildren<SubIframeProps>> = ({
+  children,
+  group = iframeName,
+}) => {
   const base = styles({ sub: Boolean(children) })
   return (
     <ConfigProvider
@@ -39,6 +44,26 @@ const IframeExample: FC<PropsWithChildren<SubIframeProps>> = ({ children, group 
         )}
       </RecipientsProvider>
     </ConfigProvider>
+  )
+}
+
+const IframeExample: FC = () => {
+  const subName = useMemo(() => {
+    const searchParams =
+      typeof window === 'undefined' ? null : new URLSearchParams(window.location.search)
+    if (searchParams) {
+      const queryObject = Object.fromEntries(searchParams.entries())
+      if (isKey('sub', queryObject)) return queryObject.sub
+    }
+    return ''
+  }, [])
+
+  return subName !== iframeName ? (
+    <IframeExampleInner group={!subName ? chatName : subName} />
+  ) : (
+    <IframeExampleInner group={subName}>
+      <SubChat />
+    </IframeExampleInner>
   )
 }
 
