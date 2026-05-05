@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9](https://github.com/event-chat/event-chat/compare/rpc@v0.1.8...rpc@v0.1.9) (2026-05-05)
+
+
+### Bug Fixes
+
+* success worker ([9f1c51f](https://github.com/event-chat/event-chat/commit/9f1c51fd6d4fbd45421511b4461d233b1541a686))
+* success worker ([22b7a8e](https://github.com/event-chat/event-chat/commit/22b7a8e2ff571ddd3735cdb5a2ecc9bbbd050e4c))
+
 ## [0.1.8](https://github.com/event-chat/event-chat/compare/rpc@v0.1.7...rpc@v0.1.8) (2026-05-05)
 
 
