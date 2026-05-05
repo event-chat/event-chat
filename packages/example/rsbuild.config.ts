@@ -41,7 +41,6 @@ export default defineConfig({
   },
   source: {
     entry: {
-      chat: './src/ChatEntry.tsx',
       iframe: './src/IframeEntry.tsx',
       index: './src/index.tsx', // 你的库主入口文件
     },

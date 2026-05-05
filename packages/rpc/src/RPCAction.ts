@@ -1,7 +1,6 @@
 import RPCFactory, { IframeSerializeOptions } from './RPCFactory'
 import { isKey } from './utils'
 
-// reset window.setTimeout
 const RPC_SIGN = 'RPCActionSign'
 
 const defaultOptions = {

@@ -8,6 +8,7 @@ import { ChatLine, ChatScroll } from '@/components/chatLine'
 import CardSelect from '@/components/chatLine/CardSelect'
 import { receiptStore } from '@/components/chatLine/receiptStore'
 import { useRecipients } from './createRecipientsStore'
+import { chatName, iframeName } from './uitls'
 
 const group = 'root'
 
@@ -91,10 +92,10 @@ const Iframe: FC = () => {
         </ChatLine>
       </div>
       <div>
-        <iframe className="h-full w-full" ref={iframeRef1} src="/iframe" />
+        <iframe className="h-full w-full" ref={iframeRef1} src={`/iframe?sub=${iframeName}`} />
       </div>
       <div>
-        <iframe className="h-full w-full" ref={iframeRef2} src="/chat" />
+        <iframe className="h-full w-full" ref={iframeRef2} src={`/iframe?sub=${chatName}`} />
       </div>
     </div>
   )

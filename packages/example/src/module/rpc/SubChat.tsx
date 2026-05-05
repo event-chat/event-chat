@@ -41,7 +41,7 @@ const SubChat: FC = () => {
 
   return (
     <div className="h-full bg-gray-800">
-      <iframe className="h-full w-full" ref={iframeRef} src={`/chat?name=${group}`} />
+      <iframe className="h-full w-full" ref={iframeRef} src={`/iframe?name=${group}`} />
     </div>
   )
 }
