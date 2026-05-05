@@ -2,10 +2,10 @@ import { Transport } from '../fields'
 import RPCAction, { ActionFunType, BrodcastItem, RPCOptionsType, RequestOptions } from './RPCAction'
 
 const factoryKey = ['getType', 'upset'] as const
-const disabledKey = ['on', 'onBrodcast']
+const disabledKey = ['on', 'onBrodcast'] as const
 
 function isAction(action: RPCAction, key: string): key is keyof RPCAction {
-  return !disabledKey.includes(key) && key in action
+  return !disabledKey.map(String).includes(key) && key in action
 }
 
 function isFactory(action: Transport | null, key: string): key is keyof Transport {
@@ -64,7 +64,7 @@ function RPCDecorator<EVENT extends ActionRecord, CONSUME extends ActionRecord>(
       },
     }
   ) as Readonly<
-    Omit<RPCAction, 'on' | 'request'> &
+    Omit<RPCAction, (typeof disabledKey)[number] | 'request'> &
       Pick<Transport, (typeof factoryKey)[number]> & {
         request: typeof request
       }

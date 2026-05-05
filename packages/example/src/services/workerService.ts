@@ -1,34 +1,20 @@
 import { createCtx, createService } from '@event-chat/rpc/react'
-import { type CtxType, baseChatServer, baseServer, brodcastServer } from './baseService'
+import { messageSchema } from '@/components/chatLine/fields'
+import { type CtxType, baseChatServer, baseServer } from './baseService'
 
-// import type { SendMessage } from '@/components/chatLine'
-// import { receiptStore } from '@/components/chatLine/receiptStore'
+// messageSchema 不要通过 @/components/chatLine 加载，worker 进程不支持 React
+const brodcastServer = (ctx: Partial<WorkerCtxType>) => ({
+  receipt: (item: unknown) => {
+    const { data, success } = messageSchema.safeParse(item)
+    if (!success) return
 
-// const mainChatServer = (
-//   item: SendMessage,
-//   { card, name, emit }: Partial<Pick<CtxType, 'card' | 'emit' | 'name'>>
-// ) => {
-//   const { receipt } = item
-//   receiptStore.hold(receipt)
-
-//   console.log('a---reback', item, name)
-//   if (name) {
-//     emit?.({
-//       detail: {
-//         broadcast: item.status === 'broadcast',
-//         busy: item.status === 'busy',
-//         date: item.date,
-//         message: item.message,
-//         own: true,
-//         user: item.name,
-//         card,
-//         receipt,
-//       },
-//       name,
-//     })
-//   }
-//   return receipt
-// }
+    // 修改内容继续转发广播
+    const suffix = ctx.page === 'root:worker' ? '' : ` (fw: ${ctx.getName?.() ?? '--'})`
+    ctx.brodcastScope?.({
+      payload: { ...data, message: `${data.message}${suffix}` },
+    })
+  },
+})
 
 const mainServer = (ctx: Partial<CtxType>) => ({
   ...baseServer(ctx),

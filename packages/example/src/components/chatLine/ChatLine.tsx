@@ -15,8 +15,9 @@ import {
 } from 'react'
 import { tv } from 'tailwind-variants'
 import z from 'zod'
+import { type SendMessage, itemSchema } from './fields'
 import { receiptStore } from './receiptStore'
-import { type SendMessage, baseStyle, itemSchema } from './utils'
+import { baseStyle } from './utils'
 
 const formatter = new Intl.DateTimeFormat('en-US', {
   month: '2-digit',
